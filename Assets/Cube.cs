@@ -39,10 +39,10 @@ public class Cube : MonoBehaviourPunCallbacks, IPunObservable
         {
             HandleInput();
         }
-        else
-        {
-            HandleInterpolation();
-        }
+        //else
+        //{
+        //    HandleInterpolation();
+        //}
 
     }
 
@@ -95,34 +95,34 @@ public class Cube : MonoBehaviourPunCallbacks, IPunObservable
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        if (stream.IsWriting)
-        {
-            if (elapsedTime > 0) // ゼロ除算を防ぐ
-            {
-                stream.SendNext((p2 - p1) / elapsedTime);
-            }
-            else
-            {
-                stream.SendNext(Vector3.zero);
-            }
-        }
-        else
-        {
-            var networkPosition = (Vector3)stream.ReceiveNext();
-            var networkVelocity = (Vector3)stream.ReceiveNext();
-            var lag = Mathf.Max(0f, unchecked(PhotonNetwork.ServerTimestamp - info.SentServerTimestamp) / 1000f);
+    //    if (stream.IsWriting)
+    //    {
+    //        if (elapsedTime > 0) // ゼロ除算を防ぐ
+    //        {
+    //            stream.SendNext((p2 - p1) / elapsedTime);
+    //        }
+    //        else
+    //        {
+    //            stream.SendNext(Vector3.zero);
+    //        }
+    //    }
+    //    else
+    //    {
+    //        var networkPosition = (Vector3)stream.ReceiveNext();
+    //        var networkVelocity = (Vector3)stream.ReceiveNext();
+    //        var lag = Mathf.Max(0f, unchecked(PhotonNetwork.ServerTimestamp - info.SentServerTimestamp) / 1000f);
 
-            // 受信時の座標を、補間の開始座標にする
-            p1 = transform.position;
-            // 現在時刻における予測座標を、補間の終了座標にする
-            p2 = networkPosition + networkVelocity * lag;
-            // 前回の補間の終了速度を、補間の開始速度にする
-            v1 = v2;
-            // 受信した秒速を、補間にかける時間あたりの速度に変換して、補間の終了速度にする
-            v2 = networkVelocity * InterpolationPeriod;
-            // 経過時間をリセットする
-            elapsedTime = 0f;
-        }
+    //        // 受信時の座標を、補間の開始座標にする
+    //        p1 = transform.position;
+    //        // 現在時刻における予測座標を、補間の終了座標にする
+    //        p2 = networkPosition + networkVelocity * lag;
+    //        // 前回の補間の終了速度を、補間の開始速度にする
+    //        v1 = v2;
+    //        // 受信した秒速を、補間にかける時間あたりの速度に変換して、補間の終了速度にする
+    //        v2 = networkVelocity * InterpolationPeriod;
+    //        // 経過時間をリセットする
+    //        elapsedTime = 0f;
+    //    }
     }
 
 }
