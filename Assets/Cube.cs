@@ -97,9 +97,14 @@ public class Cube : MonoBehaviourPunCallbacks, IPunObservable
     {
         if (stream.IsWriting)
         {
-            stream.SendNext(transform.position);
-            // –ˆƒtƒŒ[ƒ€‚ÌˆÚ“®—Ê‚ÆŒo‰ßŠÔ‚©‚çA•b‘¬‚ğ‹‚ß‚Ä‘—M‚·‚é
-            stream.SendNext((p2 - p1) / elapsedTime);
+            if (elapsedTime > 0) // ƒ[ƒœZ‚ğ–h‚®
+            {
+                stream.SendNext((p2 - p1) / elapsedTime);
+            }
+            else
+            {
+                stream.SendNext(Vector3.zero);
+            }
         }
         else
         {
