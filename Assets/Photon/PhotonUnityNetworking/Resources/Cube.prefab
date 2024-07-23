@@ -101,6 +101,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb2b678a1417f3245bed6eb23bfc6746, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  skill1: {fileID: 11400000, guid: e6f5c7e01a1db0740a450fd465b23917, type: 2}
+  skill2: {fileID: 11400000, guid: e6f5c7e01a1db0740a450fd465b23917, type: 2}
+  characterName: Yoru
+  health: 100
+  speed: 5
 --- !u!114 &7637248854424043237
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -136,7 +141,6 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
-  - {fileID: 1684094732800676951}
   - {fileID: 7637248854424043237}
   sceneViewId: 0
   InstantiationId: 0
