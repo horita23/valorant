@@ -1,15 +1,15 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public interface ISkill
+public interface ISkill 
 {
-    void Activate();
+    void Activate(Cube character);
     float Cooldown { get; }
     bool IsAvailable { get; }
     GameObject SkillModel { get; }
 }
 
-public abstract class SkillBase : ScriptableObject, ISkill
+public abstract class SkillBase : ScriptableObject,ISkill
 {
     public float cooldown;
     public GameObject skillModel;
@@ -17,15 +17,15 @@ public abstract class SkillBase : ScriptableObject, ISkill
 
     public float Cooldown => cooldown;
 
-    public GameObject SkillModel => skillModel;
-
     public bool IsAvailable => (Time.time - lastUsedTime) >= cooldown;
 
-    public void Activate()
+    public GameObject SkillModel => skillModel;
+
+    public void Activate(Cube character)
     {
         if (IsAvailable)
         {
-            UseSkill();
+            UseSkill(character);
             lastUsedTime = Time.time;
         }
         else
@@ -34,5 +34,5 @@ public abstract class SkillBase : ScriptableObject, ISkill
         }
     }
 
-    protected abstract void UseSkill();
+    protected abstract void UseSkill(Cube character);
 }

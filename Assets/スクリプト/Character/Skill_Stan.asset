@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ca05f6c40a44eb42ab61eb2d070870b, type: 3}
-  m_Name: FlashSkill
+  m_Script: {fileID: 11500000, guid: 47e50eb7e59f82b409471f45e9cde3af, type: 3}
+  m_Name: Skill_Stan
   m_EditorClassIdentifier: 
   cooldown: 1
   skillModel: {fileID: 2738189921761499574, guid: b9b8d1439172daf4191862d59032fcbc, type: 3}

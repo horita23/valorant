@@ -5,11 +5,12 @@ using UnityEngine;
 
 public class Cube : MonoBehaviourPunCallbacks
 {
-    public SkillBase skill1; // インスペクタから設定可能
-    public SkillBase skill2; // インスペクタから設定可能
+    public SkillBase skill1;
+    public SkillBase skill2;
     public string characterName;
     public float health = 100.0f;
     public float speed = 5f;
+
 
     // Start is called before the first frame update
     void Start()
@@ -28,6 +29,7 @@ public class Cube : MonoBehaviourPunCallbacks
     {
         HandleInput();
     }
+   
 
     private void HandleInput()
     {
@@ -46,10 +48,10 @@ public class Cube : MonoBehaviourPunCallbacks
             input += new Vector3(0, 0, -1);
 
         if (Input.GetKeyDown(KeyCode.Q))
-            skill1.Activate();
+            skill1.Activate(this);
 
         if (Input.GetKeyDown(KeyCode.E))
-            skill2.Activate();
+            skill2.Activate(this); 
 
         transform.Translate(6f * Time.deltaTime * input.normalized);
     }

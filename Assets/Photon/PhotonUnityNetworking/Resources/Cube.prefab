@@ -102,7 +102,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skill1: {fileID: 11400000, guid: e6f5c7e01a1db0740a450fd465b23917, type: 2}
-  skill2: {fileID: 11400000, guid: e6f5c7e01a1db0740a450fd465b23917, type: 2}
+  skill2: {fileID: 11400000, guid: 6615552e5cae1be4fafc74c67edcbb34, type: 2}
   characterName: Yoru
   health: 100
   speed: 5
