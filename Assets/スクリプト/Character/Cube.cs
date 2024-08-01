@@ -13,6 +13,15 @@ public class Skill_Info
     public KeyCode skill_Key;
 }
 
+public enum StateSkill
+{
+
+    One = 0,
+    Two = 1,
+    COUNT = 2,
+
+}
+
 public class Cube : MonoBehaviourPunCallbacks
 {
     [Tooltip("The name of the character.")]
@@ -27,9 +36,11 @@ public class Cube : MonoBehaviourPunCallbacks
     [Tooltip("The second skill of the character.")]
     public Skill_Info[] m_Skill_Info;
 
+    private StateSkill m_StateSkill;
     // Start is called before the first frame update
     void Start()
     {
+        m_StateSkill = StateSkill.COUNT;
         for (int i = 0; i < m_Skill_Info.Length; i++)
         {
             m_Skill_Info[i].skill.ResetSkill();
@@ -47,7 +58,7 @@ public class Cube : MonoBehaviourPunCallbacks
     {
         HandleInput();
     }
-   
+
 
     private void HandleInput()
     {
@@ -71,9 +82,12 @@ public class Cube : MonoBehaviourPunCallbacks
             if (Input.GetKeyDown(m_Skill_Info[i].skill_Key))
             {
                 m_Skill_Info[i].skill.Activate(this);
+                m_StateSkill = (StateSkill)i;
             }
+            
         }
-        
+        if ((int)m_StateSkill < m_Skill_Info.Length)
+            m_Skill_Info[(int)m_StateSkill].skill.StateUpdate(this);
         transform.Translate(speed * Time.deltaTime * input.normalized);
     }
 }
