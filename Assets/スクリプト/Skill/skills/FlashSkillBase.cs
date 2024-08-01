@@ -3,42 +3,71 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "FlashSkill", menuName = "Skills/FlashSkill")]
 public class FlashSkillBase : SkillBase
 {
-    public const float MAX_BRINKU_TIME = 5;
+    public float MAX_BRINKU_TIME = 5;
     private float brinkuTime = 0;
     private bool brinkuSurvivalFlag = false;
+    private bool brinkuBootFlag = false;
+    private GameObject currentEffect;
     protected override void UpdateSkill(Cube character)
     {
-
-        //部リンク開始したか
-        if (brinkuSurvivalFlag)
-        {
-            if(Input.GetKeyDown(character.m_Skill_Info[0].skill_Key))
-                character.transform.position += character.transform.forward*5;
-            brinkuTime += Time.deltaTime;
-        }
-
-        //時間オーバー
-        if(brinkuTime >= MAX_BRINKU_TIME)
-            brinkuSurvivalFlag = false;
     }
-    protected override void UseSkill(Cube character)
+
+    protected override void UpdateMein(Cube character)
     {
         Debug.Log("エリアフラッシュスキル発動。");
+        
+        if (brinkuBootFlag)
+        {
+            brinkuTime += Time.deltaTime;
 
-        Debug.Log("キャラクターのスピードが100に設定されました: " + character.speed);
-        if (brinkuSurvivalFlag)
-        {
-            brinkuSurvivalFlag = false;
-            brinkuTime = 0;
+            if (currentEffect != null)
+                // エフェクトがキャラクターと一緒に移動
+                currentEffect.transform.position = character.transform.position;
+
+            if (Input.GetKeyDown(character.m_Skill_Info[0].skill_Key))
+            {
+                character.transform.position += character.transform.forward * 5;
+                EndBrinku();
+            }
+
+            if (brinkuTime >= MAX_BRINKU_TIME)
+                EndBrinku();
         }
-        else
+
+        //部リンク起動
+        //連続でキーが押されることがあるので2重チェック
+        if (brinkuSurvivalFlag)
+            brinkuBootFlag = true;
+
+    }
+
+    protected override void UseSkill(Cube character)
+    {
+        if (!brinkuSurvivalFlag)
         {
-            // エリアフラッシュの具体的な実装
-            Instantiate(SkillModel, character.transform.position, character.transform.rotation);
+            // エフェクトのインスタンスを生成し、キャラクターの子オブジェクトにする
+            currentEffect = Instantiate(SkillModel[0], character.transform.position, character.transform.rotation);
+            currentEffect.transform.SetParent(character.transform);
+
+            //部リンク起動
             brinkuSurvivalFlag = true;
         }
 
+    }
 
 
+    private void EndBrinku()
+    {
+        brinkuBootFlag = false;
+        brinkuSurvivalFlag = false;
+        brinkuTime = 0;
+        LastUsedTimeSet();
+
+        // エフェクトの削除
+        if (currentEffect != null)
+        {
+            Destroy(currentEffect);
+            currentEffect = null;
+        }
     }
 }

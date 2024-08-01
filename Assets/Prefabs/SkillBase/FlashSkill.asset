@@ -13,4 +13,6 @@ MonoBehaviour:
   m_Name: FlashSkill
   m_EditorClassIdentifier: 
   cooldown: 1
-  skillModel: {fileID: 2738189921761499574, guid: b9b8d1439172daf4191862d59032fcbc, type: 3}
+  skillModel:
+  - {fileID: 810776106513529899, guid: b9b8d1439172daf4191862d59032fcbc, type: 3}
+  MAX_BRINKU_TIME: 5
