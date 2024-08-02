@@ -26,7 +26,7 @@ public class FastPersonCamera : MonoBehaviourPunCallbacks
     {
         var localPlayer = PhotonNetwork.LocalPlayer;
         playerAvatar = localPlayer.TagObject as Cube;
-        if (playerAvatar != null)
+        if (playerAvatar != null && playerAvatar.photonView.IsMine)
         {
             // カメラの位置をターゲットの位置に追従
             transform.position = playerAvatar.transform.position;
@@ -41,7 +41,7 @@ public class FastPersonCamera : MonoBehaviourPunCallbacks
             horizontalRotation += mouseX * MouseSensitivity;
 
             // プレイヤーのAvatarオブジェクトをカメラの水平回転に合わせて回転
-            playerAvatar.transform.rotation = Quaternion.Euler(0, horizontalRotation, 0);
+            playerAvatar.transform.rotation = Quaternion.Euler(verticalRotation, horizontalRotation, 0);
             //カメラの回転
             transform.rotation = Quaternion.Euler(verticalRotation, horizontalRotation, 0);
         }

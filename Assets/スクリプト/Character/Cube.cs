@@ -33,6 +33,9 @@ public class Cube : MonoBehaviourPunCallbacks
     [Tooltip("The movement speed of the character.")]
     public float speed = 5f;
 
+    [Tooltip("銃の種類")]
+    public GameObject GunPrefab;//弾
+
     [Tooltip("The second skill of the character.")]
     public Skill_Info[] m_Skill_Info;
 
@@ -48,15 +51,24 @@ public class Cube : MonoBehaviourPunCallbacks
         if (photonView.IsMine)
         {
             PhotonNetwork.LocalPlayer.TagObject = this;
+            var gunInstance = Instantiate(GunPrefab, transform.position, transform.rotation);
+            gunInstance.transform.SetParent(this.transform); // プレイヤーの子要素に設定
+
         }
         PhotonNetwork.SendRate = 20; // 1秒間に20回送信
         PhotonNetwork.SerializationRate = 20; // 1秒間に20回シリアライズ
+                                              // 銃のインスタンスを生成
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        HandleInput();
+        if (photonView.IsMine)
+        {
+
+            HandleInput();
+        }
     }
 
 

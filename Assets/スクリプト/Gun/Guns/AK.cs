@@ -51,6 +51,9 @@ public class AK : BaseGun
 
         if (flag)
         {
+            // 補間して元の位置に戻す
+            transform.rotation = Quaternion.Lerp(transform.rotation, transform.parent.rotation, Time.deltaTime * 5);
+
 
             // 元の位置に十分近づいたら補間を停止する
             if (Quaternion.Angle(transform.rotation, transform.parent.rotation) < 0.01f)
@@ -59,8 +62,6 @@ public class AK : BaseGun
                 Recoil_Bullet_Count = 0;
                 flag = false;
             }
-            // 補間して元の位置に戻す
-            transform.rotation = Quaternion.Lerp(transform.rotation, transform.parent.rotation, Time.deltaTime * 5);
 
         }
         Camera.transform.rotation = transform.rotation;
