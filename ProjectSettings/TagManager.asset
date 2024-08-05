@@ -4,7 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Test_Enemy
+  - CinemachineTarget
+  - Ground
   layers:
   - Default
   - TransparentFX
@@ -12,8 +13,8 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
+  - BulletIgnore
+  - Bullet
   - 
   - 
   - 

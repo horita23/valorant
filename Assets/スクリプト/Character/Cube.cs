@@ -1,7 +1,7 @@
-using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 [System.Serializable]
 public class Skill_Info
@@ -15,11 +15,9 @@ public class Skill_Info
 
 public enum StateSkill
 {
-
     One = 0,
     Two = 1,
     COUNT = 2,
-
 }
 
 public class Cube : MonoBehaviourPunCallbacks
@@ -34,31 +32,66 @@ public class Cube : MonoBehaviourPunCallbacks
     public float speed = 5f;
 
     [Tooltip("銃の種類")]
-    public GameObject GunPrefab;//弾
+    public GameObject GunPrefab;
 
     [Tooltip("The second skill of the character.")]
     public Skill_Info[] m_Skill_Info;
 
     private StateSkill m_StateSkill;
+
+    private Animator animator = null;
+
+    // Direction constants
+    private const int None = -1;
+    private const int Idle = 0;
+    private const int Forward = 1;
+    private const int ForwardRight = 2;
+    private const int Right = 3;
+    private const int BackwardRight = 4;
+    private const int Backward = 5;
+    private const int BackwardLeft = 6;
+    private const int Left = 7;
+    private const int ForwardLeft = 8;
+
+    private Rigidbody rb;
+
+    // Jump parameters
+    public float jumpForce = 10f;
+    public float moveSpeed = 5f;
+    public float gravityMultiplier = 1f;
+    private bool isJumping = false;
+    private bool isGrounded = true;
+
+    // Additional movement parameters
+    public float groundFriction = 6f;  // Friction while on the ground
+    public float airControl = 0.2f;    // Control multiplier while in the air
+
+    private Vector3 lastMoveDirection; // Store the last move direction
+
     // Start is called before the first frame update
     void Start()
     {
-        m_StateSkill = StateSkill.COUNT;
-        for (int i = 0; i < m_Skill_Info.Length; i++)
-        {
-            m_Skill_Info[i].skill.ResetSkill();
-        }
         if (photonView.IsMine)
         {
+            m_StateSkill = StateSkill.COUNT;
+            for (int i = 0; i < m_Skill_Info.Length; i++)
+            {
+                m_Skill_Info[i].skill.ResetSkill();
+            }
+
+            animator = GetComponent<Animator>();
+            rb = GetComponent<Rigidbody>();
+            rb.freezeRotation = true; // Prevent rotation from physics
+
             PhotonNetwork.LocalPlayer.TagObject = this;
             var gunInstance = Instantiate(GunPrefab, transform.position, transform.rotation);
-            gunInstance.transform.SetParent(this.transform); // プレイヤーの子要素に設定
+            gunInstance.transform.SetParent(this.transform);
 
+            // Setting the initial grounded state
+            isGrounded = true;
         }
-        PhotonNetwork.SendRate = 20; // 1秒間に20回送信
-        PhotonNetwork.SerializationRate = 20; // 1秒間に20回シリアライズ
-                                              // 銃のインスタンスを生成
-
+        PhotonNetwork.SendRate = 20;
+        PhotonNetwork.SerializationRate = 20;
     }
 
     // Update is called once per frame
@@ -66,11 +99,9 @@ public class Cube : MonoBehaviourPunCallbacks
     {
         if (photonView.IsMine)
         {
-
             HandleInput();
         }
     }
-
 
     private void HandleInput()
     {
@@ -88,6 +119,38 @@ public class Cube : MonoBehaviourPunCallbacks
         if (Input.GetKey(KeyCode.S))
             input += new Vector3(0, 0, -1);
 
+        // Normalize the input to ensure consistent movement speed
+        if (input != Vector3.zero)
+        {
+            input.Normalize();
+        }
+
+        // Convert input to world space relative to the camera
+        Vector3 camForward = transform.forward;
+        Vector3 camRight = transform.right;
+
+        camForward.y = 0; // Keep movement on the ground plane
+        camRight.y = 0;
+        if (isGrounded)
+        {
+            Vector3 moveDirection = (camForward * input.z + camRight * input.x).normalized * speed;
+            // Apply movement with ground friction
+            rb.velocity = new Vector3(moveDirection.x, rb.velocity.y, moveDirection.z);
+            lastMoveDirection = input; // Store last move direction
+        }
+        else
+        {
+            Vector3 moveDirection = (camForward * lastMoveDirection.z + camRight * lastMoveDirection.x).normalized * speed;
+            // Apply movement with reduced control in the air
+            rb.velocity = new Vector3(moveDirection.x, rb.velocity.y, moveDirection.z);
+        }
+
+        if (!isJumping)
+        {
+            // Update animation
+            UpdateAnimation(input);
+        }
+        // Skill handling
         for (int i = 0; i < m_Skill_Info.Length; i++)
         {
             m_Skill_Info[i].skill.MUpdate(this);
@@ -96,10 +159,79 @@ public class Cube : MonoBehaviourPunCallbacks
                 m_Skill_Info[i].skill.Activate(this);
                 m_StateSkill = (StateSkill)i;
             }
-            
         }
         if ((int)m_StateSkill < m_Skill_Info.Length)
             m_Skill_Info[(int)m_StateSkill].skill.StateUpdate(this);
-        transform.Translate(speed * Time.deltaTime * input.normalized);
+
+        // Handle jump input
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded && !isJumping)
+        {
+            Jump();
+        }
+    }
+
+    private void UpdateAnimation(Vector3 input)
+    {
+        // Update animation based on movement direction
+        if (input == Vector3.forward)
+        {
+            animator.SetInteger("Direction", Forward);
+        }
+        else if (input == (Vector3.forward + Vector3.right).normalized)
+        {
+            animator.SetInteger("Direction", ForwardRight);
+        }
+        else if (input == Vector3.right)
+        {
+            animator.SetInteger("Direction", Right);
+        }
+        else if (input == (Vector3.right + Vector3.back).normalized)
+        {
+            animator.SetInteger("Direction", BackwardRight);
+        }
+        else if (input == Vector3.back)
+        {
+            animator.SetInteger("Direction", Backward);
+        }
+        else if (input == (Vector3.back + Vector3.left).normalized)
+        {
+            animator.SetInteger("Direction", BackwardLeft);
+        }
+        else if (input == Vector3.left)
+        {
+            animator.SetInteger("Direction", Left);
+        }
+        else if (input == (Vector3.left + Vector3.forward).normalized)
+        {
+            animator.SetInteger("Direction", ForwardLeft);
+        }
+        else
+        {
+            animator.SetInteger("Direction", Idle);
+        }
+    }
+
+    void Jump()
+    {
+        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        animator.SetTrigger("Jump");
+        isJumping = true;
+        isGrounded = false; // Set to false to disable movement input during the jump
+        animator.SetInteger("Direction", None);
+    }
+
+    // This method should be called when the jump animation finishes
+    public void OnLanding()
+    {
+        isJumping = false;
+        isGrounded = true;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            OnLanding();
+        }
     }
 }

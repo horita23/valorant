@@ -732,6 +732,11 @@ MonoBehaviour:
     skill_Key: 113
   - skill: {fileID: 11400000, guid: 6615552e5cae1be4fafc74c67edcbb34, type: 2}
     skill_Key: 101
+  jumpForce: 4
+  moveSpeed: 5
+  gravityMultiplier: 1
+  groundFriction: 6
+  airControl: 0.002
 --- !u!114 &-7992844860689367506
 MonoBehaviour:
   m_ObjectHideFlags: 0
