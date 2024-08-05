@@ -2,6 +2,7 @@ using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 
 [System.Serializable]
 public class Skill_Info
@@ -21,7 +22,6 @@ public enum StateSkill
     COUNT = 2,
 
 }
-
 public class Cube : MonoBehaviourPunCallbacks
 {
     [Tooltip("The name of the character.")]
@@ -40,16 +40,34 @@ public class Cube : MonoBehaviourPunCallbacks
     public Skill_Info[] m_Skill_Info;
 
     private StateSkill m_StateSkill;
+
+    private Animator animator = null;
+    // Direction constants
+    // Direction constants
+    private const int Idle = 0;
+    private const int Forward = 1;
+    private const int ForwardRight = 2;
+    private const int Right = 3;
+    private const int BackwardRight = 4;
+    private const int Backward = 5;
+    private const int BackwardLeft = 6;
+    private const int Left = 7;
+    private const int ForwardLeft = 8;
+
+
     // Start is called before the first frame update
     void Start()
     {
-        m_StateSkill = StateSkill.COUNT;
-        for (int i = 0; i < m_Skill_Info.Length; i++)
-        {
-            m_Skill_Info[i].skill.ResetSkill();
-        }
         if (photonView.IsMine)
         {
+            m_StateSkill = StateSkill.COUNT;
+            for (int i = 0; i < m_Skill_Info.Length; i++)
+            {
+                m_Skill_Info[i].skill.ResetSkill();
+            }
+
+            animator = GetComponent<Animator>();
+
             PhotonNetwork.LocalPlayer.TagObject = this;
             var gunInstance = Instantiate(GunPrefab, transform.position, transform.rotation);
             gunInstance.transform.SetParent(this.transform); // プレイヤーの子要素に設定
@@ -66,7 +84,6 @@ public class Cube : MonoBehaviourPunCallbacks
     {
         if (photonView.IsMine)
         {
-
             HandleInput();
         }
     }
@@ -88,6 +105,52 @@ public class Cube : MonoBehaviourPunCallbacks
         if (Input.GetKey(KeyCode.S))
             input += new Vector3(0, 0, -1);
 
+        // Normalize the input to ensure consistent movement speed
+        if (input != Vector3.zero)
+        {
+            input.Normalize();
+        }
+
+        transform.Translate(speed * Time.deltaTime * input);
+
+        if (input == Vector3.forward)
+        {
+            animator.SetInteger("Direction", Forward);
+        }
+        else if (input == (Vector3.forward + Vector3.right).normalized)
+        {
+            animator.SetInteger("Direction", ForwardRight);
+        }
+        else if (input == Vector3.right)
+        {
+            animator.SetInteger("Direction", Right);
+        }
+        else if (input == (Vector3.right + Vector3.back).normalized)
+        {
+            animator.SetInteger("Direction", BackwardRight);
+        }
+        else if (input == Vector3.back)
+        {
+            animator.SetInteger("Direction", Backward);
+        }
+        else if (input == (Vector3.back + Vector3.left).normalized)
+        {
+            animator.SetInteger("Direction", BackwardLeft);
+        }
+        else if (input == Vector3.left)
+        {
+            animator.SetInteger("Direction", Left);
+        }
+        else if (input == (Vector3.left + Vector3.forward).normalized)
+        {
+            animator.SetInteger("Direction", ForwardLeft);
+        }
+        else
+        {
+            animator.SetInteger("Direction", Idle);
+        }
+        Debug.Log(animator.GetInteger("Direction"));
+
         for (int i = 0; i < m_Skill_Info.Length; i++)
         {
             m_Skill_Info[i].skill.MUpdate(this);
@@ -100,6 +163,6 @@ public class Cube : MonoBehaviourPunCallbacks
         }
         if ((int)m_StateSkill < m_Skill_Info.Length)
             m_Skill_Info[(int)m_StateSkill].skill.StateUpdate(this);
-        transform.Translate(speed * Time.deltaTime * input.normalized);
+
     }
 }
