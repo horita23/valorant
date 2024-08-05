@@ -25,6 +25,7 @@ public class AK : BaseGun
         currentAmmo = ammoCapacity;
         transform.Translate(new Vector3(1, 0, 1));
         Camera = FindObjectOfType<FastPersonCamera>();
+ 
     }
 
     public override void MainUpdate()
@@ -67,9 +68,6 @@ public class AK : BaseGun
             }
 
         }
-        if(Camera != null)
-        Camera.transform.rotation = transform.rotation;
-
 
     }
 

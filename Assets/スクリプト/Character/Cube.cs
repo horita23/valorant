@@ -38,7 +38,7 @@ public class Cube : MonoBehaviourPunCallbacks
     [Tooltip("The second skill of the character.")]
     public Skill_Info[] m_Skill_Info;
 
-    private StateSkill m_StateSkill;
+    private int m_StateSkill;
 
     private Animator animator = null;
 
@@ -79,21 +79,23 @@ public class Cube : MonoBehaviourPunCallbacks
     {
         if (photonView.IsMine)
         {
-            m_StateSkill = StateSkill.COUNT;
+            m_StateSkill = -1;
             for (int i = 0; i < m_Skill_Info.Length; i++)
             {
                 m_Skill_Info[i].skill.ResetSkill();
             }
+            //ネットワークで銃を作成する
+            gunInstance = PhotonNetwork.Instantiate(GunPrefab.name, transform.position, transform.rotation);
+            gunInstance.SetActive(false);
+            //プレイヤーを子にする
+            photonView.RPC("SetParentRPC", RpcTarget.AllBuffered, gunInstance.GetPhotonView().ViewID, photonView.ViewID);
 
             animator = GetComponent<Animator>();
             rb = GetComponent<Rigidbody>();
             rb.freezeRotation = true; // Prevent rotation from physics
 
             PhotonNetwork.LocalPlayer.TagObject = this;
-            //ネットワークで銃を作成する
-            gunInstance = PhotonNetwork.Instantiate(GunPrefab.name, transform.position, transform.rotation);
-            //プレイヤーを子にする
-            photonView.RPC("SetParentRPC", RpcTarget.AllBuffered, gunInstance.GetPhotonView().ViewID, photonView.ViewID);
+
             // Setting the initial grounded state
             isGrounded = true;
         }
@@ -146,51 +148,59 @@ public class Cube : MonoBehaviourPunCallbacks
             input.Normalize();
         }
 
-        // Convert input to world space relative to the camera
-        Vector3 camForward = transform.forward;
-        Vector3 camRight = transform.right;
-
-        camForward.y = 0; // Keep movement on the ground plane
-        camRight.y = 0;
-        if (isGrounded)
-        {
-            Vector3 moveDirection = (camForward * input.z + camRight * input.x).normalized * speed;
-            // Apply movement with ground friction
-            rb.velocity = new Vector3(moveDirection.x, rb.velocity.y, moveDirection.z);
-            lastMoveDirection = input; // Store last move direction
-        }
-        else
-        {
-            Vector3 moveDirection = (camForward * lastMoveDirection.z + camRight * lastMoveDirection.x).normalized * speed;
-            // Apply movement with reduced control in the air
-            rb.velocity = new Vector3(moveDirection.x, rb.velocity.y, moveDirection.z);
-        }
-
-        if (!isJumping)
-        {
-            // Update animation
-            UpdateAnimation(input);
-        }
-        // Skill handling
-        for (int i = 0; i < m_Skill_Info.Length; i++)
-        {
-            m_Skill_Info[i].skill.MUpdate(this);
-            if (Input.GetKeyDown(m_Skill_Info[i].skill_Key))
-            {
-                m_Skill_Info[i].skill.Activate(this);
-                m_StateSkill = (StateSkill)i;
-            }
-        }
-        if ((int)m_StateSkill < m_Skill_Info.Length)
-            m_Skill_Info[(int)m_StateSkill].skill.StateUpdate(this);
-
         // Handle jump input
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded && !isJumping)
         {
             Jump();
         }
+
+
+
+        //ジャンプ
+        Move(input);
+
+        //ジャンプじゃなかったらアニメーション
+        if (!isJumping)
+        {
+            // Update animation
+            UpdateAnimation(input);
+        }
+
+
+        // Skill handling
+        for (int i = 0; i < m_Skill_Info.Length; i++)
+        {
+            m_Skill_Info[i].skill.MUpdate(this);
+
+            if (Input.GetKeyDown(m_Skill_Info[i].skill_Key))
+            {
+                m_Skill_Info[i].skill.Activate(this);
+                m_StateSkill = i;
+                gunInstance.SetActive(false);
+            }
+        }
+
+        //銃の更新
+        gunInstance.GetComponent<BaseGun>().MainUpdate();
+        //銃の選択
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            //とりあえずスキルの次に銃の状態
+            m_StateSkill = m_Skill_Info.Length;
+            //銃表示
+            gunInstance.SetActive(true);
+        }
+
+        //どの手持ちの状態か
+        if (0 <= m_StateSkill && m_StateSkill< m_Skill_Info.Length)
+            m_Skill_Info[m_StateSkill].skill.StateUpdate(this);
+
+        else if(m_StateSkill == m_Skill_Info.Length)
+            //銃の更新
+            gunInstance.GetComponent<BaseGun>().StateUpdate();
     }
 
+    //移動アニメーション
     private void UpdateAnimation(Vector3 input)
     {
         // Update animation based on movement direction
@@ -239,6 +249,31 @@ public class Cube : MonoBehaviourPunCallbacks
         isJumping = true;
         isGrounded = false; // Set to false to disable movement input during the jump
         animator.SetInteger("Direction", None);
+    }
+
+    //ジャンプの更新
+    void Move(Vector3 input)
+    {
+        // Convert input to world space relative to the camera
+        Vector3 camForward = transform.forward;
+        Vector3 camRight = transform.right;
+
+        camForward.y = 0; // Keep movement on the ground plane
+        camRight.y = 0;
+        if (isGrounded)
+        {
+            Vector3 moveDirection = (camForward * input.z + camRight * input.x).normalized * speed;
+            // Apply movement with ground friction
+            rb.velocity = new Vector3(moveDirection.x, rb.velocity.y, moveDirection.z);
+            lastMoveDirection = input; // Store last move direction
+        }
+        else
+        {
+            Vector3 moveDirection = (camForward * lastMoveDirection.z + camRight * lastMoveDirection.x).normalized * speed;
+            // Apply movement with reduced control in the air
+            rb.velocity = new Vector3(moveDirection.x, rb.velocity.y, moveDirection.z);
+        }
+
     }
 
     // This method should be called when the jump animation finishes
