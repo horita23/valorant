@@ -1,8 +1,7 @@
-using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SocialPlatforms.Impl;
+using Photon.Pun;
 
 [System.Serializable]
 public class Skill_Info
@@ -16,12 +15,11 @@ public class Skill_Info
 
 public enum StateSkill
 {
-
     One = 0,
     Two = 1,
     COUNT = 2,
-
 }
+
 public class Cube : MonoBehaviourPunCallbacks
 {
     [Tooltip("The name of the character.")]
@@ -34,7 +32,7 @@ public class Cube : MonoBehaviourPunCallbacks
     public float speed = 5f;
 
     [Tooltip("銃の種類")]
-    public GameObject GunPrefab;//弾
+    public GameObject GunPrefab;
 
     [Tooltip("The second skill of the character.")]
     public Skill_Info[] m_Skill_Info;
@@ -42,7 +40,7 @@ public class Cube : MonoBehaviourPunCallbacks
     private StateSkill m_StateSkill;
 
     private Animator animator = null;
-    // Direction constants
+
     // Direction constants
     private const int Idle = 0;
     private const int Forward = 1;
@@ -54,6 +52,20 @@ public class Cube : MonoBehaviourPunCallbacks
     private const int Left = 7;
     private const int ForwardLeft = 8;
 
+    private Rigidbody rb;
+
+    // Jump parameters
+    public float jumpForce = 10f;
+    public float moveSpeed = 5f;
+    public float gravityMultiplier = 1f;
+    private bool isJumping = false;
+    private bool isGrounded = true;
+
+    // Additional movement parameters
+    public float groundFriction = 6f;  // Friction while on the ground
+    public float airControl = 0.2f;    // Control multiplier while in the air
+
+    private Vector3 lastMoveDirection; // Store the last move direction
 
     // Start is called before the first frame update
     void Start()
@@ -67,16 +79,18 @@ public class Cube : MonoBehaviourPunCallbacks
             }
 
             animator = GetComponent<Animator>();
+            rb = GetComponent<Rigidbody>();
+            rb.freezeRotation = true; // Prevent rotation from physics
 
             PhotonNetwork.LocalPlayer.TagObject = this;
             var gunInstance = Instantiate(GunPrefab, transform.position, transform.rotation);
-            gunInstance.transform.SetParent(this.transform); // プレイヤーの子要素に設定
+            gunInstance.transform.SetParent(this.transform);
 
+            // Setting the initial grounded state
+            isGrounded = true;
         }
-        PhotonNetwork.SendRate = 20; // 1秒間に20回送信
-        PhotonNetwork.SerializationRate = 20; // 1秒間に20回シリアライズ
-                                              // 銃のインスタンスを生成
-
+        PhotonNetwork.SendRate = 20;
+        PhotonNetwork.SerializationRate = 20;
     }
 
     // Update is called once per frame
@@ -87,7 +101,6 @@ public class Cube : MonoBehaviourPunCallbacks
             HandleInput();
         }
     }
-
 
     private void HandleInput()
     {
@@ -111,8 +124,52 @@ public class Cube : MonoBehaviourPunCallbacks
             input.Normalize();
         }
 
-        transform.Translate(speed * Time.deltaTime * input);
+        // Convert input to world space relative to the camera
+        Vector3 camForward = transform.forward;
+        Vector3 camRight = transform.right;
 
+        camForward.y = 0; // Keep movement on the ground plane
+        camRight.y = 0;
+        if (isGrounded)
+        {
+            Vector3 moveDirection = (camForward * input.z + camRight * input.x).normalized * speed;
+            // Apply movement with ground friction
+            rb.velocity = new Vector3(moveDirection.x, rb.velocity.y, moveDirection.z);
+            lastMoveDirection = input; // Store last move direction
+        }
+        else
+        {
+            Vector3 moveDirection = (camForward * lastMoveDirection.z + camRight * lastMoveDirection.x).normalized * speed;
+            // Apply movement with reduced control in the air
+            rb.velocity = new Vector3(moveDirection.x, rb.velocity.y, moveDirection.z);
+        }
+
+        // Update animation
+        UpdateAnimation(input);
+
+        // Skill handling
+        for (int i = 0; i < m_Skill_Info.Length; i++)
+        {
+            m_Skill_Info[i].skill.MUpdate(this);
+            if (Input.GetKeyDown(m_Skill_Info[i].skill_Key))
+            {
+                m_Skill_Info[i].skill.Activate(this);
+                m_StateSkill = (StateSkill)i;
+            }
+        }
+        if ((int)m_StateSkill < m_Skill_Info.Length)
+            m_Skill_Info[(int)m_StateSkill].skill.StateUpdate(this);
+
+        // Handle jump input
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded && !isJumping)
+        {
+            Jump();
+        }
+    }
+
+    private void UpdateAnimation(Vector3 input)
+    {
+        // Update animation based on movement direction
         if (input == Vector3.forward)
         {
             animator.SetInteger("Direction", Forward);
@@ -150,19 +207,28 @@ public class Cube : MonoBehaviourPunCallbacks
             animator.SetInteger("Direction", Idle);
         }
         Debug.Log(animator.GetInteger("Direction"));
+    }
 
-        for (int i = 0; i < m_Skill_Info.Length; i++)
+    void Jump()
+    {
+        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        animator.SetTrigger("Jump");
+        isJumping = true;
+        isGrounded = false; // Set to false to disable movement input during the jump
+    }
+
+    // This method should be called when the jump animation finishes
+    public void OnLanding()
+    {
+        isJumping = false;
+        isGrounded = true;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
         {
-            m_Skill_Info[i].skill.MUpdate(this);
-            if (Input.GetKeyDown(m_Skill_Info[i].skill_Key))
-            {
-                m_Skill_Info[i].skill.Activate(this);
-                m_StateSkill = (StateSkill)i;
-            }
-            
+            OnLanding();
         }
-        if ((int)m_StateSkill < m_Skill_Info.Length)
-            m_Skill_Info[(int)m_StateSkill].skill.StateUpdate(this);
-
     }
 }

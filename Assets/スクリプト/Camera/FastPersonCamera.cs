@@ -41,7 +41,7 @@ public class FastPersonCamera : MonoBehaviourPunCallbacks
             horizontalRotation += mouseX * MouseSensitivity;
 
             // プレイヤーのAvatarオブジェクトをカメラの水平回転に合わせて回転
-            playerAvatar.transform.rotation = Quaternion.Euler(verticalRotation, horizontalRotation, 0);
+            playerAvatar.transform.rotation = Quaternion.Euler(0, horizontalRotation, 0);
             //カメラの回転
             transform.rotation = Quaternion.Euler(verticalRotation, horizontalRotation, 0);
         }
