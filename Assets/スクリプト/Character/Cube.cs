@@ -33,6 +33,7 @@ public class Cube : MonoBehaviourPunCallbacks
 
     [Tooltip("銃の種類")]
     public GameObject GunPrefab;
+    private GameObject gunInstance;
 
     [Tooltip("The second skill of the character.")]
     public Skill_Info[] m_Skill_Info;
@@ -89,16 +90,31 @@ public class Cube : MonoBehaviourPunCallbacks
             rb.freezeRotation = true; // Prevent rotation from physics
 
             PhotonNetwork.LocalPlayer.TagObject = this;
-            var gunInstance = Instantiate(GunPrefab, transform.position, transform.rotation);
-            gunInstance.transform.SetParent(this.transform);
-
+            //ネットワークで銃を作成する
+            gunInstance = PhotonNetwork.Instantiate(GunPrefab.name, transform.position, transform.rotation);
+            //プレイヤーを子にする
+            photonView.RPC("SetParentRPC", RpcTarget.AllBuffered, gunInstance.GetPhotonView().ViewID, photonView.ViewID);
             // Setting the initial grounded state
             isGrounded = true;
         }
         PhotonNetwork.SendRate = 20;
         PhotonNetwork.SerializationRate = 20;
     }
+    //
+    [PunRPC]
+    void SetParentRPC(int gunViewID, int parentViewID)
+    {
+        PhotonView gunView = PhotonView.Find(gunViewID);
+        PhotonView parentView = PhotonView.Find(parentViewID);
 
+        if (gunView != null && parentView != null)
+        {
+            GameObject gunObj = gunView.gameObject;
+            GameObject parentObj = parentView.gameObject;
+
+            gunObj.transform.SetParent(parentObj.transform);
+        }
+    }
     // Update is called once per frame
     void Update()
     {
