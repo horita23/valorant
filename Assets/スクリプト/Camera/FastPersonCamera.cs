@@ -6,8 +6,6 @@ using UnityEngine;
 public class FastPersonCamera : MonoBehaviourPunCallbacks
 {
 
-    public GameObject target; //追従するターゲットオブジェクト
-    public Vector3 AdjustmentPos = new Vector3(0, 1.7f, 0);
     public float MouseSensitivity = 10f;
 
     private float verticalRotation;
@@ -44,8 +42,7 @@ public class FastPersonCamera : MonoBehaviourPunCallbacks
             transform.rotation = Quaternion.Euler(verticalRotation, horizontalRotation, 0);
 
             // カメラの位置をターゲットの位置に追従
-            transform.position = playerAvatar.transform.position;
-            transform.position += AdjustmentPos;
+            transform.position = playerAvatar.headChild.position;
         }
 
     }

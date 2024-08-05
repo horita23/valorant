@@ -41,6 +41,11 @@ public class Cube : MonoBehaviourPunCallbacks
 
     private Animator animator = null;
 
+
+    //孫（子オブジェクトの子オブジェクト)を取得する。
+    //以下の場合なら自身の子オブジェクトChildの子オブジェクトGrandChildを取得
+    public Transform headChild;
+
     // Direction constants
     private const int None = -1;
     private const int Idle = 0;
