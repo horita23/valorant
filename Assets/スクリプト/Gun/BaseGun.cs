@@ -29,5 +29,9 @@ public abstract class BaseGun : MonoBehaviourPunCallbacks
     public abstract void Reload();
     //リコイル
     public abstract void Recoil();
+    //必ず通る更新処理
+    public abstract void MainUpdate();
+    //銃を持っている時のみ入る更新処理
+    public abstract void StateUpdate();
 
 }

@@ -18,7 +18,7 @@ public class FastPersonCamera : MonoBehaviourPunCallbacks
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -30,6 +30,7 @@ public class FastPersonCamera : MonoBehaviourPunCallbacks
         {
             // カメラの位置をターゲットの位置に追従
             transform.position = playerAvatar.transform.position;
+            transform.Translate(new Vector3(0, 1, 0));
 
             // マウス入力によるカメラの回転
             float mouseX = Input.GetAxis("Mouse X");
