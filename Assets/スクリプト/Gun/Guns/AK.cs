@@ -27,9 +27,12 @@ public class AK : BaseGun
         Camera = FindObjectOfType<FastPersonCamera>();
     }
 
-    void Update()
+    public override void MainUpdate()
     {
 
+    }
+    public override void StateUpdate()
+    {
         if (Input.GetKey(KeyCode.Mouse0))
         {
             Shoot();
@@ -44,7 +47,7 @@ public class AK : BaseGun
             flag = true;
         }
 
-            if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.R))
         {
             Reload();
         }
@@ -64,7 +67,10 @@ public class AK : BaseGun
             }
 
         }
+        if(Camera != null)
         Camera.transform.rotation = transform.rotation;
+
+
     }
 
     public override void Shoot()
