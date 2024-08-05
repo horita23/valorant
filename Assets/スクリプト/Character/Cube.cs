@@ -42,6 +42,7 @@ public class Cube : MonoBehaviourPunCallbacks
     private Animator animator = null;
 
     // Direction constants
+    private const int None = -1;
     private const int Idle = 0;
     private const int Forward = 1;
     private const int ForwardRight = 2;
@@ -144,9 +145,11 @@ public class Cube : MonoBehaviourPunCallbacks
             rb.velocity = new Vector3(moveDirection.x, rb.velocity.y, moveDirection.z);
         }
 
-        // Update animation
-        UpdateAnimation(input);
-
+        if (!isJumping)
+        {
+            // Update animation
+            UpdateAnimation(input);
+        }
         // Skill handling
         for (int i = 0; i < m_Skill_Info.Length; i++)
         {
@@ -206,7 +209,6 @@ public class Cube : MonoBehaviourPunCallbacks
         {
             animator.SetInteger("Direction", Idle);
         }
-        Debug.Log(animator.GetInteger("Direction"));
     }
 
     void Jump()
@@ -215,6 +217,7 @@ public class Cube : MonoBehaviourPunCallbacks
         animator.SetTrigger("Jump");
         isJumping = true;
         isGrounded = false; // Set to false to disable movement input during the jump
+        animator.SetInteger("Direction", None);
     }
 
     // This method should be called when the jump animation finishes
