@@ -502,5 +502,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fbc75dea3180a14bb08d52176a3d781, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 1684094732800676950, guid: 1d327f38c7114c6489c6712dc7984e1a, type: 3}
   MouseSensitivity: 10
