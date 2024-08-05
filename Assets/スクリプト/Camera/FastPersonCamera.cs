@@ -7,6 +7,7 @@ public class FastPersonCamera : MonoBehaviourPunCallbacks
 {
 
     public GameObject target; //追従するターゲットオブジェクト
+    public Vector3 AdjustmentPos = new Vector3(0, 1.7f, 0);
     public float MouseSensitivity = 10f;
 
     private float verticalRotation;
@@ -28,10 +29,6 @@ public class FastPersonCamera : MonoBehaviourPunCallbacks
         playerAvatar = localPlayer.TagObject as Cube;
         if (playerAvatar != null && playerAvatar.photonView.IsMine)
         {
-            // カメラの位置をターゲットの位置に追従
-            transform.position = playerAvatar.transform.position;
-            transform.Translate(new Vector3(0, 1, 0));
-
             // マウス入力によるカメラの回転
             float mouseX = Input.GetAxis("Mouse X");
             float mouseY = Input.GetAxis("Mouse Y");
@@ -45,6 +42,10 @@ public class FastPersonCamera : MonoBehaviourPunCallbacks
             playerAvatar.transform.rotation = Quaternion.Euler(0, horizontalRotation, 0);
             //カメラの回転
             transform.rotation = Quaternion.Euler(verticalRotation, horizontalRotation, 0);
+
+            // カメラの位置をターゲットの位置に追従
+            transform.position = playerAvatar.transform.position;
+            transform.position += AdjustmentPos;
         }
 
     }
