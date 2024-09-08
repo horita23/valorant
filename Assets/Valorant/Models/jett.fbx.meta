@@ -5,6 +5,21 @@ ModelImporter:
   internalIDToNameTable: []
   externalObjects:
   - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: TP_Core_Eye_MI.001
+    second: {fileID: 2100000, guid: eb5891b99e1681049bd2e0f331afb51a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: TP_Wushu_S0_Hair_MI.001
+    second: {fileID: 2100000, guid: 7b2c9322e9120e949b43c86efb9371ca, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: TP_Wushu_S0_TattooMI.001
+    second: {fileID: 2100000, guid: e8d44786a85f1204189e8b51208e442d, type: 2}
+  - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: Body_D
