@@ -68,9 +68,7 @@ public class Cube : MonoBehaviourPunCallbacks
     private bool isJumping = false;
     private bool isGrounded = true;
 
-    // Additional movement parameters
-    public float groundFriction = 6f;  // Friction while on the ground
-    public float airControl = 0.2f;    // Control multiplier while in the air
+    public float airControl = 0.3f;    // Control multiplier while in the air
 
     private Vector3 lastMoveDirection; // Store the last move direction
 
@@ -117,6 +115,7 @@ public class Cube : MonoBehaviourPunCallbacks
             gunObj.transform.SetParent(parentObj.transform);
         }
     }
+
     // Update is called once per frame
     void Update()
     {
@@ -269,7 +268,8 @@ public class Cube : MonoBehaviourPunCallbacks
         }
         else
         {
-            Vector3 moveDirection = (camForward * lastMoveDirection.z + camRight * lastMoveDirection.x).normalized * speed;
+            input *= airControl;
+            Vector3 moveDirection = (camForward * (lastMoveDirection.z + input.z) + camRight * (lastMoveDirection.x + input.x)) * speed;
             // Apply movement with reduced control in the air
             rb.velocity = new Vector3(moveDirection.x, rb.velocity.y, moveDirection.z);
         }

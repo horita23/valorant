@@ -770,8 +770,7 @@ MonoBehaviour:
   jumpForce: 4
   moveSpeed: 5
   gravityMultiplier: 1
-  groundFriction: 6
-  airControl: 0.002
+  airControl: 1
 --- !u!114 &-7992844860689367506
 MonoBehaviour:
   m_ObjectHideFlags: 0
