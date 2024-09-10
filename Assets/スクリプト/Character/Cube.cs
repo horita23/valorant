@@ -46,6 +46,8 @@ public class Cube : MonoBehaviourPunCallbacks
     //孫（子オブジェクトの子オブジェクト)を取得する。
     //以下の場合なら自身の子オブジェクトChildの子オブジェクトGrandChildを取得
     public Transform headChild;
+    public Transform GunPositon;
+    public Transform[] Shoulder;
 
     // Direction constants
     private const int None = -1;
@@ -91,7 +93,7 @@ public class Cube : MonoBehaviourPunCallbacks
 
             PhotonNetwork.LocalPlayer.TagObject = this;
             //ネットワークで銃を作成する
-            gunInstance = PhotonNetwork.Instantiate(GunPrefab.name, transform.position, transform.rotation);
+            gunInstance = PhotonNetwork.Instantiate(GunPrefab.name, GunPositon.position, transform.rotation);
             //プレイヤーを子にする
             photonView.RPC("SetParentRPC", RpcTarget.AllBuffered, gunInstance.GetPhotonView().ViewID, photonView.ViewID);
             // Setting the initial grounded state
@@ -121,6 +123,8 @@ public class Cube : MonoBehaviourPunCallbacks
         if (photonView.IsMine)
         {
             HandleInput();
+
+            gunInstance.transform.position = GunPositon.position;
         }
     }
 

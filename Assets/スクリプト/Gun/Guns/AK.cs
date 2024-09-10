@@ -23,7 +23,6 @@ public class AK : BaseGun
     void Start()
     {
         currentAmmo = ammoCapacity;
-        transform.Translate(new Vector3(1, 0, 1));
         Camera = FindObjectOfType<FastPersonCamera>();
     }
 
