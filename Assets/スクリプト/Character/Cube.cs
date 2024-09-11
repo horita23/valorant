@@ -131,6 +131,19 @@ public class Cube : MonoBehaviourPunCallbacks
             HandleInput();
 
             gunInstance.transform.position = GunPositon.position;
+
+            BaseGun baseGun = null;
+
+            baseGun = gunInstance.GetComponent<BaseGun>();
+
+            baseGun.StateUpdate();
+
+            if(health <= 0)
+            {
+                transform.position = new Vector3(0, 0, 0);
+
+                health = 100;
+            }
         }
     }
 
@@ -277,11 +290,20 @@ public class Cube : MonoBehaviourPunCallbacks
         isGrounded = true;
     }
 
+    [PunRPC]
+    public void TakeDamage(float damage)
+    {
+        // ƒ_ƒ[ƒW‚ðŽó‚¯‚é
+        health -= damage;
+
+    }
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Ground"))
         {
             OnLanding();
         }
+
     }
+
 }

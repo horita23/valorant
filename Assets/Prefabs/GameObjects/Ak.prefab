@@ -50,7 +50,7 @@ MonoBehaviour:
   gunName: AK
   bulletPrefab: {fileID: 322811226365613655, guid: 5bee4474437c1cf44b705b33f591a7b0, type: 3}
   shotSpeed: 500
-  damage: 1
+  damage: 10
   ammoCapacity: 100
   shotInterval: 0.01
   Recoil_Bullet_limit: 15

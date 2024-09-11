@@ -1,3 +1,4 @@
+using Photon.Pun;
 using Photon.Pun.Demo.Asteroids;
 using System.Collections;
 using System.Collections.Generic;
@@ -19,6 +20,8 @@ public class AK : BaseGun
     private float time = 0.0f;
     private Vector3 recoilOffset = Vector3.zero;
     private bool flag = false;
+
+    private GameObject bulletInstance;
 
     void Start()
     {
@@ -83,16 +86,18 @@ public class AK : BaseGun
             time = 0.0f;
             currentAmmo--;
 
-            GameObject bullet = (GameObject)Instantiate(bulletPrefab, transform.position, transform.rotation);
-            Rigidbody bulletRb = bullet.GetComponent<Rigidbody>();
-            bullet.transform.Translate(new Vector3(0, 0, 1));
+            bulletInstance = PhotonNetwork.Instantiate(bulletPrefab.name, transform.position, transform.rotation);
+
+            Rigidbody bulletRb = bulletInstance.GetComponent<Rigidbody>();
+
+            bulletInstance.GetComponent<Bullet>().SetDamage(damage);
 
             Recoil();
 
             bulletRb.AddForce(transform.forward * shotSpeed);
 
             // 射撃後3秒で弾丸のオブジェクトを破壊する
-            Destroy(bullet, 3.0f);
+            Destroy(bulletInstance, 3.0f);
         }
     }
 

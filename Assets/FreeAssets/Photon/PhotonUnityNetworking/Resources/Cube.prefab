@@ -105,23 +105,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterName: s
   health: 100
-  speed: 5
+  RunSpeed: 5
+  WalkSpeedRatio: 0.8
+  CrouchSpeedRatio: 0.6
   GunPrefab: {fileID: 5149810931926858183, guid: e27a5dd9e9fe03742a184001c7c2e7a9, type: 3}
   m_Skill_Info:
   - skill: {fileID: 11400000, guid: 50630c02da6f59e489ae9c9e3738a0ea, type: 2}
     skill_Key: 113
   - skill: {fileID: 11400000, guid: 6615552e5cae1be4fafc74c67edcbb34, type: 2}
     skill_Key: 101
+  jumpForce: 5
   headChild: {fileID: 3597616904077443699}
   GunPositon: {fileID: 1208328615501986239}
   Shoulder:
   - {fileID: 4638361478131904805}
   - {fileID: 6169902616806851587}
-  jumpForce: -0.66
-  moveSpeed: 5
-  gravityMultiplier: 1
-  groundFriction: 6
-  airControl: 0.002
 --- !u!114 &-7992844860689367506
 MonoBehaviour:
   m_ObjectHideFlags: 0
