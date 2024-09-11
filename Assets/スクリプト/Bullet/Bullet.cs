@@ -15,7 +15,7 @@ public class Bullet : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         // 自分以外のプレイヤーに当たった場合
-        if (other.CompareTag("Player") && !other.GetComponent<PhotonView>().IsMine)
+        if (other.CompareTag("Player"))
         {
             // ヒットしたプレイヤーのPhotonViewを取得
             PhotonView targetView = other.GetComponent<PhotonView>();

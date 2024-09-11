@@ -97,7 +97,7 @@ public class AK : BaseGun
             bulletRb.AddForce(transform.forward * shotSpeed);
 
             // 射撃後3秒で弾丸のオブジェクトを破壊する
-            Destroy(bulletInstance, 3.0f);
+            Destroy(bulletInstance.gameObject, 3.0f);
         }
     }
 
