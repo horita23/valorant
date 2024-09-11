@@ -29,7 +29,9 @@ public class Cube : MonoBehaviourPunCallbacks
     public float health = 100.0f;
 
     [Tooltip("The movement speed of the character.")]
-    public float speed = 5f;
+    public float RunSpeed = 5f;
+    public float WalkSpeedRatio = 0.8f;
+    public float CrouchSpeedRatio = 0.6f;
 
     [Tooltip("銃の種類")]
     public GameObject GunPrefab;
@@ -38,7 +40,13 @@ public class Cube : MonoBehaviourPunCallbacks
     [Tooltip("The second skill of the character.")]
     public Skill_Info[] m_Skill_Info;
 
-    private int m_StateSkill;
+    // Jump parameters
+    public float jumpForce = 10f;
+
+
+
+
+    private StateSkill m_StateSkill;
 
     private Animator animator = null;
 
@@ -46,6 +54,8 @@ public class Cube : MonoBehaviourPunCallbacks
     //孫（子オブジェクトの子オブジェクト)を取得する。
     //以下の場合なら自身の子オブジェクトChildの子オブジェクトGrandChildを取得
     public Transform headChild;
+    public Transform GunPositon;
+    public Transform[] Shoulder;
 
     // Direction constants
     private const int None = -1;
@@ -59,16 +69,16 @@ public class Cube : MonoBehaviourPunCallbacks
     private const int Left = 7;
     private const int ForwardLeft = 8;
 
+    private const int ChangeMotionNum = 8;
+
+    private const int WalkMotionNum = 1;
+    private const int CrouchMotionNum = 2;
+
     private Rigidbody rb;
 
-    // Jump parameters
-    public float jumpForce = 10f;
-    public float moveSpeed = 5f;
-    public float gravityMultiplier = 1f;
     private bool isJumping = false;
     private bool isGrounded = true;
 
-    public float airControl = 0.3f;    // Control multiplier while in the air
 
     private Vector3 lastMoveDirection; // Store the last move direction
 
@@ -93,7 +103,10 @@ public class Cube : MonoBehaviourPunCallbacks
             rb.freezeRotation = true; // Prevent rotation from physics
 
             PhotonNetwork.LocalPlayer.TagObject = this;
-
+            //ネットワークで銃を作成する
+            gunInstance = PhotonNetwork.Instantiate(GunPrefab.name, GunPositon.position, transform.rotation);
+            //プレイヤーを子にする
+            photonView.RPC("SetParentRPC", RpcTarget.AllBuffered, gunInstance.GetPhotonView().ViewID, photonView.ViewID);
             // Setting the initial grounded state
             isGrounded = true;
         }
@@ -122,6 +135,8 @@ public class Cube : MonoBehaviourPunCallbacks
         if (photonView.IsMine)
         {
             HandleInput();
+
+            gunInstance.transform.position = GunPositon.position;
         }
     }
 
@@ -141,31 +156,66 @@ public class Cube : MonoBehaviourPunCallbacks
         if (Input.GetKey(KeyCode.S))
             input += new Vector3(0, 0, -1);
 
-        // Normalize the input to ensure consistent movement speed
+        // 歩いていたら
         if (input != Vector3.zero)
         {
             input.Normalize();
+
+            if (!isJumping)
+            {
+                // Update animation
+                UpdateAnimation(input);
+            }
         }
+
+        animator.SetBool("CrouchFlag", false);
+        if (Input.GetKey(KeyCode.LeftControl))
+        {
+            input *= CrouchSpeedRatio;
+            animator.SetInteger("Direction", animator.GetInteger("Direction") + ChangeMotionNum * CrouchMotionNum);
+            animator.SetBool("CrouchFlag", true);
+
+
+        }
+        else if (Input.GetKey(KeyCode.LeftShift))
+        {
+            input *= WalkSpeedRatio;
+            animator.SetInteger("Direction", animator.GetInteger("Direction") + ChangeMotionNum * WalkMotionNum);
+
+        }
+
+        // 歩いていたら
+        if (input == Vector3.zero)
+            if (!isJumping)
+                animator.SetInteger("Direction", Idle);
+
+
+        // Convert input to world space relative to the camera
+        Vector3 camForward = transform.forward;
+        Vector3 camRight = transform.right;
+        camForward.y = 0; // Keep movement on the ground plane
+        camRight.y = 0;
+        if (isGrounded)
+        {
+            Vector3 moveDirection = (camForward * input.z + camRight * input.x).normalized * RunSpeed;
+            // Apply movement with ground friction
+            rb.velocity = new Vector3(moveDirection.x, rb.velocity.y, moveDirection.z);
+            lastMoveDirection = input; // Store last move direction
+        }
+        else
+        {
+            Vector3 moveDirection = (camForward * lastMoveDirection.z + camRight * lastMoveDirection.x).normalized * RunSpeed;
+            // Apply movement with reduced control in the air
+            rb.velocity = new Vector3(moveDirection.x, rb.velocity.y, moveDirection.z);
+        }
+
 
         // Handle jump input
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded && !isJumping)
         {
             Jump();
         }
-
-
-
-        //ジャンプ
-        Move(input);
-
-        //ジャンプじゃなかったらアニメーション
-        if (!isJumping)
-        {
-            // Update animation
-            UpdateAnimation(input);
-        }
-
-
+        
         // Skill handling
         for (int i = 0; i < m_Skill_Info.Length; i++)
         {
@@ -178,25 +228,8 @@ public class Cube : MonoBehaviourPunCallbacks
                 gunInstance.SetActive(false);
             }
         }
-
-        //銃の更新
-        gunInstance.GetComponent<BaseGun>().MainUpdate();
-        //銃の選択
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            //とりあえずスキルの次に銃の状態
-            m_StateSkill = m_Skill_Info.Length;
-            //銃表示
-            gunInstance.SetActive(true);
-        }
-
-        //どの手持ちの状態か
-        if (0 <= m_StateSkill && m_StateSkill< m_Skill_Info.Length)
-            m_Skill_Info[m_StateSkill].skill.StateUpdate(this);
-
-        else if(m_StateSkill == m_Skill_Info.Length)
-            //銃の更新
-            gunInstance.GetComponent<BaseGun>().StateUpdate();
+        if ((int)m_StateSkill < m_Skill_Info.Length)
+            m_Skill_Info[(int)m_StateSkill].skill.StateUpdate(this);
     }
 
     //移動アニメーション
@@ -234,10 +267,6 @@ public class Cube : MonoBehaviourPunCallbacks
         else if (input == (Vector3.left + Vector3.forward).normalized)
         {
             animator.SetInteger("Direction", ForwardLeft);
-        }
-        else
-        {
-            animator.SetInteger("Direction", Idle);
         }
     }
 
