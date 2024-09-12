@@ -105,7 +105,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterName: s
-  health: 100
+  HEALTH: 100
   RunSpeed: 5
   WalkSpeedRatio: 0.8
   CrouchSpeedRatio: 0.6
@@ -119,7 +119,7 @@ MonoBehaviour:
   headChild: {fileID: 3597616904077443699}
   GunPositon: {fileID: 1208328615501986239}
   Shoulder:
-  - {fileID: 4638361478131904805}
+  - {fileID: 1210695736143953663}
   - {fileID: 6169902616806851587}
 --- !u!114 &-7992844860689367506
 MonoBehaviour:
@@ -389,9 +389,9 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -1868552357510907052, guid: 39cdc7e05cd49f04ab7f0f0bd31dbd85, type: 3}
   m_PrefabInstance: {fileID: 8562831624683160299}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &4638361478131904805 stripped
+--- !u!4 &1210695736143953663 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: -5292982116906110002, guid: 39cdc7e05cd49f04ab7f0f0bd31dbd85, type: 3}
+  m_CorrespondingSourceObject: {fileID: -1866732539989181420, guid: 39cdc7e05cd49f04ab7f0f0bd31dbd85, type: 3}
   m_PrefabInstance: {fileID: 8562831624683160299}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &5071448624522047535 stripped

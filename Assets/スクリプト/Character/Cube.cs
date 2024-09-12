@@ -233,6 +233,7 @@ public class Cube : MonoBehaviourPunCallbacks
         for (int i = 0; i < m_Skill_Info.Length; i++)
         {
             m_Skill_Info[i].skill.MUpdate(this);
+
             if (Input.GetKeyDown(m_Skill_Info[i].skill_Key))
             {
                 m_Skill_Info[i].skill.Activate(this);

@@ -16,7 +16,6 @@ public abstract class SkillBase : ScriptableObject,ISkill
     public float cooldown;
     public GameObject[] skillModel;
     private float lastUsedTime;
-    private bool m_skillPossibleFlag;
 
     public float Cooldown => cooldown;
 
@@ -53,7 +52,6 @@ public abstract class SkillBase : ScriptableObject,ISkill
     protected void LastUsedTimeSet()
     {
         lastUsedTime = Time.time;
-        m_skillPossibleFlag=false;
     }
 
     // リセットメソッドを追加

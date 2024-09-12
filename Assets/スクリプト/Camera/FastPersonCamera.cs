@@ -43,14 +43,14 @@ public class FastPersonCamera : MonoBehaviourPunCallbacks
             Quaternion Rotation = Quaternion.Euler(0, horizontalRotation, 0);
             playerAvatar.transform.rotation = Rotation;
 
-            //// Œ»İ‚ÌŒ¨‚Ì‰ñ“]‚ÉAV‚µ‚¢‰ñ“]‚ğ‰Á‚¦‚é
-            //Quaternion currentRotation = playerAvatar.Shoulder[0].transform.rotation;
-            //Quaternion currentRotation1 = playerAvatar.Shoulder[1].transform.rotation;
+            // Œ»İ‚ÌŒ¨‚Ì‰ñ“]‚ÉAV‚µ‚¢‰ñ“]‚ğ‰Á‚¦‚é
+            Quaternion currentRotation = playerAvatar.Shoulder[0].transform.rotation;
+            Quaternion currentRotation1 = playerAvatar.Shoulder[1].transform.rotation;
 
-            //Quaternion additionalRotation = Quaternion.Euler(verticalRotation, 0, 0);
-            //// ‰ñ“]‚ğ“K—p
-            //playerAvatar.Shoulder[0].transform.rotation = currentRotation * additionalRotation;
-            //playerAvatar.Shoulder[1].transform.rotation = currentRotation1 * additionalRotation;
+            Quaternion additionalRotation = Quaternion.Euler(0, 0, verticalRotation);
+            // ‰ñ“]‚ğ“K—p
+            playerAvatar.Shoulder[0].transform.rotation = currentRotation * additionalRotation;
+            playerAvatar.Shoulder[1].transform.rotation = currentRotation1 * additionalRotation;
 
             // Get the current rotation from the player's head and apply the rotation offset
             Quaternion targetRotation = Quaternion.Euler(verticalRotation, horizontalRotation, 0);
