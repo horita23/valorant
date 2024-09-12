@@ -24,6 +24,10 @@ public class AK : BaseGun
     private GameObject bulletInstance;
 
 
+    RaycastHit hit;
+    [SerializeField]
+    LayerMask hitLayers = 0;
+
     void Start()
     {
         currentAmmo = ammoCapacity;
@@ -79,23 +83,34 @@ public class AK : BaseGun
         if (currentAmmo <= 0) return;
 
         time += Time.deltaTime;
-
+        
         if (time > shotInterval)
         {
             time = 0.0f;
             currentAmmo--;
 
-            bulletInstance = PhotonNetwork.Instantiate(bulletPrefab.name, transform.position, transform.rotation);
+            if (Camera != null)
+            {
+                Debug.DrawRay(Camera.transform.position, Camera.transform.forward * 100, Color.red, 5);
+                if (Physics.Raycast(Camera.transform.position, Camera.transform.forward, out hit, 100.0f, hitLayers, QueryTriggerInteraction.Ignore))
+                {
+                    // 自分以外のプレイヤーに当たった場合
+                    if (hit.collider.gameObject.CompareTag("Player"))
+                    {
+                        // ヒットしたプレイヤーのPhotonViewを取得
+                        PhotonView targetView = hit.collider.GetComponent<PhotonView>();
 
-            bulletInstance.transform.TransformVector(0,0,1);
-            Rigidbody bulletRb = bulletInstance.GetComponent<Rigidbody>();
+                        if (targetView != null)
+                        {
+                            // ヒットしたプレイヤーにRPCでダメージを送る
+                            targetView.RPC("TakeDamage", RpcTarget.AllBuffered, damage);
+                        }
 
-            bulletInstance.GetComponent<Bullet>().SetDamage(damage);
+                    }
+                    Debug.Log(hit.collider.gameObject.name);
 
-            Recoil();
-
-            bulletRb.AddForce(transform.forward * shotSpeed);
-
+                }
+            }
         }
     }
 

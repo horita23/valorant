@@ -59,6 +59,9 @@ MonoBehaviour:
   verticalSpread: 2
   probabilityFactor: 1
   recoilControlAmount: 0.5
+  hitLayers:
+    serializedVersion: 2
+    m_Bits: 1
 --- !u!114 &-6739464622315056728
 MonoBehaviour:
   m_ObjectHideFlags: 0
