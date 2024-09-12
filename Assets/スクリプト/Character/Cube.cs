@@ -99,7 +99,7 @@ public class Cube : MonoBehaviourPunCallbacks
 
             PhotonNetwork.LocalPlayer.TagObject = this;
             //ネットワークで銃を作成する
-            gunInstance = PhotonNetwork.Instantiate(GunPrefab.name, GunPositon.position, transform.rotation);
+            gunInstance = PhotonNetwork.Instantiate(GunPrefab.name, GunPositon.position, Shoulder[0].rotation);
             //プレイヤーを子にする
             photonView.RPC("SetParentRPC", RpcTarget.AllBuffered, gunInstance.GetPhotonView().ViewID, photonView.ViewID);
             // Setting the initial grounded state
@@ -131,7 +131,7 @@ public class Cube : MonoBehaviourPunCallbacks
             HandleInput();
 
             gunInstance.transform.position = GunPositon.position;
-
+            gunInstance.transform.rotation = Shoulder[0].rotation;
             BaseGun baseGun = null;
 
             baseGun = gunInstance.GetComponent<BaseGun>();
