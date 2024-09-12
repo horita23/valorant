@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using UnityEngine.UI;
 
 [System.Serializable]
 public class Skill_Info
@@ -26,7 +27,8 @@ public class Cube : MonoBehaviourPunCallbacks
     public string characterName;
 
     [Tooltip("The health points of the character.")]
-    public float health = 100.0f;
+    public float HEALTH = 100.0f;
+    private float health = 0.0f;
 
     [Tooltip("The movement speed of the character.")]
     public float RunSpeed = 5f;
@@ -43,17 +45,15 @@ public class Cube : MonoBehaviourPunCallbacks
     // Jump parameters
     public float jumpForce = 10f;
 
-
-
-
     private StateSkill m_StateSkill;
 
     private Animator animator = null;
 
+    private Slider slider;
 
-    //孫（子オブジェクトの子オブジェクト)を取得する。
-    //以下の場合なら自身の子オブジェクトChildの子オブジェクトGrandChildを取得
-    public Transform headChild;
+        //孫（子オブジェクトの子オブジェクト)を取得する。
+        //以下の場合なら自身の子オブジェクトChildの子オブジェクトGrandChildを取得
+        public Transform headChild;
     public Transform GunPositon;
     public Transform[] Shoulder;
 
@@ -87,6 +87,7 @@ public class Cube : MonoBehaviourPunCallbacks
     {
         if (photonView.IsMine)
         {
+            health = HEALTH;
             m_StateSkill = StateSkill.COUNT;
             for (int i = 0; i < m_Skill_Info.Length; i++)
             {
@@ -104,6 +105,10 @@ public class Cube : MonoBehaviourPunCallbacks
             photonView.RPC("SetParentRPC", RpcTarget.AllBuffered, gunInstance.GetPhotonView().ViewID, photonView.ViewID);
             // Setting the initial grounded state
             isGrounded = true;
+
+            // スライダーを取得する
+            slider = GameObject.Find("PlayerHpBar").GetComponent<Slider>();
+
         }
         PhotonNetwork.SendRate = 20;
         PhotonNetwork.SerializationRate = 20;
@@ -142,8 +147,10 @@ public class Cube : MonoBehaviourPunCallbacks
             {
                 transform.position = new Vector3(0, 0, 0);
 
-                health = 100;
+                health = HEALTH;
             }
+
+            slider.value = health / HEALTH;
         }
     }
 
