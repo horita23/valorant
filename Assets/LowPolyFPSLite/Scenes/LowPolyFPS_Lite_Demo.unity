@@ -5578,8 +5578,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MouseSensitivity: 5
-  positionOffset: {x: -0.14, y: -0.02, z: 0.1}
-  rotationOffset: {x: 0, y: 27.42, z: 0}
+  positionOffset: {x: 0, y: 1.72, z: 0.28}
 --- !u!81 &2061227178
 AudioListener:
   m_ObjectHideFlags: 0
