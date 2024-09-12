@@ -131,7 +131,6 @@ public class Cube : MonoBehaviourPunCallbacks
             HandleInput();
 
             gunInstance.transform.position = GunPositon.position;
-            gunInstance.transform.rotation = Shoulder[0].rotation;
             BaseGun baseGun = null;
 
             baseGun = gunInstance.GetComponent<BaseGun>();
