@@ -34,7 +34,7 @@ public class CreateObject : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         // ランダムな座標に自身のアバター（ネットワークオブジェクト）を生成する
-        var position = new Vector3(0,-1,0);
+        var position = new Vector3(2,3,0);
         PhotonNetwork.Instantiate("Cube", position, Quaternion.identity);
     }
 

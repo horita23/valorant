@@ -23,6 +23,7 @@ public class AK : BaseGun
 
     private GameObject bulletInstance;
 
+
     void Start()
     {
         currentAmmo = ammoCapacity;
@@ -88,6 +89,7 @@ public class AK : BaseGun
 
             bulletInstance = PhotonNetwork.Instantiate(bulletPrefab.name, transform.position, transform.rotation);
 
+            bulletInstance.transform.TransformVector(0,0,1);
             Rigidbody bulletRb = bulletInstance.GetComponent<Rigidbody>();
 
             bulletInstance.GetComponent<Bullet>().SetDamage(damage);
@@ -96,8 +98,6 @@ public class AK : BaseGun
 
             bulletRb.AddForce(transform.forward * shotSpeed);
 
-            // 射撃後3秒で弾丸のオブジェクトを破壊する
-            Destroy(bulletInstance.gameObject, 3.0f);
         }
     }
 
