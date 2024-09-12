@@ -14,7 +14,6 @@ public class FastPersonCamera : MonoBehaviourPunCallbacks
     private Cube playerAvatar; // プレイヤーのAvatarオブジェクト
 
     public Vector3 positionOffset;  // Offset for camera position
-    public Vector3 rotationOffset;  // Offset for camera rotation
 
 
     // Start is called before the first frame update
@@ -41,23 +40,24 @@ public class FastPersonCamera : MonoBehaviourPunCallbacks
             horizontalRotation += mouseX * MouseSensitivity;
 
             // プレイヤーのAvatarオブジェクトをカメラの水平回転に合わせて回転
-            playerAvatar.transform.rotation = Quaternion.Euler(0, horizontalRotation, 0);
+            Quaternion Rotation = Quaternion.Euler(0, horizontalRotation, 0);
+            playerAvatar.transform.rotation = Rotation;
 
-            // 現在の肩の回転に、新しい回転を加える
-            Quaternion currentRotation = playerAvatar.Shoulder[0].transform.rotation;
-            Quaternion currentRotation1 = playerAvatar.Shoulder[1].transform.rotation;
+            //// 現在の肩の回転に、新しい回転を加える
+            //Quaternion currentRotation = playerAvatar.Shoulder[0].transform.rotation;
+            //Quaternion currentRotation1 = playerAvatar.Shoulder[1].transform.rotation;
 
-            Quaternion additionalRotation = Quaternion.Euler(verticalRotation, 0, 0);
-            // 回転を適用
-            playerAvatar.Shoulder[0].transform.rotation = currentRotation * additionalRotation;
-            playerAvatar.Shoulder[1].transform.rotation = currentRotation1 * additionalRotation;
+            //Quaternion additionalRotation = Quaternion.Euler(verticalRotation, 0, 0);
+            //// 回転を適用
+            //playerAvatar.Shoulder[0].transform.rotation = currentRotation * additionalRotation;
+            //playerAvatar.Shoulder[1].transform.rotation = currentRotation1 * additionalRotation;
 
             // Get the current rotation from the player's head and apply the rotation offset
-            Quaternion targetRotation = Quaternion.Euler(rotationOffset) * Quaternion.Euler(verticalRotation, horizontalRotation, 0);
+            Quaternion targetRotation = Quaternion.Euler(verticalRotation, horizontalRotation, 0);
             transform.rotation = targetRotation;
 
             // Set the camera's position relative to the player's head position, applying the offset in local space
-            transform.position = playerAvatar.headChild.position + targetRotation * positionOffset;
+            transform.position = playerAvatar.transform.position + Rotation * positionOffset;
 
 
         }

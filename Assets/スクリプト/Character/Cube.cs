@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using UnityEngine.UI;
 
 [System.Serializable]
 public class Skill_Info
@@ -26,7 +27,8 @@ public class Cube : MonoBehaviourPunCallbacks
     public string characterName;
 
     [Tooltip("The health points of the character.")]
-    public float health = 100.0f;
+    public float HEALTH = 100.0f;
+    private float health = 0.0f;
 
     [Tooltip("The movement speed of the character.")]
     public float RunSpeed = 5f;
@@ -43,17 +45,15 @@ public class Cube : MonoBehaviourPunCallbacks
     // Jump parameters
     public float jumpForce = 10f;
 
-
-
-
     private StateSkill m_StateSkill;
 
     private Animator animator = null;
 
+    private Slider slider;
 
-    //孫（子オブジェクトの子オブジェクト)を取得する。
-    //以下の場合なら自身の子オブジェクトChildの子オブジェクトGrandChildを取得
-    public Transform headChild;
+        //孫（子オブジェクトの子オブジェクト)を取得する。
+        //以下の場合なら自身の子オブジェクトChildの子オブジェクトGrandChildを取得
+        public Transform headChild;
     public Transform GunPositon;
     public Transform[] Shoulder;
 
@@ -87,16 +87,12 @@ public class Cube : MonoBehaviourPunCallbacks
     {
         if (photonView.IsMine)
         {
-            m_StateSkill = -1;
+            health = HEALTH;
+            m_StateSkill = StateSkill.COUNT;
             for (int i = 0; i < m_Skill_Info.Length; i++)
             {
                 m_Skill_Info[i].skill.ResetSkill();
             }
-            //ネットワークで銃を作成する
-            gunInstance = PhotonNetwork.Instantiate(GunPrefab.name, transform.position, transform.rotation);
-            gunInstance.SetActive(false);
-            //プレイヤーを子にする
-            photonView.RPC("SetParentRPC", RpcTarget.AllBuffered, gunInstance.GetPhotonView().ViewID, photonView.ViewID);
 
             animator = GetComponent<Animator>();
             rb = GetComponent<Rigidbody>();
@@ -104,11 +100,15 @@ public class Cube : MonoBehaviourPunCallbacks
 
             PhotonNetwork.LocalPlayer.TagObject = this;
             //ネットワークで銃を作成する
-            gunInstance = PhotonNetwork.Instantiate(GunPrefab.name, GunPositon.position, transform.rotation);
+            gunInstance = PhotonNetwork.Instantiate(GunPrefab.name, GunPositon.position, Shoulder[0].rotation);
             //プレイヤーを子にする
             photonView.RPC("SetParentRPC", RpcTarget.AllBuffered, gunInstance.GetPhotonView().ViewID, photonView.ViewID);
             // Setting the initial grounded state
             isGrounded = true;
+
+            // スライダーを取得する
+            slider = GameObject.Find("PlayerHpBar").GetComponent<Slider>();
+
         }
         PhotonNetwork.SendRate = 20;
         PhotonNetwork.SerializationRate = 20;
@@ -128,7 +128,6 @@ public class Cube : MonoBehaviourPunCallbacks
             gunObj.transform.SetParent(parentObj.transform);
         }
     }
-
     // Update is called once per frame
     void Update()
     {
@@ -137,6 +136,21 @@ public class Cube : MonoBehaviourPunCallbacks
             HandleInput();
 
             gunInstance.transform.position = GunPositon.position;
+            gunInstance.transform.rotation = Shoulder[0].rotation;
+            BaseGun baseGun = null;
+
+            baseGun = gunInstance.GetComponent<BaseGun>();
+
+            baseGun.StateUpdate();
+
+            if(health <= 0)
+            {
+                transform.position = new Vector3(0, 0, 0);
+
+                health = HEALTH;
+            }
+
+            slider.value = health / HEALTH;
         }
     }
 
@@ -224,15 +238,13 @@ public class Cube : MonoBehaviourPunCallbacks
             if (Input.GetKeyDown(m_Skill_Info[i].skill_Key))
             {
                 m_Skill_Info[i].skill.Activate(this);
-                m_StateSkill = i;
-                gunInstance.SetActive(false);
+                m_StateSkill = (StateSkill)i;
             }
         }
         if ((int)m_StateSkill < m_Skill_Info.Length)
             m_Skill_Info[(int)m_StateSkill].skill.StateUpdate(this);
     }
 
-    //移動アニメーション
     private void UpdateAnimation(Vector3 input)
     {
         // Update animation based on movement direction
@@ -279,32 +291,6 @@ public class Cube : MonoBehaviourPunCallbacks
         animator.SetInteger("Direction", None);
     }
 
-    //ジャンプの更新
-    void Move(Vector3 input)
-    {
-        // Convert input to world space relative to the camera
-        Vector3 camForward = transform.forward;
-        Vector3 camRight = transform.right;
-
-        camForward.y = 0; // Keep movement on the ground plane
-        camRight.y = 0;
-        if (isGrounded)
-        {
-            Vector3 moveDirection = (camForward * input.z + camRight * input.x).normalized * speed;
-            // Apply movement with ground friction
-            rb.velocity = new Vector3(moveDirection.x, rb.velocity.y, moveDirection.z);
-            lastMoveDirection = input; // Store last move direction
-        }
-        else
-        {
-            input *= airControl;
-            Vector3 moveDirection = (camForward * (lastMoveDirection.z + input.z) + camRight * (lastMoveDirection.x + input.x)) * speed;
-            // Apply movement with reduced control in the air
-            rb.velocity = new Vector3(moveDirection.x, rb.velocity.y, moveDirection.z);
-        }
-
-    }
-
     // This method should be called when the jump animation finishes
     public void OnLanding()
     {
@@ -312,11 +298,20 @@ public class Cube : MonoBehaviourPunCallbacks
         isGrounded = true;
     }
 
+    [PunRPC]
+    public void TakeDamage(float damage)
+    {
+        // ダメージを受ける
+        health -= damage;
+
+    }
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Ground"))
         {
             OnLanding();
         }
+
     }
+
 }
