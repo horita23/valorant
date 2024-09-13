@@ -37,7 +37,7 @@ public class Cube : MonoBehaviourPunCallbacks
 
     [Tooltip("e‚Ìí—Ş")]
     public GameObject GunPrefab;
-    private GameObject gunInstance;
+    public GameObject gunInstance;
 
     [Tooltip("The second skill of the character.")]
     public Skill_Info[] m_Skill_Info;
@@ -45,7 +45,7 @@ public class Cube : MonoBehaviourPunCallbacks
     // Jump parameters
     public float jumpForce = 10f;
 
-    private StateSkill m_StateSkill;
+    private int m_StateSkill;
 
     private Animator animator = null;
 
@@ -88,7 +88,7 @@ public class Cube : MonoBehaviourPunCallbacks
         if (photonView.IsMine)
         {
             health = HEALTH;
-            m_StateSkill = StateSkill.COUNT;
+            m_StateSkill = -1;
             for (int i = 0; i < m_Skill_Info.Length; i++)
             {
                 m_Skill_Info[i].skill.ResetSkill();
@@ -228,7 +228,7 @@ public class Cube : MonoBehaviourPunCallbacks
         {
             Jump();
         }
-        
+
         // Skill handling
         for (int i = 0; i < m_Skill_Info.Length; i++)
         {
@@ -237,11 +237,33 @@ public class Cube : MonoBehaviourPunCallbacks
             if (Input.GetKeyDown(m_Skill_Info[i].skill_Key))
             {
                 m_Skill_Info[i].skill.Activate(this);
-                m_StateSkill = (StateSkill)i;
+                m_StateSkill = i;
+                gunInstance.SetActive(false);
+                animator.SetBool("GunHaveFlag", false);
+
             }
         }
-        if ((int)m_StateSkill < m_Skill_Info.Length)
-            m_Skill_Info[(int)m_StateSkill].skill.StateUpdate(this);
+
+        //e‚ÌXV
+        gunInstance.GetComponent<BaseGun>().MainUpdate();
+        //e‚Ì‘I‘ğ
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            //‚Æ‚è‚ ‚¦‚¸ƒXƒLƒ‹‚ÌŸ‚Ée‚Ìó‘Ô
+            m_StateSkill = m_Skill_Info.Length;
+            //e•\¦
+            gunInstance.SetActive(true);
+            animator.SetBool("GunHaveFlag", true);
+
+        }
+
+        //‚Ç‚Ìè‚¿‚Ìó‘Ô‚©
+        if (0 <= m_StateSkill && m_StateSkill< m_Skill_Info.Length)
+            m_Skill_Info[m_StateSkill].skill.StateUpdate(this);
+
+        else if (m_StateSkill == m_Skill_Info.Length)
+            //e‚ÌXV
+            gunInstance.GetComponent<BaseGun>().StateUpdate();
     }
 
     private void UpdateAnimation(Vector3 input)
