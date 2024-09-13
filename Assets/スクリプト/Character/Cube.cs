@@ -16,9 +16,10 @@ public class Skill_Info
 
 public enum StateSkill
 {
-    One = 0,
-    Two = 1,
-    COUNT = 2,
+    Skill_1 = 0,
+    Skill_2 = 1,
+    Gun     = 3,
+    knife   = 4,
 }
 
 public class Cube : MonoBehaviourPunCallbacks
@@ -45,7 +46,7 @@ public class Cube : MonoBehaviourPunCallbacks
     // Jump parameters
     public float jumpForce = 10f;
 
-    private int m_StateSkill;
+    private StateSkill m_StateSkill;
 
     private Animator animator = null;
 
@@ -88,7 +89,7 @@ public class Cube : MonoBehaviourPunCallbacks
         if (photonView.IsMine)
         {
             health = HEALTH;
-            m_StateSkill = -1;
+            m_StateSkill = StateSkill.knife;
             for (int i = 0; i < m_Skill_Info.Length; i++)
             {
                 m_Skill_Info[i].skill.ResetSkill();
@@ -229,6 +230,8 @@ public class Cube : MonoBehaviourPunCallbacks
             Jump();
         }
 
+        //銃の更新
+        gunInstance.GetComponent<BaseGun>().MainUpdate();
         // Skill handling
         for (int i = 0; i < m_Skill_Info.Length; i++)
         {
@@ -236,34 +239,52 @@ public class Cube : MonoBehaviourPunCallbacks
 
             if (Input.GetKeyDown(m_Skill_Info[i].skill_Key))
             {
+                m_StateSkill = (StateSkill)i;
                 m_Skill_Info[i].skill.Activate(this);
-                m_StateSkill = i;
                 gunInstance.SetActive(false);
                 animator.SetBool("GunHaveFlag", false);
 
             }
         }
-
-        //銃の更新
-        gunInstance.GetComponent<BaseGun>().MainUpdate();
         //銃の選択
         if (Input.GetKeyDown(KeyCode.T))
         {
             //とりあえずスキルの次に銃の状態
-            m_StateSkill = m_Skill_Info.Length;
+            m_StateSkill = StateSkill.Gun;
             //銃表示
             gunInstance.SetActive(true);
             animator.SetBool("GunHaveFlag", true);
 
         }
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            m_StateSkill = StateSkill.knife;
+            gunInstance.SetActive(false);
+            animator.SetBool("GunHaveFlag", false);
+
+        }
 
         //どの手持ちの状態か
-        if (0 <= m_StateSkill && m_StateSkill< m_Skill_Info.Length)
-            m_Skill_Info[m_StateSkill].skill.StateUpdate(this);
+        switch (m_StateSkill)
+        {
+            case StateSkill.Gun:
+                gunInstance.GetComponent<BaseGun>().StateUpdate();
+                break;
 
-        else if (m_StateSkill == m_Skill_Info.Length)
-            //銃の更新
-            gunInstance.GetComponent<BaseGun>().StateUpdate();
+            case StateSkill.knife:
+                break;
+
+            case StateSkill.Skill_1:
+                m_Skill_Info[(int)StateSkill.Skill_1].skill.StateUpdate(this);
+
+                break;
+
+            case StateSkill.Skill_2:
+                m_Skill_Info[(int)StateSkill.Skill_2].skill.StateUpdate(this);
+
+                break;
+        }
+
     }
 
     private void UpdateAnimation(Vector3 input)
