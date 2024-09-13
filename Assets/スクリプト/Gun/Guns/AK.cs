@@ -24,6 +24,10 @@ public class AK : BaseGun
     //íeç≠
     public GameObject bulletHolePrefab;
 
+   
+    public GameObject muzzleFlashParticle = null;
+    public GameObject muzzleFlashPosiotn = null;
+
     RaycastHit hit;
     [SerializeField]
     LayerMask hitLayers = 0;
@@ -75,6 +79,8 @@ public class AK : BaseGun
             }
 
         }
+        
+
 
     }
 
@@ -88,7 +94,8 @@ public class AK : BaseGun
         {
             time = 0.0f;
             currentAmmo--;
-
+            var flash = Instantiate(muzzleFlashParticle, muzzleFlashPosiotn.transform);
+            
             if (Camera != null)
             {
                 Debug.DrawRay(Camera.transform.position, Camera.transform.forward * 100, Color.red, 5);
@@ -119,6 +126,7 @@ public class AK : BaseGun
 
                 }
             }
+            Recoil();
         }
     }
 
@@ -145,6 +153,8 @@ public class AK : BaseGun
             transform.Rotate(new Vector3(-Mathf.Abs(recoilOffset.y), recoilOffset.x, 0));
 
         }
+
+
 
     }
 

@@ -33,9 +33,27 @@ public class CreateObject : MonoBehaviourPunCallbacks
     // ゲームサーバーへの接続が成功した時に呼ばれるコールバック
     public override void OnJoinedRoom()
     {
-        // ランダムな座標に自身のアバター（ネットワークオブジェクト）を生成する
-        var position = new Vector3(2,3,0);
-        PhotonNetwork.Instantiate("Cube", position, Quaternion.identity);
+        SpawnPlayer();
+    }
+
+    private void SpawnPlayer()
+    {
+        // チーム選択情報を取得
+        string selectedTeam = PlayerPrefs.GetString("SelectedTeam");
+
+        // チームに応じてスポーン位置を決定
+        if (selectedTeam == "TeamA")
+        {
+            PhotonNetwork.Instantiate("Cube", new Vector3(0,3,0), Quaternion.identity);
+        }
+        else if (selectedTeam == "TeamB")
+        {
+            PhotonNetwork.Instantiate("Cube", new Vector3(5, 3, 0), Quaternion.identity);
+        }
+        else
+        {
+            Debug.LogError("チームが選択されていません");
+        }
     }
 
 }
