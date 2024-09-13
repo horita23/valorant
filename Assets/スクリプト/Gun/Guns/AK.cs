@@ -21,8 +21,8 @@ public class AK : BaseGun
     private Vector3 recoilOffset = Vector3.zero;
     private bool flag = false;
 
-    private GameObject bulletInstance;
-
+    //íeç≠
+    public GameObject bulletHolePrefab;
 
     RaycastHit hit;
     [SerializeField]
@@ -107,6 +107,14 @@ public class AK : BaseGun
                         }
 
                     }
+                    else
+                    {
+                        // íeç≠Çê∂ê¨
+                        GameObject bulletHole = Instantiate(bulletHolePrefab, hit.point, Quaternion.FromToRotation(Vector3.up, hit.normal));
+                        Destroy(bulletHole, 10.0f);
+                    }
+
+
                     Debug.Log(hit.collider.gameObject.name);
 
                 }

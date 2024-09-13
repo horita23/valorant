@@ -59,6 +59,7 @@ MonoBehaviour:
   verticalSpread: 2
   probabilityFactor: 1
   recoilControlAmount: 0.5
+  bulletHolePrefab: {fileID: 4445960066720790194, guid: 0edbc0b1d7e2f434aa9fcbfb0fb85614, type: 3}
   hitLayers:
     serializedVersion: 2
     m_Bits: 1
