@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Photon.Pun;
 
 public interface ISkill 
 {
@@ -14,7 +15,7 @@ public interface ISkill
 
 }
 
-public abstract class SkillBase : ScriptableObject,ISkill
+public abstract class SkillBase : MonoBehaviourPunCallbacks, ISkill
 {
     public float cooldown;
     public GameObject[] skillModel;

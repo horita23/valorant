@@ -141,11 +141,10 @@ MonoBehaviour:
   WalkSpeedRatio: 0.8
   CrouchSpeedRatio: 0.6
   GunPrefab: {fileID: 5149810931926858183, guid: e27a5dd9e9fe03742a184001c7c2e7a9, type: 3}
-  gunInstance: {fileID: 0}
   m_Skill_Info:
-  - skill: {fileID: 11400000, guid: 50630c02da6f59e489ae9c9e3738a0ea, type: 2}
+  - skill: {fileID: 154892506502359556, guid: 65ba9c025157a7c468b5690404090984, type: 3}
     skill_Key: 113
-  - skill: {fileID: 11400000, guid: e6f5c7e01a1db0740a450fd465b23917, type: 2}
+  - skill: {fileID: -8607862522247372323, guid: 7ee9d8d1f4693154988722fb047ca781, type: 3}
     skill_Key: 101
   jumpForce: 5
   headChild: {fileID: 3597616904077443699}
