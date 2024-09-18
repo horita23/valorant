@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using UnityEngine.UI;
+using static UnityEditor.Progress;
 
 [System.Serializable]
 public class Skill_Info
@@ -38,7 +39,7 @@ public class Cube : MonoBehaviourPunCallbacks
 
     [Tooltip("銃の種類")]
     public GameObject GunPrefab;
-    public GameObject gunInstance;
+    private GameObject gunInstance;
 
     [Tooltip("The second skill of the character.")]
     public Skill_Info[] m_Skill_Info;
@@ -102,10 +103,10 @@ public class Cube : MonoBehaviourPunCallbacks
             rb.freezeRotation = true; // Prevent rotation from physics
 
             PhotonNetwork.LocalPlayer.TagObject = this;
-            //ネットワークで銃を作成する
-            gunInstance = PhotonNetwork.Instantiate(GunPrefab.name, GunPositon.position, Shoulder[0].rotation);
-            //プレイヤーを子にする
-            photonView.RPC("SetParentRPC", RpcTarget.AllBuffered, gunInstance.GetPhotonView().ViewID, photonView.ViewID);
+            ////ネットワークで銃を作成する
+            //gunInstance = PhotonNetwork.Instantiate(GunPrefab.name, GunPositon.position, Shoulder[0].rotation);
+            ////プレイヤーを子にする
+            //photonView.RPC("SetParentRPC", RpcTarget.AllBuffered, gunInstance.GetPhotonView().ViewID, photonView.ViewID);
             // Setting the initial grounded state
             isGrounded = true;
 
@@ -132,22 +133,42 @@ public class Cube : MonoBehaviourPunCallbacks
             gunObj.transform.SetParent(parentObj.transform);
         }
     }
+
+    public void AddItem(AK item)
+    {
+        //ネットワークで銃を作成する
+        gunInstance = PhotonNetwork.Instantiate(item.name, GunPositon.position, Shoulder[0].rotation);
+        //プレイヤーを子にする
+        photonView.RPC("SetParentRPC", RpcTarget.AllBuffered, gunInstance.GetPhotonView().ViewID, photonView.ViewID);
+ 
+        m_StateSkill = StateSkill.Gun;
+        gunInstance.SetActive(true);
+
+
+    }
     // Update is called once per frame
     void Update()
     {
-        if (photonView.IsMine)
+        if (gunInstance)
         {
-            HandleInput();
-
-            gunInstance.transform.position = GunPositon.position;
-            if(health <= 0)
+            if (photonView.IsMine)
             {
-                transform.position = new Vector3(0, 0, 0);
+                HandleInput();
 
-                health = HEALTH;
+                gunInstance.transform.position = GunPositon.position;
+                if (health <= 0)
+                {
+                    transform.position = new Vector3(0, 0, 0);
+
+                    health = HEALTH;
+                }
+
+                slider.value = health / HEALTH;
             }
+        }
+        else
+        {
 
-            slider.value = health / HEALTH;
         }
     }
 
