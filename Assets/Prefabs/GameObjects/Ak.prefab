@@ -86,6 +86,7 @@ MonoBehaviour:
   ammoCapacity: 100
   shotInterval: 0.01
   Recoil_Bullet_limit: 15
+  GunMoney: 2900
   Camera: {fileID: 0}
   horizontalSpread: 0.5
   verticalSpread: 2

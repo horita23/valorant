@@ -19,6 +19,8 @@ public abstract class BaseGun : MonoBehaviourPunCallbacks
     public float shotInterval;//’e‚ªo‚éŠÔŠu
     [Tooltip("‰½”­˜A‘±‚Å’e‚ğ”­Ë‚µ‚½‚çã•ûŒü‚É’µ‚Ë‚é”½“®‚ÌãŒÀ‚ğ‚©‚¯‚é’e‚Ì”")]
     public int Recoil_Bullet_limit;
+    [Tooltip("‰½”­˜A‘±‚Å’e‚ğ”­Ë‚µ‚½‚çã•ûŒü‚É’µ‚Ë‚é”½“®‚ÌãŒÀ‚ğ‚©‚¯‚é’e‚Ì”")]
+    public int GunMoney;
 
     public FastPersonCamera Camera;
 
