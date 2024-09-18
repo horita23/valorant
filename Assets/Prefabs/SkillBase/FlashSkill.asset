@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cooldown: 1
   skillModel:
-  - {fileID: 1564260702793472665, guid: 5d525e47edf68234a955049ee1488e4c, type: 3}
-  FlashRender: {fileID: 6218850718549355563, guid: 566b99894173b174c9b10673f55271fe, type: 3}
+  - {fileID: 1564260702793472665, guid: 05fc7adcdbcb48047b24b31e1e00a1e2, type: 3}
+  cam: {fileID: 0}
+  FlashImgPrefab: {fileID: 7574978408718615546, guid: 566b99894173b174c9b10673f55271fe, type: 3}
