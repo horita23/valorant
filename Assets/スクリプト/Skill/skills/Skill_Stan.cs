@@ -5,6 +5,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Skill_Stan", menuName = "Skills/Skill_Stan")]
 public class Skill_Stan : SkillBase
 {
+    protected override void Initialize(Cube character)
+    {
+    }
     protected override void UpdateMein(Cube character)
     {
 

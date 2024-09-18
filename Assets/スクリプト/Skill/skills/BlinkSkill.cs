@@ -1,5 +1,4 @@
 using UnityEngine;
-using static FlashSkillBase;
 
 [CreateAssetMenu(fileName = "BlinkSkill", menuName = "Skills/BlinkSkill")]
 public class BlinkSkill : SkillBase
@@ -13,8 +12,13 @@ public class BlinkSkill : SkillBase
         NONE = 0,
         Boot = 1,
     }
-
     Blink m_blink = Blink.NONE;
+
+    protected override void Initialize(Cube character) 
+    {
+        m_blink = Blink.NONE;
+    }
+
     protected override void UpdateSkill(Cube character)
     {
 
@@ -44,7 +48,7 @@ public class BlinkSkill : SkillBase
                 break;
         }
 
-        if (Input.GetKeyDown(character.m_Skill_Info[0].skill_Key))
+        if (Input.GetKeyDown(GetSkill_Key))
         {
             switch (m_blink)
             {

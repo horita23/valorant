@@ -79,7 +79,11 @@ public class AK : BaseGun
             }
 
         }
-        
+        if (Camera != null)
+        {
+            Camera.transform.rotation *= transform.rotation;
+        }
+
 
 
     }

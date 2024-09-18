@@ -9,6 +9,7 @@ public class CreateObject : MonoBehaviourPunCallbacks
     // Start is called before the first frame update
     void Start()
     {
+        Application.targetFrameRate = 100;
         // プレイヤー自身の名前を"Player"に設定する
         PhotonNetwork.NickName = "Player";
 

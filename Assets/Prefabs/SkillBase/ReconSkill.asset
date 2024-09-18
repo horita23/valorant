@@ -9,10 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b7617f6e05d51c49b4d9f46dbfa9aa4, type: 3}
-  m_Name: FlashSkill
+  m_Script: {fileID: 11500000, guid: e0f4c11a233388044adafbf471cca06f, type: 3}
+  m_Name: ReconSkill
   m_EditorClassIdentifier: 
   cooldown: 1
   skillModel:
   - {fileID: 1564260702793472665, guid: 5d525e47edf68234a955049ee1488e4c, type: 3}
-  FlashRender: {fileID: 6218850718549355563, guid: 566b99894173b174c9b10673f55271fe, type: 3}
