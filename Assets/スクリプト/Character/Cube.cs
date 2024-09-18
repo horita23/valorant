@@ -57,6 +57,7 @@ public class Cube : MonoBehaviourPunCallbacks
         public Transform headChild;
     public Transform GunPositon;
     public Transform[] Shoulder;
+    public Transform[] ReconColliderPositon;
 
     // Direction constants
     private const int None = -1;
@@ -92,7 +93,8 @@ public class Cube : MonoBehaviourPunCallbacks
             m_StateSkill = StateSkill.knife;
             for (int i = 0; i < m_Skill_Info.Length; i++)
             {
-                m_Skill_Info[i].skill.ResetSkill();
+                m_Skill_Info[i].skill.initialize(this, m_Skill_Info[i].skill_Key);
+
             }
 
             animator = GetComponent<Animator>();
@@ -109,6 +111,7 @@ public class Cube : MonoBehaviourPunCallbacks
 
             // スライダーを取得する
             slider = GameObject.Find("PlayerHpBar").GetComponent<Slider>();
+
 
         }
         PhotonNetwork.SendRate = 20;
@@ -137,12 +140,6 @@ public class Cube : MonoBehaviourPunCallbacks
             HandleInput();
 
             gunInstance.transform.position = GunPositon.position;
-            BaseGun baseGun = null;
-
-            baseGun = gunInstance.GetComponent<BaseGun>();
-
-            baseGun.StateUpdate();
-
             if(health <= 0)
             {
                 transform.position = new Vector3(0, 0, 0);

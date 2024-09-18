@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b7617f6e05d51c49b4d9f46dbfa9aa4, type: 3}
-  m_Name: FlashSkill
+  m_Script: {fileID: 11500000, guid: 7ca05f6c40a44eb42ab61eb2d070870b, type: 3}
+  m_Name: UpDraft
   m_EditorClassIdentifier: 
   cooldown: 1
   skillModel:
-  - {fileID: 1564260702793472665, guid: 5d525e47edf68234a955049ee1488e4c, type: 3}
-  FlashRender: {fileID: 6218850718549355563, guid: 566b99894173b174c9b10673f55271fe, type: 3}
+  - {fileID: 810776106513529899, guid: b9b8d1439172daf4191862d59032fcbc, type: 3}
+  MAX_BRINKU_TIME: 5

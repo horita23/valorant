@@ -3,12 +3,15 @@ using System.Collections.Generic;
 
 public interface ISkill 
 {
+    void initialize(Cube character, KeyCode skill_key);
     void Activate(Cube character);
     void MUpdate(Cube character);
     void StateUpdate(Cube character);
     float Cooldown { get; }
     bool IsAvailable { get; }
     GameObject[] SkillModel { get; }
+    KeyCode GetSkill_Key { get; }
+
 }
 
 public abstract class SkillBase : ScriptableObject,ISkill
@@ -23,6 +26,16 @@ public abstract class SkillBase : ScriptableObject,ISkill
 
     public GameObject[] SkillModel => skillModel;
 
+    private  KeyCode skill_Key;
+
+    public KeyCode GetSkill_Key => skill_Key;
+
+    public void initialize(Cube character,KeyCode skill_key)
+    {
+        skill_Key = skill_key;
+        lastUsedTime = 0; // 冷却時間を考慮してリセット
+        Initialize(character);
+    }
     public void Activate(Cube character)
     {
         Debug.Log(lastUsedTime);
@@ -47,6 +60,7 @@ public abstract class SkillBase : ScriptableObject,ISkill
     protected abstract void UpdateSkill(Cube character);
     protected abstract void UpdateMein(Cube character);
     protected abstract void UseSkill(Cube character);
+    protected abstract void Initialize(Cube character);    
 
 
     protected void LastUsedTimeSet()
@@ -54,9 +68,4 @@ public abstract class SkillBase : ScriptableObject,ISkill
         lastUsedTime = Time.time;
     }
 
-    // リセットメソッドを追加
-    public void ResetSkill()
-    {
-        lastUsedTime = 0; // 冷却時間を考慮してリセット
-    }
 }

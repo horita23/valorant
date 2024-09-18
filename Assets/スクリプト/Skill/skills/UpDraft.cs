@@ -1,8 +1,7 @@
 using UnityEngine;
-using static FlashSkillBase;
 
-[CreateAssetMenu(fileName = "FlashSkill", menuName = "Skills/FlashSkill")]
-public class FlashSkillBase : SkillBase
+[CreateAssetMenu(fileName = "UpDraft", menuName = "Skills/UpDraft")]
+public class UpDraft : SkillBase
 {
     public float MAX_BRINKU_TIME = 5;
     private float brinkuTime = 0;
@@ -15,6 +14,13 @@ public class FlashSkillBase : SkillBase
     }
 
     BRINC m_BRINC = BRINC.NONE;
+
+    protected override void Initialize(Cube character)
+    {
+        m_BRINC = BRINC.NONE;
+
+    }
+
     protected override void UpdateSkill(Cube character)
     {
 
