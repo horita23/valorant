@@ -1,0 +1,377 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!319 &31900000
+AvatarMask:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Up Body
+  m_Mask: 00000000010000000100000000000000000000000100000001000000010000000100000000000000000000000100000001000000
+  m_Elements:
+  - m_Path: 
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.001
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/IK_RootTarget
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/IK_RootTarget/L_IK_FootTarget
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/IK_RootTarget/L_IK_FootTarget/L_IK_FootTarget_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/IK_RootTarget/R_IK_FootTarget
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/IK_RootTarget/R_IK_FootTarget/R_IK_FootTarget_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/MasterWeaponAim
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/MasterWeaponAim/L_Hand_IKpv_IUE
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/MasterWeaponAim/L_Hand_IKpv_IUE/L_Hand_IKpv_IUE_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/MasterWeaponAim/MasterWeapon
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/MasterWeaponAim/MasterWeapon/L_Weapon_HandTarget
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/MasterWeaponAim/MasterWeapon/L_Weapon_HandTarget/L_Weapon_HandOffset
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/MasterWeaponAim/MasterWeapon/L_Weapon_HandTarget/L_Weapon_HandOffset/L_Weapon_HandOffset_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/MasterWeaponAim/MasterWeapon/L_WeaponMaster
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/MasterWeaponAim/MasterWeapon/L_WeaponMaster/L_WeaponMaster_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/MasterWeaponAim/MasterWeapon/R_Weapon_HandTarget
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/MasterWeaponAim/MasterWeapon/R_Weapon_HandTarget/R_Weapon_HandTarget_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/MasterWeaponAim/MasterWeapon/R_WeaponMaster
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/MasterWeaponAim/MasterWeapon/R_WeaponMaster/R_WeaponMaster_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/MasterWeaponAim/R_Hand_IKpv_IUE
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/MasterWeaponAim/R_Hand_IKpv_IUE/R_Hand_IKpv_IUE_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Pelvis
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Pelvis/L_Foot_IKpv_IUE
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Pelvis/L_Foot_IKpv_IUE/L_Foot_IKpv_IUE_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Pelvis/L_Hip
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Pelvis/L_Hip/L_Hip_Twst1
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Pelvis/L_Hip/L_Hip_Twst1/L_Hip_Twst1_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Pelvis/L_Hip/L_Hip_Twst3
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Pelvis/L_Hip/L_Hip_Twst3/L_Hip_Twst3_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Pelvis/L_Hip/L_Knee
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Pelvis/L_Hip/L_Knee/L_Foot
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Pelvis/L_Hip/L_Knee/L_Foot/L_Toe
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Pelvis/L_Hip/L_Knee/L_Foot/L_Toe/L_Toe_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Pelvis/L_Hip/L_Knee/L_Knee_Ndl
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Pelvis/L_Hip/L_Knee/L_Knee_Ndl/L_Knee_Ndl_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Pelvis/M_Belt_01
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Pelvis/M_Belt_01/R_Belt
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Pelvis/M_Belt_01/R_Belt/R_Belt_02
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Pelvis/M_Belt_01/R_Belt/R_Belt_02/R_Belt_02_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Pelvis/M_Belt_01/R_Belt/R_Belt_04
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Pelvis/M_Belt_01/R_Belt/R_Belt_04/R_Sash_Base
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Pelvis/M_Belt_01/R_Belt/R_Belt_04/R_Sash_Base/R_Sash_01
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Pelvis/M_Belt_01/R_Belt/R_Belt_04/R_Sash_Base/R_Sash_01/R_Sash_01_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Pelvis/R_Foot_IKpv_IUE
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Pelvis/R_Foot_IKpv_IUE/R_Foot_IKpv_IUE_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Pelvis/R_Hip
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Pelvis/R_Hip/R_Hip_Twst1
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Pelvis/R_Hip/R_Hip_Twst1/R_Hip_Twst1_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Pelvis/R_Hip/R_Hip_Twst3
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Pelvis/R_Hip/R_Hip_Twst3/R_Hip_Twst3_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Pelvis/R_Hip/R_Knee
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Pelvis/R_Hip/R_Knee/R_Foot
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Pelvis/R_Hip/R_Knee/R_Foot/R_Toe
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Pelvis/R_Hip/R_Knee/R_Foot/R_Toe/R_Toe_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Pelvis/R_Hip/R_Knee/R_Knee_Ndl
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Pelvis/R_Hip/R_Knee/R_Knee_Ndl/R_Knee_Ndl_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/L_Clavicle
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/L_Clavicle/L_Shoulder
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/L_Clavicle/L_Shoulder/L_Elbow
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/L_Clavicle/L_Shoulder/L_Elbow/L_Elbow_Ndl
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/L_Clavicle/L_Shoulder/L_Elbow/L_Elbow_Ndl/L_Elbow_Ndl_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/L_Clavicle/L_Shoulder/L_Elbow/L_Elbow_Twst2
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/L_Clavicle/L_Shoulder/L_Elbow/L_Elbow_Twst2/L_Elbow_Twst2_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/L_Clavicle/L_Shoulder/L_Elbow/L_Elbow_Twst3
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/L_Clavicle/L_Shoulder/L_Elbow/L_Elbow_Twst3/L_Elbow_Twst3_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/L_Clavicle/L_Shoulder/L_Elbow/L_Hand
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/L_Clavicle/L_Shoulder/L_Elbow/L_Hand/L_Index1
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/L_Clavicle/L_Shoulder/L_Elbow/L_Hand/L_Index1/L_Index2
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/L_Clavicle/L_Shoulder/L_Elbow/L_Hand/L_Index1/L_Index2/L_Index3
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/L_Clavicle/L_Shoulder/L_Elbow/L_Hand/L_Index1/L_Index2/L_Index3/L_Index3_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/L_Clavicle/L_Shoulder/L_Elbow/L_Hand/L_Middle1
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/L_Clavicle/L_Shoulder/L_Elbow/L_Hand/L_Middle1/L_Middle2
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/L_Clavicle/L_Shoulder/L_Elbow/L_Hand/L_Middle1/L_Middle2/L_Middle3
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/L_Clavicle/L_Shoulder/L_Elbow/L_Hand/L_Middle1/L_Middle2/L_Middle3/L_Middle3_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/L_Clavicle/L_Shoulder/L_Elbow/L_Hand/L_Pinky1
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/L_Clavicle/L_Shoulder/L_Elbow/L_Hand/L_Pinky1/L_Pinky2
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/L_Clavicle/L_Shoulder/L_Elbow/L_Hand/L_Pinky1/L_Pinky2/L_Pinky3
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/L_Clavicle/L_Shoulder/L_Elbow/L_Hand/L_Pinky1/L_Pinky2/L_Pinky3/L_Pinky3_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/L_Clavicle/L_Shoulder/L_Elbow/L_Hand/L_Ring1
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/L_Clavicle/L_Shoulder/L_Elbow/L_Hand/L_Ring1/L_Ring2
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/L_Clavicle/L_Shoulder/L_Elbow/L_Hand/L_Ring1/L_Ring2/L_Ring3
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/L_Clavicle/L_Shoulder/L_Elbow/L_Hand/L_Ring1/L_Ring2/L_Ring3/L_Ring3_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/L_Clavicle/L_Shoulder/L_Elbow/L_Hand/L_Thumb1
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/L_Clavicle/L_Shoulder/L_Elbow/L_Hand/L_Thumb1/L_Thumb2
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/L_Clavicle/L_Shoulder/L_Elbow/L_Hand/L_Thumb1/L_Thumb2/L_Thumb3
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/L_Clavicle/L_Shoulder/L_Elbow/L_Hand/L_Thumb1/L_Thumb2/L_Thumb3/L_Thumb3_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/L_Clavicle/L_Shoulder/L_Elbow/L_Hand/L_WeaponPoint
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/L_Clavicle/L_Shoulder/L_Elbow/L_Hand/L_WeaponPoint/L_WeaponPoint_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/L_Clavicle/L_Shoulder/L_Shoulder_Twst1
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/L_Clavicle/L_Shoulder/L_Shoulder_Twst1/L_Shoulder_Twst1_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/L_Clavicle/L_Shoulder/L_Shoulder_Twst3
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/L_Clavicle/L_Shoulder/L_Shoulder_Twst3/L_Shoulder_Twst3_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/L_Clavicle/L_ShoulderPad
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/L_Clavicle/L_ShoulderPad/L_ShoulderPad_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/Neck
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/Neck/Collar
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/Neck/Collar/Collar_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/Neck/Head
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/Neck/Head/Jaw
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/Neck/Head/Jaw/Mouth_Bot
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/Neck/Head/Jaw/Mouth_Bot/Mouth_Bot_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/Neck/Head/L_Brows
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/Neck/Head/L_Brows/L_Brows_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/Neck/Head/L_Eyeball
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/Neck/Head/L_Eyeball/L_Eyeball_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/Neck/Head/L_EyeLids
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/Neck/Head/L_EyeLids/L_EyeLids_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/Neck/Head/L_Hair1
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/Neck/Head/L_Hair1/L_Hair2
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/Neck/Head/L_Hair1/L_Hair2/L_Hair3
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/Neck/Head/L_Hair1/L_Hair2/L_Hair3/L_Hair3_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/Neck/Head/L_Hair1/L_Hair4
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/Neck/Head/L_Hair1/L_Hair4/L_Hair5
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/Neck/Head/L_Hair1/L_Hair4/L_Hair5/L_Hair6
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/Neck/Head/L_Hair1/L_Hair4/L_Hair5/L_Hair6/L_Hair6_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/Neck/Head/Mouth_Top
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/Neck/Head/Mouth_Top/Mouth_Top_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/Neck/Head/MouthCorner
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/Neck/Head/MouthCorner/MouthCorner_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/Neck/Head/Ponytail1
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/Neck/Head/Ponytail1/Ponytail1_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/Neck/Head/R_Brows
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/Neck/Head/R_Brows/R_Brows_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/Neck/Head/R_Eyeball
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/Neck/Head/R_Eyeball/R_Eyeball_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/Neck/Head/R_EyeLids
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/Neck/Head/R_EyeLids/R_EyeLids_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/Neck/Head/R_Hair1
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/Neck/Head/R_Hair1/R_Hair2
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/Neck/Head/R_Hair1/R_Hair2/R_Hair3
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/Neck/Head/R_Hair1/R_Hair2/R_Hair3/R_Hair4
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/Neck/Head/R_Hair1/R_Hair2/R_Hair3/R_Hair4/R_Hair4_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/Neck/Head/R_Hair5
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/Neck/Head/R_Hair5/R_Hair6
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/Neck/Head/R_Hair5/R_Hair6/R_Hair7
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/Neck/Head/R_Hair5/R_Hair6/R_Hair7/R_Hair7_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/R_Clavicle
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/R_Clavicle/R_Shoulder
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/R_Clavicle/R_Shoulder/R_Elbow
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/R_Clavicle/R_Shoulder/R_Elbow/R_Elbow_Ndl
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/R_Clavicle/R_Shoulder/R_Elbow/R_Elbow_Ndl/R_Elbow_Ndl_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/R_Clavicle/R_Shoulder/R_Elbow/R_Elbow_Twst2
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/R_Clavicle/R_Shoulder/R_Elbow/R_Elbow_Twst2/R_Elbow_Twst2_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/R_Clavicle/R_Shoulder/R_Elbow/R_Elbow_Twst3
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/R_Clavicle/R_Shoulder/R_Elbow/R_Elbow_Twst3/R_Elbow_Twst3_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/R_Clavicle/R_Shoulder/R_Elbow/R_Hand
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/R_Clavicle/R_Shoulder/R_Elbow/R_Hand/R_Index1
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/R_Clavicle/R_Shoulder/R_Elbow/R_Hand/R_Index1/R_Index2
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/R_Clavicle/R_Shoulder/R_Elbow/R_Hand/R_Index1/R_Index2/R_Index3
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/R_Clavicle/R_Shoulder/R_Elbow/R_Hand/R_Index1/R_Index2/R_Index3/R_Index3_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/R_Clavicle/R_Shoulder/R_Elbow/R_Hand/R_Middle1
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/R_Clavicle/R_Shoulder/R_Elbow/R_Hand/R_Middle1/R_Middle2
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/R_Clavicle/R_Shoulder/R_Elbow/R_Hand/R_Middle1/R_Middle2/R_Middle3
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/R_Clavicle/R_Shoulder/R_Elbow/R_Hand/R_Middle1/R_Middle2/R_Middle3/R_Middle3_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/R_Clavicle/R_Shoulder/R_Elbow/R_Hand/R_Pinky1
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/R_Clavicle/R_Shoulder/R_Elbow/R_Hand/R_Pinky1/R_Pinky2
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/R_Clavicle/R_Shoulder/R_Elbow/R_Hand/R_Pinky1/R_Pinky2/R_Pinky3
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/R_Clavicle/R_Shoulder/R_Elbow/R_Hand/R_Pinky1/R_Pinky2/R_Pinky3/R_Pinky3_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/R_Clavicle/R_Shoulder/R_Elbow/R_Hand/R_Ring1
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/R_Clavicle/R_Shoulder/R_Elbow/R_Hand/R_Ring1/R_Ring2
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/R_Clavicle/R_Shoulder/R_Elbow/R_Hand/R_Ring1/R_Ring2/R_Ring3
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/R_Clavicle/R_Shoulder/R_Elbow/R_Hand/R_Ring1/R_Ring2/R_Ring3/R_Ring3_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/R_Clavicle/R_Shoulder/R_Elbow/R_Hand/R_Thumb1
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/R_Clavicle/R_Shoulder/R_Elbow/R_Hand/R_Thumb1/R_Thumb2
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/R_Clavicle/R_Shoulder/R_Elbow/R_Hand/R_Thumb1/R_Thumb2/R_Thumb3
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/R_Clavicle/R_Shoulder/R_Elbow/R_Hand/R_Thumb1/R_Thumb2/R_Thumb3/R_Thumb3_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/R_Clavicle/R_Shoulder/R_Elbow/R_Hand/R_WeaponPoint
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/R_Clavicle/R_Shoulder/R_Elbow/R_Hand/R_WeaponPoint/R_WeaponPoint_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/R_Clavicle/R_Shoulder/R_Shoulder_Twst1
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/R_Clavicle/R_Shoulder/R_Shoulder_Twst1/R_Shoulder_Twst1_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/R_Clavicle/R_Shoulder/R_Shoulder_Twst3
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/R_Clavicle/R_Shoulder/R_Shoulder_Twst3/R_Shoulder_Twst3_end
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/R_Clavicle/R_ShoulderPad
+    m_Weight: 1
+  - m_Path: TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/R_Clavicle/R_ShoulderPad/R_ShoulderPad_end
+    m_Weight: 1
