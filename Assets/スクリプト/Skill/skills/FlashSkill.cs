@@ -158,6 +158,7 @@ public class FlashSkill : SkillBase
                     }
                     Vector3 directionToTarget;
                     directionToTarget = playerObject.transform.position - FlashModel.transform.position;
+                    Debug.DrawRay(FlashModel.transform.position, directionToTarget * 10, Color.red, 10);
 
                     if (isVisible)
                     {
@@ -165,7 +166,6 @@ public class FlashSkill : SkillBase
                         {
 
 
-                            Debug.DrawRay(FlashModel.transform.position, directionToTarget * 10, Color.red, 10);
 
                             if (Physics.Raycast(FlashModel.transform.position, directionToTarget, out RaycastHit hitinfo, Mathf.Infinity))
                             {
@@ -219,7 +219,6 @@ public class FlashSkill : SkillBase
 
                     PhotonNetwork.SetPlayerCustomProperties(player.CustomProperties);
 
-                    PhotonNetwork.Destroy(FlashModel);
                     Destroy(FlashModel);
                     m_flash = Flash.NONE;
 

@@ -34,7 +34,7 @@ public class AK : BaseGun
 
     void Start()
     {
-        currentAmmo = ammoCapacity;
+        currentAmmo = ammoCapacity; 
         Camera = FindObjectOfType<FastPersonCamera>();
  
     }
@@ -79,11 +79,6 @@ public class AK : BaseGun
             }
 
         }
-        if (Camera != null)
-        {
-            Camera.transform.rotation *= transform.rotation;
-        }
-
 
 
     }

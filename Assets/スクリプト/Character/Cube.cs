@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using UnityEngine.UI;
-using static UnityEditor.Progress;
 
 [System.Serializable]
 public class Skill_Info
@@ -47,8 +46,6 @@ public class Cube : MonoBehaviourPunCallbacks
     // Jump parameters
     public float jumpForce = 10f;
 
-    public GameObject CameraPrefab;
-    private GameObject cameraInstance;
     private StateSkill m_StateSkill;
 
     private Animator animator = null;
@@ -88,6 +85,10 @@ public class Cube : MonoBehaviourPunCallbacks
     private bool isJumping = false;
     private bool isGrounded = true;
 
+    public float MouseSensitivity = 10f;
+
+    private float horizontalRotation;
+
 
     private Vector3 lastMoveDirection; // Store the last move direction
 
@@ -109,10 +110,6 @@ public class Cube : MonoBehaviourPunCallbacks
             rb.freezeRotation = true; // Prevent rotation from physics
 
             PhotonNetwork.LocalPlayer.TagObject = this;
-            //ネットワークで銃を作成する
-            cameraInstance = PhotonNetwork.Instantiate(CameraPrefab.name, transform.position, transform.rotation);
-            //プレイヤーを子にする
-            photonView.RPC("SetParentRPC", RpcTarget.AllBuffered, cameraInstance.GetPhotonView().ViewID, photonView.ViewID);
 
            isGrounded = true;
 
@@ -250,6 +247,17 @@ public class Cube : MonoBehaviourPunCallbacks
 
         if (Input.GetKey(KeyCode.S))
             input += new Vector3(0, 0, -1);
+
+        //キャラ回転処理
+        {
+            // マウス入力によるカメラの回転
+            float mouseX = Input.GetAxis("Mouse X");
+            horizontalRotation += mouseX * MouseSensitivity;
+
+            // プレイヤーのAvatarオブジェクトをカメラの水平回転に合わせて回転
+            transform.rotation = Quaternion.Euler(0, horizontalRotation, 0); ;
+
+        }
 
         // 歩いていたら
         if (input != Vector3.zero)
