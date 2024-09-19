@@ -62,6 +62,10 @@ public class Cube : MonoBehaviourPunCallbacks
     public Transform[] Shoulder;
     public Transform[] ReconColliderPositon;
 
+    public GameObject FlashImgPrefab;
+    private Image flashImg;
+    private bool[] flashHitFlag = new bool [2];
+
     // Direction constants
     private const int None = -1;
     private const int Idle = 0;
@@ -115,6 +119,17 @@ public class Cube : MonoBehaviourPunCallbacks
             // スライダーを取得する
             slider = GameObject.Find("PlayerHpBar").GetComponent<Slider>();
 
+            // まずScene内のCanvasを探します
+            Canvas canvas = FindObjectOfType<Canvas>();
+
+            // FlashImgPrefabをCanvasの子要素として生成します
+            GameObject flashImgObject = Instantiate(FlashImgPrefab, canvas.transform);
+
+
+            // インスタンスからImageコンポーネントを取得
+            flashImg = flashImgObject.GetComponent<Image>();
+
+            flashImg.color = Color.clear;
 
         }
         PhotonNetwork.SendRate = 20;
@@ -133,6 +148,16 @@ public class Cube : MonoBehaviourPunCallbacks
             GameObject parentObj = parentView.gameObject;
 
             gunObj.transform.SetParent(parentObj.transform);
+        }
+    }
+    [PunRPC]
+    private void UnsetParentRPC(int ViewID)
+    {
+        PhotonView flashModelView = PhotonView.Find(ViewID);
+
+        if (flashModelView != null)
+        {
+            flashModelView.transform.SetParent(null);
         }
     }
 
@@ -165,6 +190,43 @@ public class Cube : MonoBehaviourPunCallbacks
                 }
 
                 slider.value = health / HEALTH;
+
+                // プレイヤーのカスタムプロパティを取得
+                if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("isFlashed", out object flashed))
+                {
+                    // 取得したオブジェクトが bool[] 配列であると仮定
+                    bool[] flashedArray = flashed as bool[];
+                    if (flashedArray != null)
+                    {
+                        // 配列の全要素を取得し、処理する
+                        for (int i = 0; i < flashedArray.Length; i++)
+                        {
+                            flashHitFlag[i] = flashedArray[i];
+
+                            // ここで各要素に基づいた処理を追加できます
+                        }
+                    }
+                }
+
+                // UIを表示
+                if (flashHitFlag[0])
+                {
+                    flashImg.color = new Color(0, 1, 0, 1); // フラッシュの色
+                }
+                else
+                {
+                    flashImg.color = Color.Lerp(flashImg.color, Color.clear, Time.deltaTime * 0.5f); // 色をクリア
+                }
+
+                if (flashHitFlag[1])
+                {
+                    flashImg.color = new Color(1, 1, 1, 1); // フラッシュの色
+                }
+                else
+                {
+                    flashImg.color = Color.Lerp(flashImg.color, Color.clear, Time.deltaTime); // 色をクリア
+                }
+
             }
         }
         else

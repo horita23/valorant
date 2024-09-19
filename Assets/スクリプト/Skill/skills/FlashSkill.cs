@@ -15,6 +15,9 @@ public class FlashSkill : SkillBase
     private bool isVisible = false;
 
     private PhotonView targetView;
+
+    private bool[] isHit = new bool[2];
+
     public enum Flash
     {
         NONE = 0,
@@ -35,17 +38,27 @@ public class FlashSkill : SkillBase
 
 
         targetView = playerObject.GetComponent<PhotonView>();
-        // まずScene内のCanvasを探します
-        Canvas canvas = FindObjectOfType<Canvas>();
+        isHit[0] = false; // 初期化
+        isHit[1] = false; // 初期化
+        foreach (var player in PhotonNetwork.PlayerList)
+        {
 
-        // FlashImgPrefabをCanvasの子要素として生成します
-        GameObject flashImgObject = Instantiate(FlashImgPrefab, canvas.transform);
+            // プレイヤーのカスタムプロパティを更新してフラグをセット
+            player.CustomProperties["isFlashed"] = isHit;
+
+            PhotonNetwork.SetPlayerCustomProperties(player.CustomProperties);
+        }
+        //// まずScene内のCanvasを探します
+        //Canvas canvas = FindObjectOfType<Canvas>();
+
+        //// FlashImgPrefabをCanvasの子要素として生成します
+        //GameObject flashImgObject = Instantiate(FlashImgPrefab, canvas.transform);
 
 
-        // インスタンスからImageコンポーネントを取得
-        flashImg = flashImgObject.GetComponent<Image>();
+        //// インスタンスからImageコンポーネントを取得
+        //flashImg = flashImgObject.GetComponent<Image>();
 
-        flashImg.color = Color.clear;
+        //flashImg.color = Color.clear;
 
         m_flash = Flash.NONE;
         cam = Camera.main;
@@ -79,8 +92,8 @@ public class FlashSkill : SkillBase
 
                 break;
             case Flash.FLY_NOW:
-
-                FlashModel.transform.SetParent(null);
+                // プレイヤーの子要素から外す
+                targetView.RPC("UnsetParentRPC", RpcTarget.AllBuffered, FlashModel.GetPhotonView().ViewID);
                 FlashModel.GetComponent<Rigidbody>().isKinematic = false;
 
                 // 初期速度を設定
@@ -133,6 +146,7 @@ public class FlashSkill : SkillBase
                     corners[7] = playerCam.WorldToViewportPoint(bounds.max);
 
                     isVisible = false;
+                    isHit[0] = false; // 初期化
                     foreach (Vector3 corner in corners)
                     {
                         // ビューポート内の0〜1の範囲にあれば視界内とする
@@ -142,25 +156,30 @@ public class FlashSkill : SkillBase
                             break;
                         }
                     }
+                    Vector3 directionToTarget;
+                    directionToTarget = playerObject.transform.position - FlashModel.transform.position;
 
                     if (isVisible)
                     {
                         if (playerObject != null)
                         {
-                            Vector3 directionToTarget = playerObject.transform.position - FlashModel.transform.position;
+
+
                             Debug.DrawRay(FlashModel.transform.position, directionToTarget * 10, Color.red, 10);
 
                             if (Physics.Raycast(FlashModel.transform.position, directionToTarget, out RaycastHit hitinfo, Mathf.Infinity))
                             {
                                 if (hitinfo.collider.gameObject.CompareTag("Player"))
                                 {
-                                    flashImg.color = new Color(0, 1, 0, 1);
-
+                                    //flashImg.color = new Color(0, 1, 0, 1);
+                                    isHit[0] = true;
                                     Debug.Log($"{player.NickName}({player.ActorNumber})に表示されています");
 
                                 }
                                 else
                                 {
+                                    isHit[0] = false;
+
                                     Debug.Log($"{player.NickName}({player.ActorNumber})に表示されていません");
                                 }
 
@@ -173,18 +192,41 @@ public class FlashSkill : SkillBase
                     }
                     else
                     {
-                        flashImg.color = new Color(1, 1, 1, 1);
+                        if (Physics.Raycast(FlashModel.transform.position, directionToTarget, out RaycastHit hitinfo, Mathf.Infinity))
+                        {
+                            if (hitinfo.collider.gameObject.CompareTag("Player"))
+                            {
 
-                        Debug.Log($"{player.NickName}({player.ActorNumber})に表示されていません");
+                                isHit[1] = true;
+                                Debug.Log($"{player.NickName}({player.ActorNumber})に表示されていません");
+
+                            }
+                            else
+                            {
+                                isHit[1] = false;
+
+                                Debug.Log($"{player.NickName}({player.ActorNumber})に表示されていません");
+                            }
+
+
+                        }
+
                     }
+
+
+                    // プレイヤーのカスタムプロパティを更新してフラグをセット
+                    player.CustomProperties["isFlashed"] = isHit;
+
+                    PhotonNetwork.SetPlayerCustomProperties(player.CustomProperties);
+
+                    PhotonNetwork.Destroy(FlashModel);
+                    Destroy(FlashModel);
+                    m_flash = Flash.NONE;
+
 
                 }
 
-                //targetView.RPC("CheckFlashVisibility", RpcTarget.AllBuffered, FlashModel,cam,flashImg);
-                PhotonNetwork.Destroy(FlashModel);
-                Destroy(FlashModel);
-                m_flash = Flash.NONE;
-                
+
                 break;
 
             default:
@@ -204,18 +246,29 @@ public class FlashSkill : SkillBase
             m_flash = Flash.PREPARATION;
         }
 
-        if(!isVisible)
+        isHit[0] = false; // 初期化
+        isHit[1] = false; // 初期化
+        foreach (var player in PhotonNetwork.PlayerList)
         {
-            flashImg.color = Color.Lerp(flashImg.color, Color.clear, Time.deltaTime);
-        }
-        else
-        {
-            flashImg.color = Color.Lerp(flashImg.color, Color.clear, Time.deltaTime * 0.5f);
 
+            // プレイヤーのカスタムプロパティを更新してフラグをセット
+            player.CustomProperties["isFlashed"] = isHit;
+
+            PhotonNetwork.SetPlayerCustomProperties(player.CustomProperties);
         }
+
+
+        //if(!isVisible)
+        //{
+        //    flashImg.color = Color.Lerp(flashImg.color, Color.clear, Time.deltaTime);
+        //}
+        //else
+        //{
+        //    flashImg.color = Color.Lerp(flashImg.color, Color.clear, Time.deltaTime * 0.5f);
+
+        //}
 
     }
-
 
     protected override void UseSkill(Cube character)
     {
