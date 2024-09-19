@@ -95,6 +95,8 @@ public class Cube : MonoBehaviourPunCallbacks
     // Start is called before the first frame update
     void Start()
     {
+
+
         if (photonView.IsMine)
         {
             health = HEALTH;
@@ -111,7 +113,7 @@ public class Cube : MonoBehaviourPunCallbacks
 
             PhotonNetwork.LocalPlayer.TagObject = this;
 
-           isGrounded = true;
+            isGrounded = true;
 
             // スライダーを取得する
             slider = GameObject.Find("PlayerHpBar").GetComponent<Slider>();
@@ -127,10 +129,17 @@ public class Cube : MonoBehaviourPunCallbacks
             flashImg = flashImgObject.GetComponent<Image>();
 
             flashImg.color = Color.clear;
+            //キャラクターの子オブジェクトにアタッチされているCameraコンポーネントを無効化
+            Camera characterCamera = GetComponentInChildren<Camera>();
+            if (characterCamera != null)
+            {
+                characterCamera.enabled = true;
+            }
 
         }
-        PhotonNetwork.SendRate = 20;
-        PhotonNetwork.SerializationRate = 20;
+            PhotonNetwork.SendRate = 20;
+            PhotonNetwork.SerializationRate = 20;
+        
     }
     //
     [PunRPC]

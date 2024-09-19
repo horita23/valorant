@@ -161,6 +161,7 @@ MonoBehaviour:
   - {fileID: 5343146302850605085}
   FlashImgPrefab: {fileID: 7574978408718615546, guid: 566b99894173b174c9b10673f55271fe, type: 3}
   MouseSensitivity: 10
+  camera: {fileID: 8666773273318886275, guid: cee2b34d643597b4fbfd4424c7c4a75f, type: 3}
 --- !u!114 &-7992844860689367506
 MonoBehaviour:
   m_ObjectHideFlags: 0
