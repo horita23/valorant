@@ -14,7 +14,6 @@ public class FlashSkill : SkillBase
 
     private bool isVisible = false;
 
-    private Cube player;
     private PhotonView targetView;
     public enum Flash
     {
@@ -29,9 +28,13 @@ public class FlashSkill : SkillBase
 
     protected override void Initialize(Cube character)
     {
+        // ローカルプレイヤーオブジェクトを取得する
+        var localPlayer = PhotonNetwork.LocalPlayer;
+        int viewID = (int)localPlayer.CustomProperties["viewID"];
+        GameObject playerObject = PhotonView.Find(viewID)?.gameObject;
 
-        player = FindObjectOfType<Cube>();
-        targetView = player.GetComponent<PhotonView>();
+
+        targetView = playerObject.GetComponent<PhotonView>();
         // まずScene内のCanvasを探します
         Canvas canvas = FindObjectOfType<Canvas>();
 
@@ -153,12 +156,12 @@ public class FlashSkill : SkillBase
                                 {
                                     flashImg.color = new Color(0, 1, 0, 1);
 
-                                    Debug.Log("ターゲットはカメラに表示されています");
+                                    Debug.Log($"{player.NickName}({player.ActorNumber})に表示されています");
 
                                 }
                                 else
                                 {
-                                    Debug.Log("ターゲットはカメラに表示されていません");
+                                    Debug.Log($"{player.NickName}({player.ActorNumber})に表示されていません");
                                 }
 
 
@@ -172,7 +175,7 @@ public class FlashSkill : SkillBase
                     {
                         flashImg.color = new Color(1, 1, 1, 1);
 
-                        Debug.Log("ターゲットはカメラに表示されていません");
+                        Debug.Log($"{player.NickName}({player.ActorNumber})に表示されていません");
                     }
 
                 }
