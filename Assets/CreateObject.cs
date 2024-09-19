@@ -42,19 +42,32 @@ public class CreateObject : MonoBehaviourPunCallbacks
         // チーム選択情報を取得
         string selectedTeam = PlayerPrefs.GetString("SelectedTeam");
 
-        // チームに応じてスポーン位置を決定
+        GameObject playerObject = null;
+
+        // チームに応じてスポーン位置を決定してプレイヤーを生成
         if (selectedTeam == "TeamA")
         {
-            PhotonNetwork.Instantiate("Cube", new Vector3(0,3,0), Quaternion.identity);
+            playerObject = PhotonNetwork.Instantiate("Cube", new Vector3(0, 3, 0), Quaternion.identity);
         }
         else if (selectedTeam == "TeamB")
         {
-            PhotonNetwork.Instantiate("Cube", new Vector3(5, 3, 0), Quaternion.identity);
+            playerObject = PhotonNetwork.Instantiate("Cube", new Vector3(5, 3, 0), Quaternion.identity);
         }
         else
         {
             Debug.LogError("チームが選択されていません");
+            return;
         }
+
+        // プレイヤー生成時にPhotonViewのViewIDを保存
+        PhotonView playerPhotonView = playerObject.GetComponent<PhotonView>();
+        int viewID = playerPhotonView.ViewID;
+
+        // カスタムプロパティにViewIDを保存
+        ExitGames.Client.Photon.Hashtable customProperties = PhotonNetwork.LocalPlayer.CustomProperties;
+        customProperties["viewID"] = viewID;
+        PhotonNetwork.LocalPlayer.SetCustomProperties(customProperties);
+
     }
 
 }

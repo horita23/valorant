@@ -144,9 +144,10 @@ MonoBehaviour:
   m_Skill_Info:
   - skill: {fileID: 154892506502359556, guid: 65ba9c025157a7c468b5690404090984, type: 3}
     skill_Key: 113
-  - skill: {fileID: -8607862522247372323, guid: 7ee9d8d1f4693154988722fb047ca781, type: 3}
+  - skill: {fileID: -5144472228389245700, guid: 8e998af7a0958264ab96c4562cc324d7, type: 3}
     skill_Key: 101
   jumpForce: 5
+  CameraPrefab: {fileID: 8666773273318886272, guid: cee2b34d643597b4fbfd4424c7c4a75f, type: 3}
   headChild: {fileID: 3597616904077443699}
   GunPositon: {fileID: 1208328615501986239}
   Shoulder:

@@ -1,17 +1,21 @@
 ﻿using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.Progress;
 
 [CreateAssetMenu(fileName = "FlashSkill", menuName = "Skills/FlashSkill")]
 public class FlashSkill : SkillBase
 {
     private GameObject FlashModel;
-    public Camera cam;  // ターゲットを表示するカメラ
+    private Camera cam;  // ターゲットを表示するカメラ
     public GameObject FlashImgPrefab; // プレハブをインスペクターで設定
     private Image flashImg;
 
     private bool isVisible = false;
 
+    private Cube player;
+    private PhotonView targetView;
     public enum Flash
     {
         NONE = 0,
@@ -26,6 +30,8 @@ public class FlashSkill : SkillBase
     protected override void Initialize(Cube character)
     {
 
+        player = FindObjectOfType<Cube>();
+        targetView = player.GetComponent<PhotonView>();
         // まずScene内のCanvasを探します
         Canvas canvas = FindObjectOfType<Canvas>();
 
@@ -50,8 +56,14 @@ public class FlashSkill : SkillBase
                 break;
             case Flash.PREPARATION:
 
-                FlashModel = Instantiate(SkillModel[0], character.transform.position + character.transform.forward * 1f + new Vector3(0,1.5f,0), character.transform.rotation);
-                FlashModel.transform.SetParent(character.transform);
+
+                //ネットワークで銃を作成する
+                FlashModel = PhotonNetwork.Instantiate(SkillModel[0].name, character.transform.position + character.transform.forward * 1f + new Vector3(0, 1.5f, 0), character.transform.rotation);
+                //プレイヤーを子にする
+                targetView.RPC("SetParentRPC", RpcTarget.AllBuffered, FlashModel.GetPhotonView().ViewID, targetView.ViewID);
+
+                //FlashModel = Instantiate(SkillModel[0], character.transform.position + character.transform.forward * 1f + new Vector3(0,1.5f,0), character.transform.rotation);
+                //FlashModel.transform.SetParent(character.transform);
                 FlashModel.GetComponent<Rigidbody>().isKinematic = true;
 
                 m_flash = Flash.HOLD;
@@ -96,20 +108,26 @@ public class FlashSkill : SkillBase
             case Flash.FLY_END:
                 // ターゲットのバウンディングボックスを考慮してカメラの視界内に少しでも入っているか確認
                 Renderer targetRenderer = FlashModel.GetComponent<Renderer>();
-                // ターゲットがカメラに映っているかの判定
-                if (cam != null && FlashModel != null)
+                foreach (var player in PhotonNetwork.PlayerList)
                 {
+                    // ターゲットがカメラに映っているかの判定
                     Bounds bounds = targetRenderer.bounds;
                     Vector3[] corners = new Vector3[8];
 
-                    corners[0] = cam.WorldToViewportPoint(bounds.min);
-                    corners[1] = cam.WorldToViewportPoint(new Vector3(bounds.min.x, bounds.min.y, bounds.max.z));
-                    corners[2] = cam.WorldToViewportPoint(new Vector3(bounds.min.x, bounds.max.y, bounds.min.z));
-                    corners[3] = cam.WorldToViewportPoint(new Vector3(bounds.min.x, bounds.max.y, bounds.max.z));
-                    corners[4] = cam.WorldToViewportPoint(new Vector3(bounds.max.x, bounds.min.y, bounds.min.z));
-                    corners[5] = cam.WorldToViewportPoint(new Vector3(bounds.max.x, bounds.min.y, bounds.max.z));
-                    corners[6] = cam.WorldToViewportPoint(new Vector3(bounds.max.x, bounds.max.y, bounds.min.z));
-                    corners[7] = cam.WorldToViewportPoint(bounds.max);
+                    int viewID = (int)player.CustomProperties["viewID"];
+                    GameObject playerObject = PhotonView.Find(viewID)?.gameObject;
+
+                    // プレイヤーのカメラを取得
+                    Camera playerCam = playerObject.GetComponentInChildren<Camera>();
+
+                    corners[0] = playerCam.WorldToViewportPoint(bounds.min);
+                    corners[1] = playerCam.WorldToViewportPoint(new Vector3(bounds.min.x, bounds.min.y, bounds.max.z));
+                    corners[2] = playerCam.WorldToViewportPoint(new Vector3(bounds.min.x, bounds.max.y, bounds.min.z));
+                    corners[3] = playerCam.WorldToViewportPoint(new Vector3(bounds.min.x, bounds.max.y, bounds.max.z));
+                    corners[4] = playerCam.WorldToViewportPoint(new Vector3(bounds.max.x, bounds.min.y, bounds.min.z));
+                    corners[5] = playerCam.WorldToViewportPoint(new Vector3(bounds.max.x, bounds.min.y, bounds.max.z));
+                    corners[6] = playerCam.WorldToViewportPoint(new Vector3(bounds.max.x, bounds.max.y, bounds.min.z));
+                    corners[7] = playerCam.WorldToViewportPoint(bounds.max);
 
                     isVisible = false;
                     foreach (Vector3 corner in corners)
@@ -121,27 +139,30 @@ public class FlashSkill : SkillBase
                             break;
                         }
                     }
+
                     if (isVisible)
                     {
-
-                        Vector3 directionToTarget = character.transform.position - FlashModel.transform.position;
-                        Debug.DrawRay(FlashModel.transform.position, directionToTarget * 10, Color.red, 10);
-
-                        if (Physics.Raycast(FlashModel.transform.position, directionToTarget, out RaycastHit hitinfo, Mathf.Infinity))
+                        if (playerObject != null)
                         {
-                            if (hitinfo.collider.gameObject.CompareTag("Player"))
-                            {
-                                flashImg.color = new Color(0, 1, 0, 1);
+                            Vector3 directionToTarget = playerObject.transform.position - FlashModel.transform.position;
+                            Debug.DrawRay(FlashModel.transform.position, directionToTarget * 10, Color.red, 10);
 
-                                Debug.Log("ターゲットはカメラに表示されています");
+                            if (Physics.Raycast(FlashModel.transform.position, directionToTarget, out RaycastHit hitinfo, Mathf.Infinity))
+                            {
+                                if (hitinfo.collider.gameObject.CompareTag("Player"))
+                                {
+                                    flashImg.color = new Color(0, 1, 0, 1);
+
+                                    Debug.Log("ターゲットはカメラに表示されています");
+
+                                }
+                                else
+                                {
+                                    Debug.Log("ターゲットはカメラに表示されていません");
+                                }
+
 
                             }
-                            else
-                            {
-                                Debug.Log("ターゲットはカメラに表示されていません");
-                            }
-
-
                         }
 
 
@@ -153,10 +174,14 @@ public class FlashSkill : SkillBase
 
                         Debug.Log("ターゲットはカメラに表示されていません");
                     }
+
                 }
+
+                //targetView.RPC("CheckFlashVisibility", RpcTarget.AllBuffered, FlashModel,cam,flashImg);
+                PhotonNetwork.Destroy(FlashModel);
                 Destroy(FlashModel);
                 m_flash = Flash.NONE;
-
+                
                 break;
 
             default:

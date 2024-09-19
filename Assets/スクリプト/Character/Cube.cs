@@ -47,6 +47,8 @@ public class Cube : MonoBehaviourPunCallbacks
     // Jump parameters
     public float jumpForce = 10f;
 
+    public GameObject CameraPrefab;
+    private GameObject cameraInstance;
     private StateSkill m_StateSkill;
 
     private Animator animator = null;
@@ -103,12 +105,12 @@ public class Cube : MonoBehaviourPunCallbacks
             rb.freezeRotation = true; // Prevent rotation from physics
 
             PhotonNetwork.LocalPlayer.TagObject = this;
-            ////ネットワークで銃を作成する
-            //gunInstance = PhotonNetwork.Instantiate(GunPrefab.name, GunPositon.position, Shoulder[0].rotation);
-            ////プレイヤーを子にする
-            //photonView.RPC("SetParentRPC", RpcTarget.AllBuffered, gunInstance.GetPhotonView().ViewID, photonView.ViewID);
-            // Setting the initial grounded state
-            isGrounded = true;
+            //ネットワークで銃を作成する
+            cameraInstance = PhotonNetwork.Instantiate(CameraPrefab.name, transform.position, transform.rotation);
+            //プレイヤーを子にする
+            photonView.RPC("SetParentRPC", RpcTarget.AllBuffered, cameraInstance.GetPhotonView().ViewID, photonView.ViewID);
+
+           isGrounded = true;
 
             // スライダーを取得する
             slider = GameObject.Find("PlayerHpBar").GetComponent<Slider>();
@@ -140,7 +142,6 @@ public class Cube : MonoBehaviourPunCallbacks
         gunInstance = PhotonNetwork.Instantiate(item.name, GunPositon.position, Shoulder[0].rotation);
         //プレイヤーを子にする
         photonView.RPC("SetParentRPC", RpcTarget.AllBuffered, gunInstance.GetPhotonView().ViewID, photonView.ViewID);
- 
         m_StateSkill = StateSkill.Gun;
         gunInstance.SetActive(true);
 
