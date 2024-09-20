@@ -33,7 +33,7 @@ public class FlashSkill : SkillBase
     {
         // ローカルプレイヤーオブジェクトを取得する
         var localPlayer = PhotonNetwork.LocalPlayer;
-        int viewID = (int)localPlayer.CustomProperties["viewID"];
+        int viewID = (int)localPlayer.CustomProperties[$"viewID_{localPlayer.ActorNumber}"];
         GameObject playerObject = PhotonView.Find(viewID)?.gameObject;
 
 
@@ -124,13 +124,16 @@ public class FlashSkill : SkillBase
             case Flash.FLY_END:
                 // ターゲットのバウンディングボックスを考慮してカメラの視界内に少しでも入っているか確認
                 Renderer targetRenderer = FlashModel.GetComponent<Renderer>();
+
+
                 foreach (var player in PhotonNetwork.PlayerList)
                 {
                     // ターゲットがカメラに映っているかの判定
                     Bounds bounds = targetRenderer.bounds;
                     Vector3[] corners = new Vector3[8];
 
-                    int viewID = (int)player.CustomProperties["viewID"];
+                   
+                    int viewID = (int)player.CustomProperties[$"viewID_{player.ActorNumber}"];
                     GameObject playerObject = PhotonView.Find(viewID)?.gameObject;
 
                     // プレイヤーのカメラを取得
