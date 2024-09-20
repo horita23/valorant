@@ -44,7 +44,7 @@ public class FlashSkill : SkillBase
         {
 
             // プレイヤーのカスタムプロパティを更新してフラグをセット
-            player.CustomProperties["isFlashed"] = isHit;
+            player.CustomProperties[$"isFlashed{player.ActorNumber}"] = isHit;
 
             PhotonNetwork.SetPlayerCustomProperties(player.CustomProperties);
         }
@@ -218,7 +218,7 @@ public class FlashSkill : SkillBase
 
 
                     // プレイヤーのカスタムプロパティを更新してフラグをセット
-                    player.CustomProperties["isFlashed"] = isHit;
+                    player.CustomProperties[$"isFlashed{player.ActorNumber}"] = isHit;
 
                     PhotonNetwork.SetPlayerCustomProperties(player.CustomProperties);
 
@@ -249,15 +249,18 @@ public class FlashSkill : SkillBase
             m_flash = Flash.PREPARATION;
         }
 
-        isHit[0] = false; // 初期化
-        isHit[1] = false; // 初期化
-        foreach (var player in PhotonNetwork.PlayerList)
+        if (m_flash == Flash.NONE)
         {
+            isHit[0] = false; // 初期化
+            isHit[1] = false; // 初期化
+            foreach (var player in PhotonNetwork.PlayerList)
+            {
 
-            // プレイヤーのカスタムプロパティを更新してフラグをセット
-            player.CustomProperties["isFlashed"] = isHit;
+                // プレイヤーのカスタムプロパティを更新してフラグをセット
+                player.CustomProperties[$"isFlashed{player.ActorNumber}"] = isHit;
 
-            PhotonNetwork.SetPlayerCustomProperties(player.CustomProperties);
+                PhotonNetwork.SetPlayerCustomProperties(player.CustomProperties);
+            }
         }
 
 

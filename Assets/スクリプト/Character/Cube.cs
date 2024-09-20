@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using UnityEngine.UI;
+using Photon.Realtime;
 
 [System.Serializable]
 public class Skill_Info
@@ -199,7 +200,7 @@ public class Cube : MonoBehaviourPunCallbacks
                 slider.value = health / HEALTH;
 
                 // プレイヤーのカスタムプロパティを取得
-                if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("isFlashed", out object flashed))
+                if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue($"isFlashed{PhotonNetwork.LocalPlayer.ActorNumber}", out object flashed))
                 {
                     // 取得したオブジェクトが bool[] 配列であると仮定
                     bool[] flashedArray = flashed as bool[];
