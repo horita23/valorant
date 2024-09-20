@@ -63,10 +63,14 @@ public class CreateObject : MonoBehaviourPunCallbacks
         PhotonView playerPhotonView = playerObject.GetComponent<PhotonView>();
         int viewID = playerPhotonView.ViewID;
 
+
+
         // カスタムプロパティにViewIDを保存
         ExitGames.Client.Photon.Hashtable customProperties = PhotonNetwork.LocalPlayer.CustomProperties;
-        customProperties["viewID"] = viewID;
+        // プレイヤーのActorNumberをキーにしてViewIDを保存
+        customProperties[$"viewID_{PhotonNetwork.LocalPlayer.ActorNumber}"] = viewID;
         PhotonNetwork.LocalPlayer.SetCustomProperties(customProperties);
+
 
     }
 
