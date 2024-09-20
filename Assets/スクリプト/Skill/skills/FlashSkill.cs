@@ -219,11 +219,12 @@ public class FlashSkill : SkillBase
 
                     PhotonNetwork.SetPlayerCustomProperties(player.CustomProperties);
 
-                    Destroy(FlashModel);
-                    m_flash = Flash.NONE;
 
 
                 }
+                PhotonNetwork.Destroy(FlashModel);
+                Destroy(FlashModel);
+                m_flash = Flash.NONE;
 
 
                 break;

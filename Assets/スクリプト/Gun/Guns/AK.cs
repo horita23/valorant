@@ -28,6 +28,7 @@ public class AK : BaseGun
     public GameObject muzzleFlashParticle = null;
     public GameObject muzzleFlashPosiotn = null;
 
+    
     RaycastHit hit;
     [SerializeField]
     LayerMask hitLayers = 0;
@@ -88,17 +89,22 @@ public class AK : BaseGun
         if (currentAmmo <= 0) return;
 
         time += Time.deltaTime;
-        
+        var localPlayer = PhotonNetwork.LocalPlayer;
+        Cube playerAvatar = localPlayer.TagObject as Cube;
+
+        Camera camera = playerAvatar.GetComponentInChildren<Camera>();
+
         if (time > shotInterval)
         {
             time = 0.0f;
             currentAmmo--;
             var flash = Instantiate(muzzleFlashParticle, muzzleFlashPosiotn.transform);
             
+
             if (Camera != null)
             {
-                Debug.DrawRay(Camera.transform.position, Camera.transform.forward * 100, Color.red, 5);
-                if (Physics.Raycast(Camera.transform.position, Camera.transform.forward, out hit, 100.0f, hitLayers, QueryTriggerInteraction.Ignore))
+                Debug.DrawRay(camera.transform.position, camera.transform.forward * 100, Color.red, 5);
+                if (Physics.Raycast(camera.transform.position, camera.transform.forward, out hit, 100.0f, hitLayers, QueryTriggerInteraction.Ignore))
                 {
                     // 自分以外のプレイヤーに当たった場合
                     if (hit.collider.gameObject.CompareTag("Player"))
