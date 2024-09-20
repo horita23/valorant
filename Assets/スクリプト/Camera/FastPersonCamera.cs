@@ -39,6 +39,7 @@ public class FastPersonCamera : MonoBehaviourPunCallbacks
 
                 // プレイヤーのAvatarオブジェクトをカメラの水平回転に合わせて回転
                 transform.localRotation = Quaternion.Euler(verticalRotation, 0, 0);
+
                 transform.position = playerAvatar.CameraPosition.position;
 
             }
