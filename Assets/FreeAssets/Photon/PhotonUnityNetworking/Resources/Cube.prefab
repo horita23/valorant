@@ -142,6 +142,7 @@ MonoBehaviour:
   WalkSpeedRatio: 0.8
   CrouchSpeedRatio: 0.6
   GunPrefab: {fileID: 5149810931926858183, guid: e27a5dd9e9fe03742a184001c7c2e7a9, type: 3}
+  gunInstance: {fileID: 0}
   m_Skill_Info:
   - skill: {fileID: 154892506502359556, guid: 65ba9c025157a7c468b5690404090984, type: 3}
     skill_Key: 113
@@ -159,6 +160,7 @@ MonoBehaviour:
   - {fileID: 8659660236005059070}
   - {fileID: 5629457848350391612}
   - {fileID: 5343146302850605085}
+  CameraPosition: {fileID: 3597616904077443699}
   FlashImgPrefab: {fileID: 7574978408718615546, guid: 566b99894173b174c9b10673f55271fe, type: 3}
   MouseSensitivity: 10
 --- !u!114 &-7992844860689367506

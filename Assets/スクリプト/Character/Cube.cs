@@ -38,7 +38,7 @@ public class Cube : MonoBehaviourPunCallbacks
 
     [Tooltip("銃の種類")]
     public GameObject GunPrefab;
-    private GameObject gunInstance;
+    public GameObject gunInstance;
 
     [Tooltip("The second skill of the character.")]
     public Skill_Info[] m_Skill_Info;
@@ -58,6 +58,7 @@ public class Cube : MonoBehaviourPunCallbacks
     public Transform GunPositon;
     public Transform[] Shoulder;
     public Transform[] ReconColliderPositon;
+    public Transform CameraPosition;
 
     public GameObject FlashImgPrefab;
     private Image flashImg;
@@ -95,7 +96,6 @@ public class Cube : MonoBehaviourPunCallbacks
     // Start is called before the first frame update
     void Start()
     {
-
 
         if (photonView.IsMine)
         {
@@ -174,7 +174,8 @@ public class Cube : MonoBehaviourPunCallbacks
         //プレイヤーを子にする
         photonView.RPC("SetParentRPC", RpcTarget.AllBuffered, gunInstance.GetPhotonView().ViewID, photonView.ViewID);
         m_StateSkill = StateSkill.Gun;
-        gunInstance.SetActive(true);
+        animator.SetBool("GunHaveFlag", true);
+
 
 
     }
