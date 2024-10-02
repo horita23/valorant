@@ -23,24 +23,27 @@ public class FastPersonCamera : MonoBehaviourPunCallbacks
 
     private void LateUpdate()
     {
-        var localPlayer = PhotonNetwork.LocalPlayer;
-        playerAvatar = localPlayer.TagObject as Cube;
-        if (playerAvatar != null && playerAvatar.photonView.IsMine)
+        if (photonView.IsMine)
         {
-            if (playerAvatar.gunInstance)
+            var localPlayer = PhotonNetwork.LocalPlayer;
+            playerAvatar = localPlayer.TagObject as Cube;
+            if (playerAvatar != null && playerAvatar.photonView.IsMine)
             {
-                // マウス入力によるカメラの回転
-                float mouseY = Input.GetAxis("Mouse Y");
-                verticalRotation -= mouseY * playerAvatar.MouseSensitivity;
+                if (playerAvatar.gunInstance)
+                {
+                    // マウス入力によるカメラの回転
+                    float mouseY = Input.GetAxis("Mouse Y");
+                    verticalRotation -= mouseY * playerAvatar.MouseSensitivity;
 
-                //
-                verticalRotation = Mathf.Clamp(verticalRotation, -70f, 70f);
+                    //
+                    verticalRotation = Mathf.Clamp(verticalRotation, -70f, 70f);
 
 
-                // プレイヤーのAvatarオブジェクトをカメラの水平回転に合わせて回転
-                transform.localRotation = Quaternion.Euler(verticalRotation, 0, 0);
-                transform.position = playerAvatar.CameraPosition.position;
+                    // プレイヤーのAvatarオブジェクトをカメラの水平回転に合わせて回転
+                    transform.localRotation = Quaternion.Euler(verticalRotation, 0, 0);
+                    // transform.position = playerAvatar.CameraPosition.position;
 
+                }
             }
         }
     }

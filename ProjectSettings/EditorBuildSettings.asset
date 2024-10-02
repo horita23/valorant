@@ -14,7 +14,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Multiplayer.unity
     guid: d467bb58a331a364da0289e764f6c986
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/TeamSelectScene.unity
     guid: de9ee0a2f8d61044d9e6191e19fa89f6
   - enabled: 1

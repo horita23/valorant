@@ -4,6 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using UnityEngine.UI;
 using Photon.Realtime;
+using UnityEngine.AI;
 
 [System.Serializable]
 public class Skill_Info
@@ -94,6 +95,7 @@ public class Cube : MonoBehaviourPunCallbacks
 
     private Vector3 lastMoveDirection; // Store the last move direction
 
+
     // Start is called before the first frame update
     void Start()
     {
@@ -136,6 +138,7 @@ public class Cube : MonoBehaviourPunCallbacks
             {
                 characterCamera.enabled = true;
             }
+
 
         }
             PhotonNetwork.SendRate = 20;
@@ -187,36 +190,7 @@ public class Cube : MonoBehaviourPunCallbacks
         {
             if (photonView.IsMine)
             {
-                HandleInput();
-
-                gunInstance.transform.position = GunPositon.position;
-                if (health <= 0)
-                {
-                    transform.position = new Vector3(0, 0, 0);
-
-                    health = HEALTH;
-                }
-
-                slider.value = health / HEALTH;
-
-                // プレイヤーのカスタムプロパティを取得
-                if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue($"isFlashed{PhotonNetwork.LocalPlayer.ActorNumber}", out object flashed))
-                {
-                    // 取得したオブジェクトが bool[] 配列であると仮定
-                    bool[] flashedArray = flashed as bool[];
-                    if (flashedArray != null)
-                    {
-                        // 配列の全要素を取得し、処理する
-                        for (int i = 0; i < flashedArray.Length; i++)
-                        {
-                            flashHitFlag[i] = flashedArray[i];
-
-                            // ここで各要素に基づいた処理を追加できます
-                        }
-                    }
-                }
-
-                // UIを表示
+                // フラッシュUIを表示
                 if (flashHitFlag[0])
                 {
                     flashImg.color = new Color(0, 1, 0, 1); // フラッシュの色
@@ -234,6 +208,20 @@ public class Cube : MonoBehaviourPunCallbacks
                 {
                     flashImg.color = Color.Lerp(flashImg.color, Color.clear, Time.deltaTime); // 色をクリア
                 }
+
+                //プレイヤー色々な操作
+                HandleInput();
+
+                gunInstance.transform.position = GunPositon.position;
+                //HPが０ならリスポーン位置に移動
+                if (health <= 0)
+                {
+                    transform.position = new Vector3(0, 0, 0);
+
+                    health = HEALTH;
+                }
+                //HPバー
+                slider.value = health / HEALTH;
 
             }
         }
@@ -447,6 +435,17 @@ public class Cube : MonoBehaviourPunCallbacks
         health -= damage;
 
     }
+
+    [PunRPC]
+    public void Flash(bool GreenFlash = false,bool whiteFlash = false)
+    {
+        flashHitFlag[0] = GreenFlash;
+        flashHitFlag[1] = whiteFlash;
+
+
+
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Ground"))

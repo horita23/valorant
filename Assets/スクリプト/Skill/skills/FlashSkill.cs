@@ -2,7 +2,6 @@
 using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEditor.Progress;
 
 [CreateAssetMenu(fileName = "FlashSkill", menuName = "Skills/FlashSkill")]
 public class FlashSkill : SkillBase
@@ -16,7 +15,6 @@ public class FlashSkill : SkillBase
 
     private PhotonView targetView;
 
-    private bool[] isHit = new bool[2];
 
     public enum Flash
     {
@@ -25,6 +23,7 @@ public class FlashSkill : SkillBase
         HOLD = 2,
         FLY_NOW = 3,
         FLY_END = 4,
+        RESET = 5,
     }
 
     Flash m_flash = Flash.NONE;
@@ -38,16 +37,6 @@ public class FlashSkill : SkillBase
 
 
         targetView = playerObject.GetComponent<PhotonView>();
-        isHit[0] = false; // 初期化
-        isHit[1] = false; // 初期化
-        foreach (var player in PhotonNetwork.PlayerList)
-        {
-
-            // プレイヤーのカスタムプロパティを更新してフラグをセット
-            player.CustomProperties[$"isFlashed{player.ActorNumber}"] = isHit;
-
-            PhotonNetwork.SetPlayerCustomProperties(player.CustomProperties);
-        }
         //// まずScene内のCanvasを探します
         //Canvas canvas = FindObjectOfType<Canvas>();
 
@@ -149,7 +138,6 @@ public class FlashSkill : SkillBase
                     corners[7] = playerCam.WorldToViewportPoint(bounds.max);
 
                     isVisible = false;
-                    isHit[0] = false; // 初期化
                     foreach (Vector3 corner in corners)
                     {
                         // ビューポート内の0〜1の範囲にあれば視界内とする
@@ -163,6 +151,10 @@ public class FlashSkill : SkillBase
                     directionToTarget = playerObject.transform.position - FlashModel.transform.position;
                     Debug.DrawRay(FlashModel.transform.position, directionToTarget * 10, Color.red, 10);
 
+                    bool[] isHit = new bool[2]; // 変更: 各プレイヤーに対して独自のフラグを持つ
+
+                    isHit[0] = false;
+                    isHit[1] = false;
                     if (isVisible)
                     {
                         if (playerObject != null)
@@ -218,20 +210,56 @@ public class FlashSkill : SkillBase
 
 
                     // プレイヤーのカスタムプロパティを更新してフラグをセット
-                    player.CustomProperties[$"isFlashed{player.ActorNumber}"] = isHit;
+                    // player.CustomProperties[$"isFlashed{player.ActorNumber}"] = isHit;
 
-                    PhotonNetwork.SetPlayerCustomProperties(player.CustomProperties);
+                    PhotonView targetView = playerObject.GetComponent<PhotonView>();
+
+                    // ヒットしたプレイヤーにRPCでダメージを送る
+                    targetView.RPC("Flash", RpcTarget.AllBuffered, isHit[0], isHit[1]);
+
+                   // PhotonNetwork.SetPlayerCustomProperties(player.CustomProperties);
 
 
 
                 }
                 PhotonNetwork.Destroy(FlashModel);
                 Destroy(FlashModel);
-                m_flash = Flash.NONE;
+                m_flash = Flash.RESET;
 
 
                 break;
+        case Flash.RESET:
+                foreach (var player in PhotonNetwork.PlayerList)
+                {
+                    bool[] isHit = new bool[2]; // 各プレイヤーに対して独自のフラグを持つ
 
+                    isHit[0] = false;
+                    isHit[1] = false;
+
+                    // プレイヤーのカスタムプロパティが存在するかチェック
+                    if (player.CustomProperties.TryGetValue($"viewID_{player.ActorNumber}", out object viewIDObj) && viewIDObj != null)
+                    {
+                        int viewID = (int)viewIDObj;
+
+                        GameObject playerObject = PhotonView.Find(viewID)?.gameObject;
+
+                        // playerObjectがnullかどうか確認
+                        if (playerObject != null)
+                        {
+                            PhotonView targetView = playerObject.GetComponent<PhotonView>();
+
+                            // PhotonViewが存在するか確認
+                            if (targetView != null)
+                            {
+                                // ヒットしたプレイヤーにRPCでダメージを送る
+                                targetView.RPC("Flash", RpcTarget.AllBuffered, isHit[0], isHit[1]);
+                            }
+                        }
+                    }
+                }
+                m_flash = Flash.NONE;
+
+                break;
             default:
                 break;
         }
@@ -249,18 +277,8 @@ public class FlashSkill : SkillBase
             m_flash = Flash.PREPARATION;
         }
 
-        if (m_flash == Flash.NONE)
+        if (m_flash == Flash.RESET)
         {
-            isHit[0] = false; // 初期化
-            isHit[1] = false; // 初期化
-            foreach (var player in PhotonNetwork.PlayerList)
-            {
-
-                // プレイヤーのカスタムプロパティを更新してフラグをセット
-                player.CustomProperties[$"isFlashed{player.ActorNumber}"] = isHit;
-
-                PhotonNetwork.SetPlayerCustomProperties(player.CustomProperties);
-            }
         }
 
 
