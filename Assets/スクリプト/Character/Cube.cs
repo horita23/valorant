@@ -32,6 +32,7 @@ public class Cube : MonoBehaviourPunCallbacks
         TeamB
     }
     public Team team;
+    public Vector3 respawnPositon;
 
     [Tooltip("The name of the character.")]
     public string characterName;
@@ -61,7 +62,8 @@ public class Cube : MonoBehaviourPunCallbacks
 
     private Slider slider;
 
-    private int killCount;
+    public int killCount;
+
         //孫（子オブジェクトの子オブジェクト)を取得する。
         //以下の場合なら自身の子オブジェクトChildの子オブジェクトGrandChildを取得
         public Transform headChild;
@@ -227,6 +229,8 @@ public class Cube : MonoBehaviourPunCallbacks
                     transform.position = new Vector3(0, 0, 0);
 
                     health = HEALTH;
+
+                    killCount++;
                 }
                 //HPバー
                 slider.value = health / HEALTH;
@@ -460,6 +464,10 @@ public class Cube : MonoBehaviourPunCallbacks
     }
 
     public Team GetTeam() { return team; }
+
+    public float GetHp() {        return health; 
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Ground"))

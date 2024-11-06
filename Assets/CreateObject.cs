@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class CreateObject : MonoBehaviourPunCallbacks
 {
+    public Transform[] respawnPositon;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -47,13 +49,15 @@ public class CreateObject : MonoBehaviourPunCallbacks
         // チームに応じてスポーン位置を決定してプレイヤーを生成
         if (selectedTeam == "TeamA")
         {
-            playerObject = PhotonNetwork.Instantiate("Cube", new Vector3(0, 3, 0), Quaternion.identity);
+            playerObject = PhotonNetwork.Instantiate("Cube", respawnPositon[0].position, Quaternion.identity);
 
             playerObject.GetComponent<Cube>().team = Cube.Team.TeamA;
+            playerObject.GetComponent<Cube>().respawnPositon = respawnPositon[0].position;
         }
         else if (selectedTeam == "TeamB")
         {
-            playerObject = PhotonNetwork.Instantiate("Cube", new Vector3(5, 3, 0), Quaternion.identity);
+            playerObject = PhotonNetwork.Instantiate("Cube", respawnPositon[1].position, Quaternion.identity);
+            playerObject.GetComponent<Cube>().respawnPositon = respawnPositon[1].position;
             playerObject.GetComponent<Cube>().team = Cube.Team.TeamB;
 
         }

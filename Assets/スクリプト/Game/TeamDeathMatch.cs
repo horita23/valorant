@@ -85,7 +85,7 @@ public class TeamDeathMatch : MonoBehaviour
                 //スポーンから出れないようにする、スキルは使えない
 
                 //30秒たったら１フェーズに移行
-                if (GameTime > 30.0f)
+                if (GameTime > 0.0f)
                 {
                     m_phase = Phase.FASTPHASE;
 

@@ -136,6 +136,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb2b678a1417f3245bed6eb23bfc6746, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  team: 0
+  respawnPositon: {x: 0, y: 0, z: 0}
   characterName: s
   HEALTH: 100
   RunSpeed: 5
@@ -295,10 +297,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.5
+  m_Radius: 0.35053074
   m_Height: 1.4301794
   m_Direction: 1
-  m_Center: {x: 0, y: 1.3752304, z: 0}
+  m_Center: {x: -0.0064860582, y: 1.3752304, z: -0.14150965}
 --- !u!1 &3492567741565762040
 GameObject:
   m_ObjectHideFlags: 0

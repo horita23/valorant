@@ -112,12 +112,17 @@ public class AK : BaseGun
                         // ヒットしたプレイヤーのPhotonViewを取得
                         PhotonView targetView = hit.collider.GetComponent<PhotonView>();
 
+
                         if (targetView != null)
                         {
+
                             // ヒットしたプレイヤーにRPCでダメージを送る
                             targetView.RPC("TakeDamage", RpcTarget.AllBuffered, damage);
+
+
+
                         }
-                        
+
                     }
                     else
                     {
