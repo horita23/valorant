@@ -100,9 +100,9 @@ public class TeamDeathMatch : MonoBehaviour
                 //どちらかのチームの合計キル数が20にだったら2フェーズ目に移行
                 for(int i = 0; i < killCount.Length; i++) 
                 {
-                    if (killCount[i] == 20)
+                    if (killCount[i] == 5)
                     {
-                        m_phase = Phase.SECONDPHASE;
+                        m_phase = Phase.ENDPHASE;
 
                     }
                     
@@ -118,6 +118,21 @@ public class TeamDeathMatch : MonoBehaviour
                 break;
 
             case Phase.ENDPHASE:
+
+                foreach (var player in PhotonNetwork.PlayerList)
+                {
+                    if (player.CustomProperties.TryGetValue($"viewID_{player.ActorNumber}", out object viewIDObj) && viewIDObj != null)
+                    {
+                        int viewID = (int)player.CustomProperties[$"viewID_{player.ActorNumber}"];
+                        GameObject playerObject = PhotonView.Find(viewID)?.gameObject;
+
+                        Cube playerScript = playerObject.GetComponent<Cube>();
+
+                        playerScript.GameEndFlag = true;
+                    }
+
+                }
+
                 break;
 
             default:

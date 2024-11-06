@@ -31,6 +31,7 @@ public class Cube : MonoBehaviourPunCallbacks
         TeamA,
         TeamB
     }
+    public  bool GameEndFlag = false;
     public Team team;
     public Vector3 respawnPositon;
 
@@ -196,52 +197,63 @@ public class Cube : MonoBehaviourPunCallbacks
     // Update is called once per frame
     void Update()
     {
-        if (gunInstance)
+        if (GameEndFlag)
         {
-            if (photonView.IsMine)
+
+            return;
+        }
+
+
+            if (gunInstance)
             {
-                // フラッシュUIを表示
-                if (flashHitFlag[0])
+                if (photonView.IsMine)
                 {
-                    flashImg.color = new Color(0, 1, 0, 1); // フラッシュの色
-                }
-                else
-                {
-                    flashImg.color = Color.Lerp(flashImg.color, Color.clear, Time.deltaTime * 0.5f); // 色をクリア
-                }
+                    // フラッシュUIを表示
+                    if (flashHitFlag[0])
+                    {
+                        flashImg.color = new Color(0, 1, 0, 1); // フラッシュの色
+                    }
+                    else
+                    {
+                        flashImg.color = Color.Lerp(flashImg.color, Color.clear, Time.deltaTime * 0.5f); // 色をクリア
+                    }
 
-                if (flashHitFlag[1])
-                {
-                    flashImg.color = new Color(1, 1, 1, 1); // フラッシュの色
+                    if (flashHitFlag[1])
+                    {
+                        flashImg.color = new Color(1, 1, 1, 1); // フラッシュの色
+                    }
+                    else
+                    {
+                        flashImg.color = Color.Lerp(flashImg.color, Color.clear, Time.deltaTime); // 色をクリア
+                    }
+
+                    //プレイヤー色々な操作
+                    HandleInput();
+
+                    gunInstance.transform.position = GunPositon.position;
+                    //HPが０ならリスポーン位置に移動
+                    if (health <= 0)
+                    {
+                        transform.position = new Vector3(0, 0, 0);
+
+                        health = HEALTH;
+
+                        killCount++;
+                    }
+                    //HPバー
+                    slider.value = health / HEALTH;
+
+
+
                 }
-                else
-                {
-                    flashImg.color = Color.Lerp(flashImg.color, Color.clear, Time.deltaTime); // 色をクリア
-                }
-
-                //プレイヤー色々な操作
-                HandleInput();
-
-                gunInstance.transform.position = GunPositon.position;
-                //HPが０ならリスポーン位置に移動
-                if (health <= 0)
-                {
-                    transform.position = new Vector3(0, 0, 0);
-
-                    health = HEALTH;
-
-                    killCount++;
-                }
-                //HPバー
-                slider.value = health / HEALTH;
 
             }
-        }
-        else
-        {
+            else
+            {
+
+            }
 
         }
-    }
 
     private void HandleInput()
     {
