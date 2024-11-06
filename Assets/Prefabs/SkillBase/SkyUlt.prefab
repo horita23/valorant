@@ -47,4 +47,5 @@ MonoBehaviour:
   cooldown: 1
   skillModel:
   - {fileID: 7739173049233884324, guid: 0fd9492dcb304c449b1431d8af453c94, type: 3}
+  - {fileID: 7739173049233884324, guid: 0fd9492dcb304c449b1431d8af453c94, type: 3}
   MAX_BRINKU_TIME: 5

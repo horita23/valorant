@@ -117,7 +117,7 @@ public class AK : BaseGun
                             // ヒットしたプレイヤーにRPCでダメージを送る
                             targetView.RPC("TakeDamage", RpcTarget.AllBuffered, damage);
                         }
-
+                        
                     }
                     else
                     {

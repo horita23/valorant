@@ -26,6 +26,13 @@ public enum StateSkill
 
 public class Cube : MonoBehaviourPunCallbacks
 {
+    public enum Team
+    {
+        TeamA,
+        TeamB
+    }
+    public Team team;
+
     [Tooltip("The name of the character.")]
     public string characterName;
 
@@ -54,6 +61,7 @@ public class Cube : MonoBehaviourPunCallbacks
 
     private Slider slider;
 
+    private int killCount;
         //孫（子オブジェクトの子オブジェクト)を取得する。
         //以下の場合なら自身の子オブジェクトChildの子オブジェクトGrandChildを取得
         public Transform headChild;
@@ -95,6 +103,7 @@ public class Cube : MonoBehaviourPunCallbacks
 
     private Vector3 lastMoveDirection; // Store the last move direction
 
+    private Vector4 FlashColor;
 
     // Start is called before the first frame update
     void Start()
@@ -138,7 +147,6 @@ public class Cube : MonoBehaviourPunCallbacks
             {
                 characterCamera.enabled = true;
             }
-
 
         }
             PhotonNetwork.SendRate = 20;
@@ -437,15 +445,21 @@ public class Cube : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
-    public void Flash(bool GreenFlash = false,bool whiteFlash = false)
+    public void Flash(bool HitFlash = false,bool NoHitFlash = false)
     {
-        flashHitFlag[0] = GreenFlash;
-        flashHitFlag[1] = whiteFlash;
+        flashHitFlag[0] = HitFlash;
+        flashHitFlag[1] = NoHitFlash;
 
 
 
     }
 
+    public int GetKillCount()
+    {
+        return killCount;
+    }
+
+    public Team GetTeam() { return team; }
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Ground"))

@@ -48,10 +48,14 @@ public class CreateObject : MonoBehaviourPunCallbacks
         if (selectedTeam == "TeamA")
         {
             playerObject = PhotonNetwork.Instantiate("Cube", new Vector3(0, 3, 0), Quaternion.identity);
+
+            playerObject.GetComponent<Cube>().team = Cube.Team.TeamA;
         }
         else if (selectedTeam == "TeamB")
         {
             playerObject = PhotonNetwork.Instantiate("Cube", new Vector3(5, 3, 0), Quaternion.identity);
+            playerObject.GetComponent<Cube>().team = Cube.Team.TeamB;
+
         }
         else
         {
