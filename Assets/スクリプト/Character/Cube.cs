@@ -156,6 +156,7 @@ public class Cube : MonoBehaviourPunCallbacks
             // プレイヤーのActorNumberをキーにしてViewIDを保存
             customProperties[$"killCount_{PhotonNetwork.LocalPlayer.ActorNumber}"] = killCount;
             customProperties[$"Teme_{PhotonNetwork.LocalPlayer.ActorNumber}"] = team;
+            customProperties[$"GameEneFlag_{PhotonNetwork.LocalPlayer.ActorNumber}"] = GameEndFlag;
 
             PhotonNetwork.LocalPlayer.SetCustomProperties(customProperties);
 

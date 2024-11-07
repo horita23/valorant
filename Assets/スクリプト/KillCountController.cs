@@ -17,7 +17,6 @@ public class KillCountController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        int indext = 0;
 
         foreach (var player in PhotonNetwork.PlayerList)
         {
@@ -28,11 +27,20 @@ public class KillCountController : MonoBehaviour
 
                 int killCount = (int)player.CustomProperties[$"killCount_{player.ActorNumber}"];
 
-                scoreboardPanel[indext].text = killCount.ToString();
-            
+                if ((Cube.Team)player.CustomProperties[$"Teme_{player.ActorNumber}"] == Cube.Team.TeamA)
+                {
+                    scoreboardPanel[(int)Cube.Team.TeamA].text = killCount.ToString();
+
+                }
+                else
+                {
+                    scoreboardPanel[(int)Cube.Team.TeamB].text = killCount.ToString();
+
+                }
+
+
             }
 
-            indext++;
         }
 
     }

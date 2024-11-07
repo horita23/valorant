@@ -45,18 +45,18 @@ public class TeamDeathMatch : MonoBehaviour
             {
                 int viewID = (int)player.CustomProperties[$"viewID_{player.ActorNumber}"];
                 GameObject playerObject = PhotonView.Find(viewID)?.gameObject;
+                int killcount = (int)player.CustomProperties[$"killCount_{player.ActorNumber}"];
 
-                Cube playerScript = playerObject.GetComponent<Cube>();
-
+                
                 //チームの合計キル数カウント
-                if(playerScript.GetTeam() == Cube.Team.TeamA)
+                if((Cube.Team)player.CustomProperties[$"Teme_{player.ActorNumber}"] == Cube.Team.TeamA)
                 {
-                    killCount[0] = playerScript.GetKillCount();
+                    killCount[0] = killcount;
 
                 }
                 else
                 {
-                    killCount[1] = playerScript.GetKillCount();
+                    killCount[1] = killcount;
 
                 }
             }
@@ -126,9 +126,12 @@ public class TeamDeathMatch : MonoBehaviour
                         int viewID = (int)player.CustomProperties[$"viewID_{player.ActorNumber}"];
                         GameObject playerObject = PhotonView.Find(viewID)?.gameObject;
 
-                        Cube playerScript = playerObject.GetComponent<Cube>();
+                        // カスタムプロパティにViewIDを保存
+                        ExitGames.Client.Photon.Hashtable customProperties = player.CustomProperties;
+                        // プレイヤーのActorNumberをキーにしてViewIDを保存
+                        customProperties[$"GameEneFlag_{player.ActorNumber}"] = true;
+                        player.SetCustomProperties(customProperties);
 
-                        playerScript.GameEndFlag = true;
                     }
 
                 }
