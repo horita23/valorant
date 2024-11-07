@@ -26,9 +26,9 @@ public class KillCountController : MonoBehaviour
                 int viewID = (int)player.CustomProperties[$"viewID_{player.ActorNumber}"];
                 GameObject playerObject = PhotonView.Find(viewID)?.gameObject;
 
-                Cube playerScript = playerObject.GetComponent<Cube>();
+                int killCount = (int)player.CustomProperties[$"killCount_{player.ActorNumber}"];
 
-                scoreboardPanel[indext].text = playerScript.GetKillCount().ToString();
+                scoreboardPanel[indext].text = killCount.ToString();
             
             }
 

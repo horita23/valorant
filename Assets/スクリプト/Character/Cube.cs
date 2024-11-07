@@ -63,7 +63,7 @@ public class Cube : MonoBehaviourPunCallbacks
 
     private Slider slider;
 
-    public int killCount;
+    public int killCount = 0;
 
         //孫（子オブジェクトの子オブジェクト)を取得する。
         //以下の場合なら自身の子オブジェクトChildの子オブジェクトGrandChildを取得
@@ -151,8 +151,17 @@ public class Cube : MonoBehaviourPunCallbacks
                 characterCamera.enabled = true;
             }
 
+            // カスタムプロパティにViewIDを保存
+            ExitGames.Client.Photon.Hashtable customProperties = PhotonNetwork.LocalPlayer.CustomProperties;
+            // プレイヤーのActorNumberをキーにしてViewIDを保存
+            customProperties[$"killCount_{PhotonNetwork.LocalPlayer.ActorNumber}"] = killCount;
+            customProperties[$"Teme_{PhotonNetwork.LocalPlayer.ActorNumber}"] = team;
+
+            PhotonNetwork.LocalPlayer.SetCustomProperties(customProperties);
+
+
         }
-            PhotonNetwork.SendRate = 20;
+        PhotonNetwork.SendRate = 20;
             PhotonNetwork.SerializationRate = 20;
         
     }
@@ -239,9 +248,16 @@ public class Cube : MonoBehaviourPunCallbacks
                         health = HEALTH;
 
                         killCount++;
-                    }
-                    //HPバー
-                    slider.value = health / HEALTH;
+
+                        // カスタムプロパティにViewIDを保存
+                        ExitGames.Client.Photon.Hashtable customProperties = PhotonNetwork.LocalPlayer.CustomProperties;
+                        // プレイヤーのActorNumberをキーにしてViewIDを保存
+                        customProperties[$"killCount_{PhotonNetwork.LocalPlayer.ActorNumber}"] = killCount;
+                        PhotonNetwork.LocalPlayer.SetCustomProperties(customProperties);
+
+                }
+                //HPバー
+                slider.value = health / HEALTH;
 
 
 

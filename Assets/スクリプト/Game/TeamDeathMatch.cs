@@ -28,7 +28,7 @@ public class TeamDeathMatch : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        m_phase = Phase.NONE;
+        m_phase = Phase.PREPARATIONPHASE;
         GameTime = 0.0f;
     }
 
