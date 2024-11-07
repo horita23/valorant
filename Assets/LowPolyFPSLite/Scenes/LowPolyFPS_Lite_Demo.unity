@@ -750,7 +750,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scoreboardPanel:
   - {fileID: 1471953207}
-  - {fileID: 0}
+  - {fileID: 79275081}
 --- !u!4 &110698487
 Transform:
   m_ObjectHideFlags: 0

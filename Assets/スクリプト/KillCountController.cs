@@ -29,12 +29,12 @@ public class KillCountController : MonoBehaviour
 
                 if ((Cube.Team)player.CustomProperties[$"Teme_{player.ActorNumber}"] == Cube.Team.TeamA)
                 {
-                    scoreboardPanel[(int)Cube.Team.TeamA].text = killCount.ToString();
+                    scoreboardPanel[0].text = killCount.ToString();
 
                 }
                 else
                 {
-                    scoreboardPanel[(int)Cube.Team.TeamB].text = killCount.ToString();
+                    scoreboardPanel[1].text = killCount.ToString();
 
                 }
 

@@ -2,6 +2,8 @@
 using System;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
+using Photon.Pun;
+using static FlashSkill;
 
 [CreateAssetMenu(fileName = "ReconSkill", menuName = "Skills/ReconSkill")]
 public class ReconSkill : SkillBase
@@ -168,6 +170,9 @@ public class ReconSkill : SkillBase
 
     }
 
+    protected override void ResetSkill(Cube character)
+    {
+    }
 
     private void EndBrinku()
     {

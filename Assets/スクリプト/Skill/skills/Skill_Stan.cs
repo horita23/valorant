@@ -1,6 +1,8 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static FlashSkill;
 
 [CreateAssetMenu(fileName = "Skill_Stan", menuName = "Skills/Skill_Stan")]
 public class Skill_Stan : SkillBase
@@ -23,4 +25,9 @@ public class Skill_Stan : SkillBase
         character.transform.position += new Vector3(0,5,0);
         LastUsedTimeSet();
     }
+
+    protected override void ResetSkill(Cube character)
+    {
+    }
+
 }

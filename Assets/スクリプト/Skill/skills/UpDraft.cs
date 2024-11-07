@@ -1,4 +1,6 @@
+using Photon.Pun;
 using UnityEngine;
+using static FlashSkill;
 
 [CreateAssetMenu(fileName = "UpDraft", menuName = "Skills/UpDraft")]
 public class UpDraft : SkillBase
@@ -77,6 +79,9 @@ public class UpDraft : SkillBase
         
     }
 
+    protected override void ResetSkill(Cube character)
+    {
+    }
 
     private void EndBrinku()
     {

@@ -8,6 +8,8 @@ public interface ISkill
     void Activate(Cube character);
     void MUpdate(Cube character);
     void StateUpdate(Cube character);
+    void resetSkill(Cube character);
+
     float Cooldown { get; }
     bool IsAvailable { get; }
     GameObject[] SkillModel { get; }
@@ -25,6 +27,8 @@ public abstract class SkillBase : MonoBehaviourPunCallbacks, ISkill
 
     public bool IsAvailable => (Time.time - lastUsedTime) >= cooldown;
 
+    public bool SkillActivation = false;
+
     public GameObject[] SkillModel => skillModel;
 
     private  KeyCode skill_Key;
@@ -35,6 +39,8 @@ public abstract class SkillBase : MonoBehaviourPunCallbacks, ISkill
     {
         skill_Key = skill_key;
         lastUsedTime = 0; // 冷却時間を考慮してリセット
+        SkillActivation = false;
+
         Initialize(character);
     }
     public void Activate(Cube character)
@@ -57,11 +63,18 @@ public abstract class SkillBase : MonoBehaviourPunCallbacks, ISkill
     {
         UpdateSkill(character);
     }
+    public void resetSkill(Cube character)
+    {
+        ResetSkill(character);
+    }
+
+
     // 新しい抽象メソッドを定義
     protected abstract void UpdateSkill(Cube character);
     protected abstract void UpdateMein(Cube character);
     protected abstract void UseSkill(Cube character);
-    protected abstract void Initialize(Cube character);    
+    protected abstract void Initialize(Cube character);
+    protected abstract void ResetSkill(Cube character);
 
 
     protected void LastUsedTimeSet()

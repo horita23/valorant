@@ -162,8 +162,8 @@ public class Cube : MonoBehaviourPunCallbacks
 
 
         }
-        PhotonNetwork.SendRate = 20;
-            PhotonNetwork.SerializationRate = 20;
+        PhotonNetwork.SendRate = 30;
+            PhotonNetwork.SerializationRate = 30;
         
     }
     //
@@ -207,12 +207,16 @@ public class Cube : MonoBehaviourPunCallbacks
     // Update is called once per frame
     void Update()
     {
-        if (GameEndFlag)
+
+        ExitGames.Client.Photon.Hashtable gameEndFlag = PhotonNetwork.LocalPlayer.CustomProperties;
+        // プレイヤーのActorNumberをキーにしてViewIDを保存
+       GameEndFlag = (bool)gameEndFlag[$"GameEneFlag_{PhotonNetwork.LocalPlayer.ActorNumber}"] ;
+
+        if(GameEndFlag)
         {
-
             return;
-        }
 
+        }
 
             if (gunInstance)
             {
@@ -250,12 +254,20 @@ public class Cube : MonoBehaviourPunCallbacks
 
                         killCount++;
 
+                        
                         // カスタムプロパティにViewIDを保存
                         ExitGames.Client.Photon.Hashtable customProperties = PhotonNetwork.LocalPlayer.CustomProperties;
                         // プレイヤーのActorNumberをキーにしてViewIDを保存
                         customProperties[$"killCount_{PhotonNetwork.LocalPlayer.ActorNumber}"] = killCount;
                         PhotonNetwork.LocalPlayer.SetCustomProperties(customProperties);
 
+                    if(killCount != (int)customProperties[$"killCount_{PhotonNetwork.LocalPlayer.ActorNumber}"])
+                    {
+                        // プレイヤーのActorNumberをキーにしてViewIDを保存
+                        customProperties[$"killCount_{PhotonNetwork.LocalPlayer.ActorNumber}"] = killCount;
+                        PhotonNetwork.LocalPlayer.SetCustomProperties(customProperties);
+
+                    }
                 }
                 //HPバー
                 slider.value = health / HEALTH;
@@ -365,14 +377,16 @@ public class Cube : MonoBehaviourPunCallbacks
         for (int i = 0; i < m_Skill_Info.Length; i++)
         {
             m_Skill_Info[i].skill.MUpdate(this);
-
-            if (Input.GetKeyDown(m_Skill_Info[i].skill_Key))
+            if (!m_Skill_Info[0].skill.SkillActivation && !m_Skill_Info[1].skill.SkillActivation)
             {
-                m_StateSkill = (StateSkill)i;
-                m_Skill_Info[i].skill.Activate(this);
-                gunInstance.SetActive(false);
-                animator.SetBool("GunHaveFlag", false);
+                if (Input.GetKeyDown(m_Skill_Info[i].skill_Key))
+                {
+                    m_StateSkill = (StateSkill)i;
+                    m_Skill_Info[i].skill.Activate(this);
+                    gunInstance.SetActive(false);
+                    animator.SetBool("GunHaveFlag", false);
 
+                }
             }
         }
         //銃の選択
@@ -380,6 +394,10 @@ public class Cube : MonoBehaviourPunCallbacks
         {
             //とりあえずスキルの次に銃の状態
             m_StateSkill = StateSkill.Gun;
+            m_Skill_Info[0].skill.resetSkill(this);
+            if(!m_Skill_Info[1].skill.SkillActivation) m_Skill_Info[1].skill.resetSkill(this);
+
+
             //銃表示
             gunInstance.SetActive(true);
             animator.SetBool("GunHaveFlag", true);
@@ -388,6 +406,9 @@ public class Cube : MonoBehaviourPunCallbacks
         if (Input.GetKeyDown(KeyCode.Z))
         {
             m_StateSkill = StateSkill.knife;
+            m_Skill_Info[0].skill.resetSkill(this);
+            if (!m_Skill_Info[1].skill.SkillActivation) m_Skill_Info[1].skill.resetSkill(this);
+
             gunInstance.SetActive(false);
             animator.SetBool("GunHaveFlag", false);
 

@@ -137,6 +137,9 @@ public class SkyUlt : SkillBase
 
     }
 
+    protected override void ResetSkill(Cube character)
+    {
+    }
 
     private void EndBrinku()
     {

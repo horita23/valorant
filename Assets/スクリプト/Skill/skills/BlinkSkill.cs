@@ -1,4 +1,6 @@
+using Photon.Pun;
 using UnityEngine;
+using static FlashSkill;
 
 [CreateAssetMenu(fileName = "BlinkSkill", menuName = "Skills/BlinkSkill")]
 public class BlinkSkill : SkillBase
@@ -75,6 +77,9 @@ public class BlinkSkill : SkillBase
 
     }
 
+    protected override void ResetSkill(Cube character)
+    {
+    }
 
     private void EndBrinku()
     {

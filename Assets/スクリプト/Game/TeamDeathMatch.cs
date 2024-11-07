@@ -5,6 +5,7 @@ using UnityEngine;
 using static SkyUlt;
 using UnityEngine.AI;
 using UnityEngine.TextCore.Text;
+using UnityEngine.SceneManagement;
 
 public class TeamDeathMatch : MonoBehaviour
 {
@@ -135,7 +136,7 @@ public class TeamDeathMatch : MonoBehaviour
                     }
 
                 }
-
+              //  SceneManager.LoadScene("ResulttScene");
                 break;
 
             default:
