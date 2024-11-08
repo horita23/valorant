@@ -424,7 +424,8 @@ public class Cube : MonoBehaviourPunCallbacks
                 {
                     m_StateSkill = (StateSkill)i;
                     m_Skill_Info[i].skill.Activate(this);
-                    gunInstance.SetActive(false);
+                    PhotonNetwork.Destroy(gunInstance);
+
                     animator.SetBool("GunHaveFlag", false);
 
                 }
@@ -440,7 +441,11 @@ public class Cube : MonoBehaviourPunCallbacks
 
 
             //銃表示
-            gunInstance.SetActive(true);
+            //ネットワークで銃を作成する
+            gunInstance = PhotonNetwork.Instantiate("Ak", GunPositon.position, Shoulder[0].rotation);
+            //プレイヤーを子にする
+            photonView.RPC("SetParentRPC", RpcTarget.AllBuffered, gunInstance.GetPhotonView().ViewID, photonView.ViewID);
+
             animator.SetBool("GunHaveFlag", true);
 
         }
@@ -450,7 +455,8 @@ public class Cube : MonoBehaviourPunCallbacks
             m_Skill_Info[0].skill.resetSkill(this);
             if (!m_Skill_Info[1].skill.SkillActivation) m_Skill_Info[1].skill.resetSkill(this);
 
-            gunInstance.SetActive(false);
+            PhotonNetwork.Destroy(gunInstance);
+
             animator.SetBool("GunHaveFlag", false);
 
         }
