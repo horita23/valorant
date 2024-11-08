@@ -6,9 +6,36 @@ using static SkyUlt;
 using UnityEngine.AI;
 using UnityEngine.TextCore.Text;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class TeamDeathMatch : MonoBehaviour
 {
+    public float COOL_TIME_END = 3f;
+    private float coolTimeEnd;
+
+    public Text texxt;
+
+    public Text messageText;       // 表示するテキスト
+    public float displayDuration = 2f;   // テキストの表示時間
+    public float fadeDuration = 0.5f;    // フェードイン・フェードアウトの時間
+
+
+    public void ShowText(string message)
+    {
+        // メッセージをセットし、フェードイン開始
+        messageText.text = message;
+        StartCoroutine(FadeInAndOut());
+    }
+
+    private IEnumerator FadeInAndOut()
+    {
+        // フェードイン
+        messageText.CrossFadeAlpha(1f, fadeDuration, false);
+        yield return new WaitForSeconds(displayDuration);
+
+        // フェードアウト
+        messageText.CrossFadeAlpha(0f, fadeDuration, false);
+    }
 
     //フェーズ
     public enum Phase
@@ -29,8 +56,15 @@ public class TeamDeathMatch : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // 初期状態でテキストを非表示に
+        messageText.canvasRenderer.SetAlpha(0f);
+
+        coolTimeEnd = COOL_TIME_END;
         m_phase = Phase.PREPARATIONPHASE;
         GameTime = 0.0f;
+
+        killCount[0] = 0;
+        killCount[1] = 0;
     }
 
     // Update is called once per frame
@@ -101,7 +135,7 @@ public class TeamDeathMatch : MonoBehaviour
                 //どちらかのチームの合計キル数が20にだったら2フェーズ目に移行
                 for(int i = 0; i < killCount.Length; i++) 
                 {
-                    if (killCount[i] == 5)
+                    if (killCount[i] == 10)
                     {
                         m_phase = Phase.ENDPHASE;
 
@@ -120,6 +154,8 @@ public class TeamDeathMatch : MonoBehaviour
 
             case Phase.ENDPHASE:
 
+                coolTimeEnd -= Time.deltaTime;
+
                 foreach (var player in PhotonNetwork.PlayerList)
                 {
                     if (player.CustomProperties.TryGetValue($"viewID_{player.ActorNumber}", out object viewIDObj) && viewIDObj != null)
@@ -136,7 +172,22 @@ public class TeamDeathMatch : MonoBehaviour
                     }
 
                 }
-                SceneManager.LoadScene("TeamSelectScene");
+
+
+               ShowText("終了!");
+
+
+                if (coolTimeEnd<=0)
+                {
+                    if (PhotonNetwork.InRoom)
+                    {
+                        PhotonNetwork.LeaveRoom();
+                    }
+                    PhotonNetwork.Disconnect();
+
+                    SceneManager.LoadScene("TeamSelectScene");
+
+                }
                 break;
 
             default:

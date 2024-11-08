@@ -29,6 +29,10 @@ public class Cube : MonoBehaviourPunCallbacks
     public float COOL_TIME = 3f;
     private float coolTime;
 
+    public float COOL_TIME_END = 3f;
+    private float coolTimeEnd;
+
+    private float FlashTime;
     public enum Team
     {
         TeamA,
@@ -111,12 +115,15 @@ public class Cube : MonoBehaviourPunCallbacks
 
     private Vector4 FlashColor;
 
+    private bool hitFlash;
+
     // Start is called before the first frame update
     void Start()
     {
 
         if (photonView.IsMine)
         {
+            coolTimeEnd = COOL_TIME_END;
             coolTime = COOL_TIME;
             health = HEALTH;
             m_StateSkill = StateSkill.knife;
@@ -160,11 +167,19 @@ public class Cube : MonoBehaviourPunCallbacks
             // プレイヤーのActorNumberをキーにしてViewIDを保存
             customProperties[$"killCount_{PhotonNetwork.LocalPlayer.ActorNumber}"] = killCount;
             customProperties[$"Teme_{PhotonNetwork.LocalPlayer.ActorNumber}"] = team;
+            GameEndFlag = false;
             customProperties[$"GameEneFlag_{PhotonNetwork.LocalPlayer.ActorNumber}"] = GameEndFlag;
 
             PhotonNetwork.LocalPlayer.SetCustomProperties(customProperties);
+            //ネットワークで銃を作成する
+            gunInstance = PhotonNetwork.Instantiate("Ak", GunPositon.position, Shoulder[0].rotation);
+            //プレイヤーを子にする
+            photonView.RPC("SetParentRPC", RpcTarget.AllBuffered, gunInstance.GetPhotonView().ViewID, photonView.ViewID);
+            m_StateSkill = StateSkill.Gun;
+            animator.SetBool("GunHaveFlag", true);
 
-
+            FlashTime = 5.0f;
+            hitFlash = false;
         }
         PhotonNetwork.SendRate = 30;
             PhotonNetwork.SerializationRate = 30;
@@ -234,22 +249,36 @@ public class Cube : MonoBehaviourPunCallbacks
                 }
 
                     // フラッシュUIを表示
-                    if (flashHitFlag[0])
+                 if (flashHitFlag[0])
                 {
                     flashImg.color = new Color(0, 1, 0, 1); // フラッシュの色
+
+                    FlashTime = 3.5f;
+
+                    hitFlash = true;
                 }
                 else
                 {
-                    flashImg.color = Color.Lerp(flashImg.color, Color.clear, Time.deltaTime * 0.5f); // 色をクリア
+                    FlashTime -= Time.deltaTime;
+
+                    if (FlashTime <= 0)
+                    {
+                        flashImg.color = Color.Lerp(flashImg.color, Color.clear, Time.deltaTime * 0.5f); // 色をクリア
+                        hitFlash = false;
+
+                    }
                 }
 
-                if (flashHitFlag[1])
+                if (!hitFlash)
                 {
-                    flashImg.color = new Color(1, 1, 1, 1); // フラッシュの色
-                }
-                else
-                {
-                    flashImg.color = Color.Lerp(flashImg.color, Color.clear, Time.deltaTime); // 色をクリア
+                    if (flashHitFlag[1])
+                    {
+                        flashImg.color = new Color(1, 1, 1, 1); // フラッシュの色
+                    }
+                    else
+                    {
+                        flashImg.color = Color.Lerp(flashImg.color, Color.clear, Time.deltaTime); // 色をクリア
+                    }
                 }
 
                 //プレイヤー色々な操作
@@ -364,14 +393,14 @@ public class Cube : MonoBehaviourPunCallbacks
         camRight.y = 0;
         if (isGrounded)
         {
-            Vector3 moveDirection = (camForward * input.z + camRight * input.x).normalized * RunSpeed;
+            Vector3 moveDirection = (camForward * input.z + camRight * input.x) * RunSpeed;
             // Apply movement with ground friction
             rb.velocity = new Vector3(moveDirection.x, rb.velocity.y, moveDirection.z);
             lastMoveDirection = input; // Store last move direction
         }
         else
         {
-            Vector3 moveDirection = (camForward * lastMoveDirection.z + camRight * lastMoveDirection.x).normalized * RunSpeed;
+            Vector3 moveDirection = (camForward * lastMoveDirection.z + camRight * lastMoveDirection.x) * RunSpeed;
             // Apply movement with reduced control in the air
             rb.velocity = new Vector3(moveDirection.x, rb.velocity.y, moveDirection.z);
         }

@@ -89,7 +89,7 @@ public class FlashSkill : SkillBase
 
                 // 初期速度を設定
                 Rigidbody rb = FlashModel.GetComponent<Rigidbody>();
-                rb.velocity = FlashModel.transform.forward * 5f;
+                rb.velocity = FlashModel.transform.forward * 10f;
 
 
                 // 左クリックが押されているか確認
