@@ -424,7 +424,8 @@ public class Cube : MonoBehaviourPunCallbacks
                 {
                     m_StateSkill = (StateSkill)i;
                     m_Skill_Info[i].skill.Activate(this);
-                    PhotonNetwork.Destroy(gunInstance);
+                    if(gunInstance)
+                        gunInstance.SetActive(false);
 
                     animator.SetBool("GunHaveFlag", false);
 
@@ -442,9 +443,8 @@ public class Cube : MonoBehaviourPunCallbacks
 
             //銃表示
             //ネットワークで銃を作成する
-            gunInstance = PhotonNetwork.Instantiate("Ak", GunPositon.position, Shoulder[0].rotation);
-            //プレイヤーを子にする
-            photonView.RPC("SetParentRPC", RpcTarget.AllBuffered, gunInstance.GetPhotonView().ViewID, photonView.ViewID);
+
+            gunInstance.SetActive(true);
 
             animator.SetBool("GunHaveFlag", true);
 
@@ -455,7 +455,8 @@ public class Cube : MonoBehaviourPunCallbacks
             m_Skill_Info[0].skill.resetSkill(this);
             if (!m_Skill_Info[1].skill.SkillActivation) m_Skill_Info[1].skill.resetSkill(this);
 
-            PhotonNetwork.Destroy(gunInstance);
+            if (gunInstance)
+                gunInstance.SetActive(false);
 
             animator.SetBool("GunHaveFlag", false);
 
@@ -564,6 +565,16 @@ public class Cube : MonoBehaviourPunCallbacks
     public Team GetTeam() { return team; }
 
     public float GetHp() {        return health; 
+    }
+
+    [PunRPC]
+    public void ToggleActiveState(int viewID, bool isActive)
+    {
+        PhotonView targetView = PhotonView.Find(viewID);
+        if (targetView != null)
+        {
+            targetView.gameObject.SetActive(isActive);
+        }
     }
 
     private void OnCollisionEnter(Collision collision)

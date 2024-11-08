@@ -25,7 +25,7 @@ public class FastPersonCamera : MonoBehaviourPunCallbacks
     {
         var localPlayer = PhotonNetwork.LocalPlayer;
         playerAvatar = localPlayer.TagObject as Cube;
-        if (playerAvatar != null && playerAvatar.photonView.IsMine)
+        if (playerAvatar != null && photonView.IsMine)
         {
             if (playerAvatar.gunInstance)
             {
