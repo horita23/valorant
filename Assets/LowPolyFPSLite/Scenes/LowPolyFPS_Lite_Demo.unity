@@ -7840,6 +7840,8 @@ MonoBehaviour:
   Guns:
   - ak: {fileID: -6017627654315502556, guid: e27a5dd9e9fe03742a184001c7c2e7a9, type: 3}
     botton: {fileID: 1835401293}
+  - ak: {fileID: -6017627654315502556, guid: e27a5dd9e9fe03742a184001c7c2e7a9, type: 3}
+    botton: {fileID: 611065182}
 --- !u!4 &1158152313
 Transform:
   m_ObjectHideFlags: 0
@@ -11851,6 +11853,7 @@ MonoBehaviour:
   prefabs:
   - {fileID: 1684094732800676950, guid: b5b768f5e0e79cc428785590cd1497bc, type: 3}
   - {fileID: 5149810931926858183, guid: e27a5dd9e9fe03742a184001c7c2e7a9, type: 3}
+  - {fileID: 5149810931926858183, guid: dfc39f355e5f7f340bbb190afe0eae96, type: 3}
   - {fileID: 322811226365613655, guid: 5bee4474437c1cf44b705b33f591a7b0, type: 3}
   - {fileID: 1564260702793472665, guid: 05fc7adcdbcb48047b24b31e1e00a1e2, type: 3}
   - {fileID: 7739173049233884324, guid: 0fd9492dcb304c449b1431d8af453c94, type: 3}
