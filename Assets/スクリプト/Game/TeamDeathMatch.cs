@@ -136,7 +136,7 @@ public class TeamDeathMatch : MonoBehaviour
                     }
 
                 }
-              //  SceneManager.LoadScene("ResulttScene");
+                SceneManager.LoadScene("TeamSelectScene");
                 break;
 
             default:

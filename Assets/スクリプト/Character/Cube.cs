@@ -26,6 +26,9 @@ public enum StateSkill
 
 public class Cube : MonoBehaviourPunCallbacks
 {
+    public float COOL_TIME = 3f;
+    private float coolTime;
+
     public enum Team
     {
         TeamA,
@@ -114,6 +117,7 @@ public class Cube : MonoBehaviourPunCallbacks
 
         if (photonView.IsMine)
         {
+            coolTime = COOL_TIME;
             health = HEALTH;
             m_StateSkill = StateSkill.knife;
             for (int i = 0; i < m_Skill_Info.Length; i++)
@@ -210,58 +214,66 @@ public class Cube : MonoBehaviourPunCallbacks
 
         ExitGames.Client.Photon.Hashtable gameEndFlag = PhotonNetwork.LocalPlayer.CustomProperties;
         // プレイヤーのActorNumberをキーにしてViewIDを保存
-       GameEndFlag = (bool)gameEndFlag[$"GameEneFlag_{PhotonNetwork.LocalPlayer.ActorNumber}"] ;
+        GameEndFlag = (bool)gameEndFlag[$"GameEneFlag_{PhotonNetwork.LocalPlayer.ActorNumber}"];
 
-        if(GameEndFlag)
+        if (GameEndFlag)
         {
             return;
 
         }
 
-            if (gunInstance)
+        if (gunInstance)
+        {
+            if (photonView.IsMine)
             {
-                if (photonView.IsMine)
+                //
+                if (coolTime >= 0)
                 {
+                    coolTime -= Time.deltaTime;
+                    health = HEALTH;
+                }
+
                     // フラッシュUIを表示
                     if (flashHitFlag[0])
-                    {
-                        flashImg.color = new Color(0, 1, 0, 1); // フラッシュの色
-                    }
-                    else
-                    {
-                        flashImg.color = Color.Lerp(flashImg.color, Color.clear, Time.deltaTime * 0.5f); // 色をクリア
-                    }
+                {
+                    flashImg.color = new Color(0, 1, 0, 1); // フラッシュの色
+                }
+                else
+                {
+                    flashImg.color = Color.Lerp(flashImg.color, Color.clear, Time.deltaTime * 0.5f); // 色をクリア
+                }
 
-                    if (flashHitFlag[1])
-                    {
-                        flashImg.color = new Color(1, 1, 1, 1); // フラッシュの色
-                    }
-                    else
-                    {
-                        flashImg.color = Color.Lerp(flashImg.color, Color.clear, Time.deltaTime); // 色をクリア
-                    }
+                if (flashHitFlag[1])
+                {
+                    flashImg.color = new Color(1, 1, 1, 1); // フラッシュの色
+                }
+                else
+                {
+                    flashImg.color = Color.Lerp(flashImg.color, Color.clear, Time.deltaTime); // 色をクリア
+                }
 
-                    //プレイヤー色々な操作
-                    HandleInput();
+                //プレイヤー色々な操作
+                HandleInput();
+                
+                gunInstance.transform.position = GunPositon.position;
+                //HPが０ならリスポーン位置に移動
+                if (health <= 0)
+                {
+                    
+                    transform.position = respawnPositon;
 
-                    gunInstance.transform.position = GunPositon.position;
-                    //HPが０ならリスポーン位置に移動
-                    if (health <= 0)
-                    {
-                        transform.position = new Vector3(0, 0, 0);
+                    health = HEALTH;
 
-                        health = HEALTH;
+                    killCount++;
+                    coolTime = COOL_TIME;
 
-                        killCount++;
+                    // カスタムプロパティにViewIDを保存
+                    ExitGames.Client.Photon.Hashtable customProperties = PhotonNetwork.LocalPlayer.CustomProperties;
+                    // プレイヤーのActorNumberをキーにしてViewIDを保存
+                    customProperties[$"killCount_{PhotonNetwork.LocalPlayer.ActorNumber}"] = killCount;
+                    PhotonNetwork.LocalPlayer.SetCustomProperties(customProperties);
 
-                        
-                        // カスタムプロパティにViewIDを保存
-                        ExitGames.Client.Photon.Hashtable customProperties = PhotonNetwork.LocalPlayer.CustomProperties;
-                        // プレイヤーのActorNumberをキーにしてViewIDを保存
-                        customProperties[$"killCount_{PhotonNetwork.LocalPlayer.ActorNumber}"] = killCount;
-                        PhotonNetwork.LocalPlayer.SetCustomProperties(customProperties);
-
-                    if(killCount != (int)customProperties[$"killCount_{PhotonNetwork.LocalPlayer.ActorNumber}"])
+                    if (killCount != (int)customProperties[$"killCount_{PhotonNetwork.LocalPlayer.ActorNumber}"])
                     {
                         // プレイヤーのActorNumberをキーにしてViewIDを保存
                         customProperties[$"killCount_{PhotonNetwork.LocalPlayer.ActorNumber}"] = killCount;
@@ -274,15 +286,15 @@ public class Cube : MonoBehaviourPunCallbacks
 
 
 
-                }
-
-            }
-            else
-            {
-
             }
 
         }
+        else
+        {
+
+        }
+
+    }
 
     private void HandleInput()
     {
@@ -493,8 +505,9 @@ public class Cube : MonoBehaviourPunCallbacks
     [PunRPC]
     public void TakeDamage(float damage)
     {
-        // ダメージを受ける
-        health -= damage;
+        if(coolTime <= 0)
+            // ダメージを受ける
+            health -= damage;
 
     }
 
