@@ -143,7 +143,7 @@ public class TeamDeathMatch : MonoBehaviour
                 //どちらかのチームの合計キル数が20にだったら2フェーズ目に移行
                 for(int i = 0; i < killCount.Length; i++) 
                 {
-                    if (killCount[i] == 10)
+                    if (killCount[i] == 1)
                     {
                         m_phase = Phase.ENDPHASE;
                         EndMatch();
@@ -208,6 +208,7 @@ public class TeamDeathMatch : MonoBehaviour
                         if (PhotonNetwork.InRoom)
                         {
                             PhotonNetwork.LocalPlayer.CustomProperties.Clear();
+
                             PhotonNetwork.LeaveRoom();
                         }
                         PhotonNetwork.Disconnect();
