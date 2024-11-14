@@ -14,6 +14,8 @@ public class CreateObject : MonoBehaviourPunCallbacks
         Application.targetFrameRate = 200;
         // プレイヤー自身の名前を"Player"に設定する
         PhotonNetwork.NickName = "Player";
+        PhotonNetwork.SendRate = 30;
+        PhotonNetwork.SerializationRate = 30;
 
         // PhotonServerSettingsの設定内容を使ってマスターサーバーへ接続する
         PhotonNetwork.ConnectUsingSettings();

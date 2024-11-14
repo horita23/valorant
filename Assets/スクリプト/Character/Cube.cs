@@ -5,6 +5,8 @@ using Photon.Pun;
 using UnityEngine.UI;
 using Photon.Realtime;
 using UnityEngine.AI;
+using UnityEditor.VersionControl;
+using Photon.Pun.Demo.PunBasics;
 
 [System.Serializable]
 public class Skill_Info
@@ -117,6 +119,7 @@ public class Cube : MonoBehaviourPunCallbacks
 
     private bool hitFlash;
 
+    private PlayerUIManager playerUIManagerObject;
     // Start is called before the first frame update
     void Start()
     {
@@ -173,6 +176,10 @@ public class Cube : MonoBehaviourPunCallbacks
             PhotonNetwork.LocalPlayer.SetCustomProperties(customProperties);
             //ネットワークで銃を作成する
             gunInstance = PhotonNetwork.Instantiate("Ak", GunPositon.position, Shoulder[0].rotation);
+            AK GunInstance = gunInstance.GetComponent<AK>();
+
+            GunInstance.GunTransform = gunInstance.transform;
+
             //プレイヤーを子にする
             photonView.RPC("SetParentRPC", RpcTarget.AllBuffered, gunInstance.GetPhotonView().ViewID, photonView.ViewID);
             m_StateSkill = StateSkill.Gun;
@@ -180,9 +187,9 @@ public class Cube : MonoBehaviourPunCallbacks
 
             FlashTime = 5.0f;
             hitFlash = false;
+
+            playerUIManagerObject = FindObjectOfType<PlayerUIManager>();
         }
-        PhotonNetwork.SendRate = 30;
-            PhotonNetwork.SerializationRate = 30;
         
     }
     //
@@ -256,6 +263,9 @@ public class Cube : MonoBehaviourPunCallbacks
                     FlashTime = 3.5f;
 
                     hitFlash = true;
+
+                    Debug.Log("フラッシュがくらっています");
+
                 }
                 else
                 {
@@ -274,6 +284,8 @@ public class Cube : MonoBehaviourPunCallbacks
                     if (flashHitFlag[1])
                     {
                         flashImg.color = new Color(1, 1, 1, 1); // フラッシュの色
+                        Debug.Log("フラッシュが食らう位置にいるけど視界にフラッシュが入っていない");
+
                     }
                     else
                     {
@@ -285,6 +297,14 @@ public class Cube : MonoBehaviourPunCallbacks
                 HandleInput();
                 
                 gunInstance.transform.position = GunPositon.position;
+                // ガンの回転を取得
+                Quaternion gunRotation = Shoulder[0].rotation;
+
+                // z軸の回転をリセット
+                gunRotation.z = 0;
+                gunRotation.y = 0;
+
+
                 //HPが０ならリスポーン位置に移動
                 if (health <= 0)
                 {
@@ -309,9 +329,17 @@ public class Cube : MonoBehaviourPunCallbacks
                         PhotonNetwork.LocalPlayer.SetCustomProperties(customProperties);
 
                     }
+
+                    if (gunInstance != null)
+                    {
+                        BaseGun BasegunInstance = gunInstance.GetComponent<BaseGun>();
+                        BasegunInstance.RespawnReset();
+
+                    }
+
                 }
-                //HPバー
-                slider.value = health / HEALTH;
+                    //HPバー
+                    slider.value = health / HEALTH;
 
 
 
@@ -322,7 +350,17 @@ public class Cube : MonoBehaviourPunCallbacks
         {
 
         }
+        if (gunInstance != null)
+        {
+            BaseGun BasegunInstance = gunInstance.GetComponent<BaseGun>();
 
+            bool GunActive = false;
+
+            if (m_StateSkill == StateSkill.Gun)
+                GunActive = true;
+
+            playerUIManagerObject.UpdatePlayerUI(health, BasegunInstance.GetRestBullet(), BasegunInstance.GetMaxBullet(), GunActive);
+        }
     }
 
     private void HandleInput()
@@ -425,7 +463,7 @@ public class Cube : MonoBehaviourPunCallbacks
                     m_StateSkill = (StateSkill)i;
                     m_Skill_Info[i].skill.Activate(this);
                     if(gunInstance)
-                        gunInstance.SetActive(false);
+                        photonView.RPC("ToggleActiveState", RpcTarget.AllBuffered, gunInstance.GetPhotonView().ViewID, false);
 
                     animator.SetBool("GunHaveFlag", false);
 
@@ -444,7 +482,7 @@ public class Cube : MonoBehaviourPunCallbacks
             //銃表示
             //ネットワークで銃を作成する
 
-            gunInstance.SetActive(true);
+            photonView.RPC("ToggleActiveState", RpcTarget.AllBuffered, gunInstance.GetPhotonView().ViewID, true);
 
             animator.SetBool("GunHaveFlag", true);
 
@@ -456,7 +494,7 @@ public class Cube : MonoBehaviourPunCallbacks
             if (!m_Skill_Info[1].skill.SkillActivation) m_Skill_Info[1].skill.resetSkill(this);
 
             if (gunInstance)
-                gunInstance.SetActive(false);
+                photonView.RPC("ToggleActiveState", RpcTarget.AllBuffered, gunInstance.GetPhotonView().ViewID, false);
 
             animator.SetBool("GunHaveFlag", false);
 
@@ -552,7 +590,6 @@ public class Cube : MonoBehaviourPunCallbacks
     {
         flashHitFlag[0] = HitFlash;
         flashHitFlag[1] = NoHitFlash;
-
 
 
     }

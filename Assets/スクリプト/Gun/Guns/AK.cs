@@ -6,16 +6,14 @@ using UnityEngine;
 
 public class AK : BaseGun
 {
-    [Tooltip("現在の弾薬")]
-    private int currentAmmo;     // 現在の弾薬
     [Tooltip("集団率横")]
     public float horizontalSpread = 1.0f;
     [Tooltip("集団率縦")]
     public float verticalSpread = 1.0f; // M_rand, v
     public float probabilityFactor = 1.0f; // P^b
-
     public float recoilControlAmount = 0.5f; // リコイル制御量 (0.0 から 1.0)
-
+    public int magazin = 25;
+    private int MaxammoCapacity = 0;
     private int Recoil_Bullet_Count = 0;
     private float time = 0.0f;
     private Vector3 recoilOffset = Vector3.zero;
@@ -28,16 +26,23 @@ public class AK : BaseGun
     public GameObject muzzleFlashParticle = null;
     public GameObject muzzleFlashPosiotn = null;
 
-    
+    public Transform GunTransform;
+
     RaycastHit hit;
     [SerializeField]
     LayerMask hitLayers = 0;
-
     void Start()
     {
-        currentAmmo = ammoCapacity; 
-        Camera = FindObjectOfType<FastPersonCamera>();
- 
+        magazin = 25;
+        MaxammoCapacity = ammoCapacity;
+        RestBullet = magazin;
+
+        var localPlayer = PhotonNetwork.LocalPlayer;
+        Cube playerAvatar = localPlayer.TagObject as Cube;
+
+        Camera = playerAvatar.GetComponentInChildren<FastPersonCamera>();
+
+        GunTransform = transform;
     }
 
     public override void MainUpdate()
@@ -46,6 +51,9 @@ public class AK : BaseGun
     }
     public override void StateUpdate()
     {
+        var localPlayer = PhotonNetwork.LocalPlayer;
+        Cube playerAvatar = localPlayer.TagObject as Cube;
+
         if (Input.GetKey(KeyCode.Mouse0))
         {
             Shoot();
@@ -55,7 +63,7 @@ public class AK : BaseGun
             flag = true;
 
         }
-        if (currentAmmo <= 0)
+        if (RestBullet <= 0)
         {
             flag = true;
         }
@@ -70,11 +78,14 @@ public class AK : BaseGun
             // 補間して元の位置に戻す
             transform.rotation = Quaternion.Lerp(transform.rotation, transform.parent.rotation, Time.deltaTime * 5);
 
+            if(GunTransform != null)
+            GunTransform.rotation = Quaternion.Lerp(GunTransform.rotation, transform.parent.rotation, Time.deltaTime * 5);
 
             // 元の位置に十分近づいたら補間を停止する
             if (Quaternion.Angle(transform.rotation, transform.parent.rotation) < 0.01f)
             {
                 transform.rotation = transform.parent.rotation;
+                GunTransform.rotation = transform.parent.rotation;
                 Recoil_Bullet_Count = 0;
                 flag = false;
             }
@@ -82,29 +93,31 @@ public class AK : BaseGun
         }
 
 
+
+
     }
 
     public override void Shoot()
     {
-        if (currentAmmo <= 0) return;
+        if (RestBullet <= 0) return;
 
         time += Time.deltaTime;
         var localPlayer = PhotonNetwork.LocalPlayer;
         Cube playerAvatar = localPlayer.TagObject as Cube;
 
-        Camera camera = playerAvatar.GetComponentInChildren<Camera>();
 
         if (time > shotInterval)
         {
             time = 0.0f;
-            currentAmmo--;
+            RestBullet--;
+            ammoCapacity--;
             var flash = Instantiate(muzzleFlashParticle, muzzleFlashPosiotn.transform);
             
 
             if (Camera != null)
             {
-                Debug.DrawRay(camera.transform.position, camera.transform.forward * 100, Color.red, 5);
-                if (Physics.Raycast(camera.transform.position, camera.transform.forward, out hit, 100.0f, hitLayers, QueryTriggerInteraction.Ignore))
+                Debug.DrawRay(Camera.transform.position, Camera.transform.forward * 100, Color.red, 5);
+                if (Physics.Raycast(Camera.transform.position, Camera.transform.forward, out hit, 100.0f, hitLayers, QueryTriggerInteraction.Ignore))
                 {
                     // 自分以外のプレイヤーに当たった場合
                     if (hit.collider.gameObject.CompareTag("Player"))
@@ -137,12 +150,19 @@ public class AK : BaseGun
                 }
             }
             Recoil();
+
+
         }
     }
 
     public override void Reload()
     {
-        currentAmmo = ammoCapacity;
+        if(ammoCapacity > 0)
+            if(magazin < ammoCapacity)
+                RestBullet = magazin;
+            else
+                RestBullet = ammoCapacity;
+
     }
 
     public override void Recoil()
@@ -155,17 +175,21 @@ public class AK : BaseGun
         {
             // リコイルを適用
             transform.Rotate(new Vector3(0, recoilOffset.x, 0));
-
+            GunTransform.rotation *= Quaternion.Euler(0, recoilOffset.x, 0);
         }
-        else
+        else if(Recoil_Bullet_Count > 2)
         {
             // リコイルを適用
             transform.Rotate(new Vector3(-Mathf.Abs(recoilOffset.y), recoilOffset.x, 0));
-
+            GunTransform.rotation *= Quaternion.Euler(-Mathf.Abs(recoilOffset.y), recoilOffset.x, 0);
         }
 
 
-
+    }
+    public override void RespawnReset()
+    {
+        ammoCapacity = MaxammoCapacity;
+        RestBullet = magazin;
     }
 
     private void RecoilControl()

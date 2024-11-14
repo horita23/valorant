@@ -127,6 +127,12 @@ public class FlashSkill : SkillBase
                     int viewID = (int)player.CustomProperties[$"viewID_{player.ActorNumber}"];
                     GameObject playerObject = PhotonView.Find(viewID)?.gameObject;
 
+                    int playerHP = (int)playerObject.GetComponent<Cube>().GetHp();
+                    var playerScript = playerObject.GetComponent<Cube>();
+
+                    Debug.Log(playerScript.GetHp());
+                    Debug.Log(playerHP);
+
                     // プレイヤーのカメラを取得
                     Camera playerCam = playerObject.GetComponentInChildren<Camera>();
 
@@ -163,31 +169,34 @@ public class FlashSkill : SkillBase
                         {
 
 
-
-                            if (Physics.Raycast(FlashModel.transform.position, directionToTarget, out RaycastHit hitinfo, Mathf.Infinity))
+                            for (int i = 0; i < 20; i++)
                             {
-                                if (hitinfo.collider.gameObject.CompareTag("Player"))
+                                if (Physics.Raycast(FlashModel.transform.position, directionToTarget, out RaycastHit hitinfo, Mathf.Infinity))
                                 {
-                                    //flashImg.color = new Color(0, 1, 0, 1);
-                                    isHit[0] = true;
-                                    Debug.Log($"{player.NickName}({player.ActorNumber})に表示されています");
+                                    if (hitinfo.collider.gameObject.CompareTag("Player"))
+                                    {
+                                        //flashImg.color = new Color(0, 1, 0, 1);
+                                        isHit[0] = true;
+                                        Debug.Log($"{player.NickName}({player.ActorNumber})に表示されています");
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        isHit[0] = false;
+
+                                        Debug.Log($"{player.NickName}({player.ActorNumber})に表示されていません");
+                                    }
+
 
                                 }
-                                else
-                                {
-                                    isHit[0] = false;
-
-                                    Debug.Log($"{player.NickName}({player.ActorNumber})に表示されていません");
-                                }
-
 
                             }
+                            }
+
+
+                            // UIの表示処理などを行う
                         }
-
-
-                        // UIの表示処理などを行う
-                    }
-                    else
+                        else
                     {
                         if (Physics.Raycast(FlashModel.transform.position, directionToTarget, out RaycastHit hitinfo, Mathf.Infinity))
                         {
@@ -215,10 +224,13 @@ public class FlashSkill : SkillBase
                     // player.CustomProperties[$"isFlashed{player.ActorNumber}"] = isHit;
 
                     PhotonView targetView = playerObject.GetComponent<PhotonView>();
+                    for (int i = 0; i < 200; i++)
+                    {
 
-                    // ヒットしたプレイヤーにRPCでダメージを送る
-                    targetView.RPC("Flash", RpcTarget.AllBuffered, isHit[0], isHit[1]);
-
+                        // ヒットしたプレイヤーにRPCでダメージを送る
+                        targetView.RPC("Flash", RpcTarget.All, isHit[0], isHit[1]);
+                        break;
+                    }
                    // PhotonNetwork.SetPlayerCustomProperties(player.CustomProperties);
 
 
@@ -253,8 +265,13 @@ public class FlashSkill : SkillBase
                             // PhotonViewが存在するか確認
                             if (targetView != null)
                             {
-                                // ヒットしたプレイヤーにRPCでダメージを送る
-                                targetView.RPC("Flash", RpcTarget.AllBuffered, isHit[0], isHit[1]);
+                                for (int i = 0; i < 20; i++)
+                                {
+
+                                    // ヒットしたプレイヤーにRPCでダメージを送る
+                                    targetView.RPC("Flash", RpcTarget.AllBuffered, isHit[0], isHit[1]);
+                                    break;
+                                }
                             }
                         }
                     }
@@ -287,118 +304,7 @@ public class FlashSkill : SkillBase
 
         if (!SkillActivation) return;
 
-        if (Input.GetKeyDown(GetSkill_Key))
-        {
-            // ターゲットのバウンディングボックスを考慮してカメラの視界内に少しでも入っているか確認
-            Renderer targetRenderer = FlashModel.GetComponent<Renderer>();
-
-
-            foreach (var player in PhotonNetwork.PlayerList)
-            {
-                // ターゲットがカメラに映っているかの判定
-                Bounds bounds = targetRenderer.bounds;
-                Vector3[] corners = new Vector3[8];
-
-
-                int viewID = (int)player.CustomProperties[$"viewID_{player.ActorNumber}"];
-                GameObject playerObject = PhotonView.Find(viewID)?.gameObject;
-
-                // プレイヤーのカメラを取得
-                Camera playerCam = playerObject.GetComponentInChildren<Camera>();
-
-                corners[0] = playerCam.WorldToViewportPoint(bounds.min);
-                corners[1] = playerCam.WorldToViewportPoint(new Vector3(bounds.min.x, bounds.min.y, bounds.max.z));
-                corners[2] = playerCam.WorldToViewportPoint(new Vector3(bounds.min.x, bounds.max.y, bounds.min.z));
-                corners[3] = playerCam.WorldToViewportPoint(new Vector3(bounds.min.x, bounds.max.y, bounds.max.z));
-                corners[4] = playerCam.WorldToViewportPoint(new Vector3(bounds.max.x, bounds.min.y, bounds.min.z));
-                corners[5] = playerCam.WorldToViewportPoint(new Vector3(bounds.max.x, bounds.min.y, bounds.max.z));
-                corners[6] = playerCam.WorldToViewportPoint(new Vector3(bounds.max.x, bounds.max.y, bounds.min.z));
-                corners[7] = playerCam.WorldToViewportPoint(bounds.max);
-
-                isVisible = false;
-                foreach (Vector3 corner in corners)
-                {
-                    // ビューポート内の0〜1の範囲にあれば視界内とする
-                    if (corner.x >= 0.0f && corner.x <= 1.0f && corner.y >= 0.0f && corner.y <= 1.0f && corner.z > 0.0f)
-                    {
-                        isVisible = true;
-                        break;
-                    }
-                }
-                Vector3 directionToTarget;
-                directionToTarget = playerObject.transform.position - FlashModel.transform.position;
-                Debug.DrawRay(FlashModel.transform.position, directionToTarget * 10, Color.red, 10);
-
-                bool[] isHit = new bool[2]; // 変更: 各プレイヤーに対して独自のフラグを持つ
-
-                isHit[0] = false;
-                isHit[1] = false;
-                if (isVisible)
-                {
-                    if (playerObject != null)
-                    {
-
-
-
-                        if (Physics.Raycast(FlashModel.transform.position, directionToTarget, out RaycastHit hitinfo, Mathf.Infinity))
-                        {
-                            if (hitinfo.collider.gameObject.CompareTag("Player"))
-                            {
-                                //flashImg.color = new Color(0, 1, 0, 1);
-                                isHit[0] = true;
-                                Debug.Log($"{player.NickName}({player.ActorNumber})に表示されています");
-
-                            }
-                            else
-                            {
-                                isHit[0] = false;
-
-                                Debug.Log($"{player.NickName}({player.ActorNumber})に表示されていません");
-                            }
-
-
-                        }
-                    }
-
-
-                    // UIの表示処理などを行う
-                }
-                else
-                {
-                    if (Physics.Raycast(FlashModel.transform.position, directionToTarget, out RaycastHit hitinfo, Mathf.Infinity))
-                    {
-                        if (hitinfo.collider.gameObject.CompareTag("Player"))
-                        {
-
-                            isHit[1] = true;
-                            Debug.Log($"{player.NickName}({player.ActorNumber})に表示されていません");
-
-                        }
-                        else
-                        {
-                            isHit[1] = false;
-
-                            Debug.Log($"{player.NickName}({player.ActorNumber})に表示されていません");
-                        }
-
-
-                    }
-
-                }
-
-
-
-                PhotonView targetView = playerObject.GetComponent<PhotonView>();
-
-                // ヒットしたプレイヤーにRPCでダメージを送る
-                targetView.RPC("Flash", RpcTarget.AllBuffered, isHit[0], isHit[1]);
-
-                SkillActivation = false;
-
-            }
-
-
-        }
+        
 
     }
 

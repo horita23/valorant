@@ -16,6 +16,8 @@ public abstract class BaseGun : MonoBehaviourPunCallbacks
     public float damage;      //ƒ_ƒ[ƒW
     [Tooltip("’e–ò—e—Ê")]
     public int ammoCapacity;    //’e–ò—e—Ê
+    [Tooltip("Œ»İ‚Ì’e–ò")]
+    public int RestBullet;     // Œ»İ‚Ì’e–ò
     [Tooltip("’e‚ªo‚éŠÔŠu")]
     public float shotInterval;//’e‚ªo‚éŠÔŠu
     [Tooltip("‰½”­˜A‘±‚Å’e‚ğ”­Ë‚µ‚½‚çã•ûŒü‚É’µ‚Ë‚é”½“®‚ÌãŒÀ‚ğ‚©‚¯‚é’e‚Ì”")]
@@ -36,5 +38,9 @@ public abstract class BaseGun : MonoBehaviourPunCallbacks
     public abstract void MainUpdate();
     //e‚ğ‚Á‚Ä‚¢‚é‚Ì‚İ“ü‚éXVˆ—
     public abstract void StateUpdate();
+    public abstract void RespawnReset();
+
+    public int GetRestBullet() { return RestBullet; }
+    public int GetMaxBullet() { return ammoCapacity; }
 
 }

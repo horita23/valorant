@@ -163,6 +163,7 @@ public class TeamDeathMatch : MonoBehaviour
                         int viewID = (int)player.CustomProperties[$"viewID_{player.ActorNumber}"];
                         GameObject playerObject = PhotonView.Find(viewID)?.gameObject;
 
+
                         // カスタムプロパティにViewIDを保存
                         ExitGames.Client.Photon.Hashtable customProperties = player.CustomProperties;
                         // プレイヤーのActorNumberをキーにしてViewIDを保存
