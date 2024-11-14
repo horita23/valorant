@@ -5,7 +5,6 @@ using Photon.Pun;
 using UnityEngine.UI;
 using Photon.Realtime;
 using UnityEngine.AI;
-using UnityEditor.VersionControl;
 using Photon.Pun.Demo.PunBasics;
 
 [System.Serializable]
