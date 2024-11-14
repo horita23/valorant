@@ -56,19 +56,19 @@ public class FastPersonCamera : MonoBehaviourPunCallbacks
                 }
 
 
-                Transform spineBone = playerAvatar.transform.Find("jett/TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1"); // 上半身のボーン名に合わせて変更
-                if (spineBone != null)
-                {
-                    // 上半身を少し回転させる（オプション）
-                    spineBone.localRotation *= transform.localRotation;
+                //Transform spineBone = playerAvatar.transform.Find("jett/TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1"); // 上半身のボーン名に合わせて変更
+                //if (spineBone != null)
+                //{
+                //    // 上半身を少し回転させる（オプション）
+                //    spineBone.localRotation *= transform.localRotation;
 
-                }
-                Transform Splitter = playerAvatar.transform.Find("jett/TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/Neck"); // 上半身のボーン名に合わせて変更
-                if (Splitter != null)
-                {
-                    Vector3 rotatedPosition = Splitter.rotation * FastCameraPositon;
-                    transform.position = Splitter.transform.position + rotatedPosition;
-                }
+                //}
+                //Transform Splitter = playerAvatar.transform.Find("jett/TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/Neck"); // 上半身のボーン名に合わせて変更
+                //if (Splitter != null)
+                //{
+                //    Vector3 rotatedPosition = Splitter.rotation * FastCameraPositon;
+                //    transform.position = Splitter.transform.position + rotatedPosition;
+                //}
 
             }
         }

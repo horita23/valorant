@@ -143,7 +143,7 @@ public class TeamDeathMatch : MonoBehaviour
                 //どちらかのチームの合計キル数が20にだったら2フェーズ目に移行
                 for(int i = 0; i < killCount.Length; i++) 
                 {
-                    if (killCount[i] == 1)
+                    if (killCount[i] == 10)
                     {
                         m_phase = Phase.ENDPHASE;
                         EndMatch();
