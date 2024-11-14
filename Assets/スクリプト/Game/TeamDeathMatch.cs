@@ -10,7 +10,7 @@ using UnityEngine.UI;
 
 public class TeamDeathMatch : MonoBehaviour
 {
-    public float COOL_TIME_END = 3f;
+    public float COOL_TIME_END = 2f;
     private float coolTimeEnd;
 
     public Text texxt;
@@ -19,7 +19,15 @@ public class TeamDeathMatch : MonoBehaviour
     public float displayDuration = 2f;   // テキストの表示時間
     public float fadeDuration = 0.5f;    // フェードイン・フェードアウトの時間
 
+    private float CoolTimeEnd = 4.0f; // クールタイムを2秒に設定
+    private bool isCoolTime = false; // クールタイムの状態を管理
 
+    void EndMatch()
+    {
+        // 試合が終了したらクールタイム開始
+        isCoolTime = true;
+        CoolTimeEnd = Time.time + CoolTimeEnd; // 現在の時刻に2秒を足して終了時間を設定
+    }
     public void ShowText(string message)
     {
         // メッセージをセットし、フェードイン開始
@@ -138,9 +146,10 @@ public class TeamDeathMatch : MonoBehaviour
                     if (killCount[i] == 1)
                     {
                         m_phase = Phase.ENDPHASE;
+                        EndMatch();
 
                     }
-                    
+
                 }
                 break;
             case Phase.SECONDPHASE:
@@ -154,7 +163,7 @@ public class TeamDeathMatch : MonoBehaviour
 
             case Phase.ENDPHASE:
 
-                coolTimeEnd -= Time.deltaTime;
+                //coolTimeEnd -= Time.deltaTime;
 
                 foreach (var player in PhotonNetwork.PlayerList)
                 {
@@ -174,21 +183,39 @@ public class TeamDeathMatch : MonoBehaviour
 
                 }
 
-
                ShowText("終了!");
 
-                m_phase = Phase.PREPARATIONPHASE;
+                Debug.Log(CoolTimeEnd);
 
-                if (coolTimeEnd<=0)
+                //if (coolTimeEnd<=0)
+                //{
+                //    if (PhotonNetwork.InRoom)
+                //    {
+                //        PhotonNetwork.LeaveRoom();
+                //    }
+                //    PhotonNetwork.Disconnect();
+
+                //    SceneManager.LoadScene("TeamSelectScene");
+
+                //}
+
+
+                if (isCoolTime)
                 {
-                    if (PhotonNetwork.InRoom)
+                    // 現在の時刻がcoolTimeEndを超えるとクールタイム終了
+                    if (Time.time >= CoolTimeEnd)
                     {
-                        PhotonNetwork.LeaveRoom();
+                        if (PhotonNetwork.InRoom)
+                        {
+                            PhotonNetwork.LeaveRoom();
+                        }
+                        PhotonNetwork.Disconnect();
+
+                        SceneManager.LoadScene("TeamSelectScene");
+
+                        m_phase = Phase.PREPARATIONPHASE;
+
                     }
-                    PhotonNetwork.Disconnect();
-
-                    SceneManager.LoadScene("TeamSelectScene");
-
                 }
                 break;
 

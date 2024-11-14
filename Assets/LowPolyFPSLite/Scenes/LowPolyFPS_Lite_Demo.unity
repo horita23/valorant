@@ -8133,7 +8133,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32d6b618850f82045a22126d7ace90bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  COOL_TIME_END: 3
+  COOL_TIME_END: 2
   texxt: {fileID: 0}
   messageText: {fileID: 267809092}
   displayDuration: 2
@@ -8991,6 +8991,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1337452464}
   - component: {fileID: 1337452463}
+  - component: {fileID: 1337452465}
   m_Layer: 0
   m_Name: CreateObject
   m_TagString: Untagged
@@ -9005,7 +9006,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1337452462}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 41b98d70e80fb22468def56253953bb6, type: 3}
   m_Name: 
@@ -9028,6 +9029,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1337452465
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1337452462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84cd0ff63265df746b15ffde99dbaa56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  respawnPositon:
+  - {fileID: 960611449}
+  - {fileID: 701640631}
 --- !u!1001 &1348028315
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9743,6 +9759,8 @@ PlayableDirector:
     value: {fileID: 922618271}
   - key: {fileID: -7111990863906331220, guid: b6a6e04b4bbab254185a1af9b4825485, type: 2}
     value: {fileID: 879157828}
+  - key: {fileID: -3548868739507388874, guid: b6a6e04b4bbab254185a1af9b4825485, type: 2}
+    value: {fileID: 0}
   m_ExposedReferences:
     m_References: []
 --- !u!4 &1435020541
