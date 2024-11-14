@@ -83,7 +83,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 322811226365613655, guid: 5bee4474437c1cf44b705b33f591a7b0, type: 3}
   shotSpeed: 500
   damage: 10
-  ammoCapacity: 100
+  ammoCapacity: 300
   RestBullet: 0
   shotInterval: 0.08
   Recoil_Bullet_limit: 15
@@ -97,6 +97,7 @@ MonoBehaviour:
   bulletHolePrefab: {fileID: 4445960066720790194, guid: 0edbc0b1d7e2f434aa9fcbfb0fb85614, type: 3}
   muzzleFlashParticle: {fileID: 1336949550903370, guid: 4543ab5e3d405ec40a8d4e9aa5165030, type: 3}
   muzzleFlashPosiotn: {fileID: 3170730685699409279}
+  GunTransform: {fileID: 0}
   hitLayers:
     serializedVersion: 2
     m_Bits: 1

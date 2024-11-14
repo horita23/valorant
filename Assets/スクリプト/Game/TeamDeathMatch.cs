@@ -207,6 +207,7 @@ public class TeamDeathMatch : MonoBehaviour
                     {
                         if (PhotonNetwork.InRoom)
                         {
+                            PhotonNetwork.LocalPlayer.CustomProperties.Clear();
                             PhotonNetwork.LeaveRoom();
                         }
                         PhotonNetwork.Disconnect();
