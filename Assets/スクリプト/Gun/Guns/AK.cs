@@ -26,7 +26,13 @@ public class AK : BaseGun
     public GameObject muzzleFlashParticle = null;
     public GameObject muzzleFlashPosiotn = null;
 
-    public Transform GunTransform;
+    private Quaternion FastGunRotate;
+    // インスペクターで調整可能なEuler角
+    [SerializeField] 
+    private Vector3 fastGunRotateEuler = Vector3.zero;
+
+    public Vector2 CurrentRecoil { get; private set; }
+    private Quaternion OriginalRotation; // 元の回転を保存
 
     RaycastHit hit;
     [SerializeField]
@@ -42,7 +48,6 @@ public class AK : BaseGun
 
         Camera = playerAvatar.GetComponentInChildren<FastPersonCamera>();
 
-        GunTransform = transform;
     }
 
     public override void MainUpdate()
@@ -53,6 +58,21 @@ public class AK : BaseGun
     {
         var localPlayer = PhotonNetwork.LocalPlayer;
         Cube playerAvatar = localPlayer.TagObject as Cube;
+
+        // ガンの回転を取得
+        Quaternion gunRotation = playerAvatar.Shoulder[2].rotation;
+
+        // z軸をリセットしたい場合、Euler角を利用
+        Vector3 euler = gunRotation.eulerAngles;
+        euler.z = 0; // z軸をリセット
+        gunRotation = Quaternion.Euler(euler);
+
+        // FastGunRotateの調整 (ここで微調整を加える)
+        FastGunRotate = Quaternion.Euler(0,-13,0);
+
+        transform.rotation = gunRotation * FastGunRotate;
+
+        
 
         if (Input.GetKey(KeyCode.Mouse0))
         {
@@ -76,20 +96,19 @@ public class AK : BaseGun
         if (flag)
         {
             // 補間して元の位置に戻す
-            transform.rotation = Quaternion.Lerp(transform.rotation, transform.parent.rotation, Time.deltaTime * 5);
+           // transform.rotation = Quaternion.Lerp(transform.rotation, gunRotation, Time.deltaTime * 5);
 
-            if(GunTransform != null)
-            GunTransform.rotation = Quaternion.Lerp(GunTransform.rotation, transform.parent.rotation, Time.deltaTime * 5);
 
             // 元の位置に十分近づいたら補間を停止する
-            if (Quaternion.Angle(transform.rotation, transform.parent.rotation) < 0.01f)
+            if (Quaternion.Angle(transform.rotation, gunRotation) < 0.01f)
             {
-                transform.rotation = transform.parent.rotation;
-                GunTransform.rotation = transform.parent.rotation;
-                Recoil_Bullet_Count = 0;
-                flag = false;
+                //transform.rotation = transform.parent.rotation;
+                
             }
+            Recoil_Bullet_Count = 0;
+            CurrentRecoil = Vector2.zero; // リコイルなし
 
+            flag = false;
         }
 
 
@@ -168,6 +187,12 @@ public class AK : BaseGun
     public override void Recoil()
     {
         Vector2 recoilOffset = GenerateRandomPoint();
+        if (Recoil_Bullet_Count == 0)
+        {
+            OriginalRotation = transform.rotation;
+
+        }
+
         Recoil_Bullet_Count++;
 
         // 縦の反動の上限を設定
@@ -175,14 +200,15 @@ public class AK : BaseGun
         {
             // リコイルを適用
             transform.Rotate(new Vector3(0, recoilOffset.x, 0));
-            GunTransform.rotation *= Quaternion.Euler(0, recoilOffset.x, 0);
+            CurrentRecoil = new Vector2(0, recoilOffset.x);
         }
         else if(Recoil_Bullet_Count > 2)
         {
             // リコイルを適用
             transform.Rotate(new Vector3(-Mathf.Abs(recoilOffset.y), recoilOffset.x, 0));
-            GunTransform.rotation *= Quaternion.Euler(-Mathf.Abs(recoilOffset.y), recoilOffset.x, 0);
+            CurrentRecoil = new Vector2(-Mathf.Abs(recoilOffset.y), recoilOffset.x); // カメラに渡すデータ
         }
+
 
 
     }

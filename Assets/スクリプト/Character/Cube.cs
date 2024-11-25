@@ -177,7 +177,6 @@ public class Cube : MonoBehaviourPunCallbacks
             gunInstance = PhotonNetwork.Instantiate("Ak", GunPositon.position, Shoulder[0].rotation);
             AK GunInstance = gunInstance.GetComponent<AK>();
 
-            GunInstance.GunTransform = gunInstance.transform;
 
             //プレイヤーを子にする
             photonView.RPC("SetParentRPC", RpcTarget.AllBuffered, gunInstance.GetPhotonView().ViewID, photonView.ViewID);
@@ -296,13 +295,6 @@ public class Cube : MonoBehaviourPunCallbacks
                 HandleInput();
                 
                 gunInstance.transform.position = GunPositon.position;
-                // ガンの回転を取得
-                Quaternion gunRotation = Shoulder[0].rotation;
-
-                // z軸の回転をリセット
-                gunRotation.z = 0;
-                gunRotation.y = 0;
-
 
                 //HPが０ならリスポーン位置に移動
                 if (health <= 0)
