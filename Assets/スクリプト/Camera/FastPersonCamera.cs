@@ -71,20 +71,22 @@ public class FastPersonCamera : MonoBehaviourPunCallbacks
             {
                 isInterpolating = false; // 補間終了
             }
+
+            Transform spineBone = playerAvatar.transform.Find("jett/TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1");
+            if (spineBone != null)
+            {
+                spineBone.localRotation *= transform.localRotation;
+            }
+
+            Transform neckBone = playerAvatar.transform.Find("jett/TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/Neck");
+            if (neckBone != null)
+            {
+                Vector3 rotatedPosition = neckBone.rotation * FastCameraPosition;
+                transform.position = neckBone.position + rotatedPosition;
+            }
+
         }
 
-        Transform spineBone = playerAvatar.transform.Find("jett/TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1");
-        if (spineBone != null)
-        {
-            spineBone.localRotation *= transform.localRotation;
-        }
-
-        Transform neckBone = playerAvatar.transform.Find("jett/TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/Neck");
-        if (neckBone != null)
-        {
-            Vector3 rotatedPosition = neckBone.rotation * FastCameraPosition;
-            transform.position = neckBone.position + rotatedPosition;
-        }
     }
 
     /// <summary>指定したリコイルを設定する</summary>

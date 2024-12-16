@@ -9044,6 +9044,7 @@ MonoBehaviour:
   respawnPositon:
   - {fileID: 960611449}
   - {fileID: 701640631}
+  playSceneName: LowPolyFPS_Lite_Demo
 --- !u!1001 &1348028315
 PrefabInstance:
   m_ObjectHideFlags: 0

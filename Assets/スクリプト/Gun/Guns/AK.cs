@@ -36,6 +36,7 @@ public class AK : BaseGun
 
     private float lastrecilY;
 
+
     RaycastHit hit;
     [SerializeField]
     LayerMask hitLayers = 0;
@@ -196,7 +197,8 @@ public class AK : BaseGun
         }
         else // ˆê’èˆÈ~‚Íƒ‰ƒ“ƒ_ƒ€‚Æ‚©
         {
-            CurrentRecoil = new Vector2(RecoilPattern[Recoil_Bullet_limit].x, Random.Range(-1.0f,1.5f));
+            CurrentRecoil = new Vector2(-2.1f, Random.Range(-1.5f,1.5f));
+
         }
 
 

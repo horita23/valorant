@@ -1,30 +1,30 @@
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
+using UnityEngine.SceneManagement;
 
 public class CreateObject1 : MonoBehaviourPunCallbacks
 {
     public Transform[] respawnPositon;
+    public string playSceneName = "LowPolyFPS_Lite_Demo";
 
-    void Start()
+    private void OnEnable()
     {
-        Application.targetFrameRate = 200;
-        PhotonNetwork.NickName = "Player";
-        PhotonNetwork.SendRate = 30;
-        PhotonNetwork.SerializationRate = 30;
-
-        // マスターサーバーに接続
-        PhotonNetwork.ConnectUsingSettings();
+        // シーンロード時のコールバックを登録
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    public override void OnConnectedToMaster()
+    private void OnDisable()
     {
-        RoomOptions roomOptions = new RoomOptions { MaxPlayers = 10 };
-        PhotonNetwork.JoinOrCreateRoom("MatchRoom", roomOptions, TypedLobby.Default);
+        // コールバックの解除
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    public override void OnJoinedRoom()
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+
+        // シーン遷移後に必ず実行されるようにする
+        Debug.Log("Scene Loaded: " + scene.name);
         AssignTeamAndSpawnPlayer();
     }
 
@@ -62,5 +62,6 @@ public class CreateObject1 : MonoBehaviourPunCallbacks
         customProperties[$"viewID_{PhotonNetwork.LocalPlayer.ActorNumber}"] = viewID;
         PhotonNetwork.LocalPlayer.SetCustomProperties(customProperties);
     }
+
 }
 
