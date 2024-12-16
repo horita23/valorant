@@ -143,17 +143,17 @@ MonoBehaviour:
   respawnPositon: {x: 0, y: 0, z: 0}
   characterName: s
   HEALTH: 100
-  RunSpeed: 5
+  RunSpeed: 8.56
   WalkSpeedRatio: 0.8
   CrouchSpeedRatio: 0.6
   GunPrefab: {fileID: 5149810931926858183, guid: e27a5dd9e9fe03742a184001c7c2e7a9, type: 3}
   gunInstance: {fileID: 0}
   m_Skill_Info:
-  - skill: {fileID: -8607862522247372323, guid: 7ee9d8d1f4693154988722fb047ca781, type: 3}
+  - skill: {fileID: 8198514620440955701, guid: 3b3a55ecbf4b4254599895f61ad775f7, type: 3}
     skill_Key: 113
   - skill: {fileID: -5144472228389245700, guid: 8e998af7a0958264ab96c4562cc324d7, type: 3}
     skill_Key: 101
-  jumpForce: 5
+  jumpForce: 8.09
   killCount: 0
   headChild: {fileID: 3597616904077443699}
   GunPositon: {fileID: 1208328615501986239}
@@ -169,6 +169,7 @@ MonoBehaviour:
   - {fileID: 5343146302850605085}
   CameraPosition: {fileID: 3597616904077443699}
   FlashImgPrefab: {fileID: 7574978408718615546, guid: 566b99894173b174c9b10673f55271fe, type: 3}
+  rb: {fileID: 0}
   MouseSensitivity: 5
 --- !u!114 &-7992844860689367506
 MonoBehaviour:
@@ -222,7 +223,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 1
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0

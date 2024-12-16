@@ -224,12 +224,11 @@ public class FlashSkill : SkillBase
                     // player.CustomProperties[$"isFlashed{player.ActorNumber}"] = isHit;
 
                     PhotonView targetView = playerObject.GetComponent<PhotonView>();
-                    for (int i = 0; i < 200; i++)
+                    for (int i = 0; i < 70; i++)
                     {
 
                         // ヒットしたプレイヤーにRPCでダメージを送る
                         targetView.RPC("Flash", RpcTarget.All, isHit[0], isHit[1]);
-                        break;
                     }
                    // PhotonNetwork.SetPlayerCustomProperties(player.CustomProperties);
 

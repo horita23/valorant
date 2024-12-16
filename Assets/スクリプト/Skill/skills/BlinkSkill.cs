@@ -61,7 +61,7 @@ public class BlinkSkill : SkillBase
                     m_blink=Blink.Boot;
                     break;
                 case Blink.Boot:
-                    character.transform.position += character.transform.forward * 5;
+                    character.rb.AddForce(character.transform.forward * 5000);
                     EndBrinku();
                     break;
                 default:

@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3867112258233127980}
-  - component: {fileID: 154892506502359556}
+  - component: {fileID: 8198514620440955701}
   m_Layer: 0
-  m_Name: Brink
+  m_Name: BlinkSkill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,7 +32,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &154892506502359556
+--- !u!114 &8198514620440955701
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -44,7 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98986f931e759b3488167880700be042, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cooldown: 0.1
+  cooldown: 0
   skillModel:
   - {fileID: 810776106513529899, guid: b9b8d1439172daf4191862d59032fcbc, type: 3}
+  SkillActivation: 0
   MAX_BRINKU_TIME: 5
