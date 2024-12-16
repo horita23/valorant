@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class CreateObject1 : MonoBehaviourPunCallbacks
 {
     public Transform[] respawnPositon;
-    public string playSceneName = "LowPolyFPS_Lite_Demo";
+    public string playSceneName = "LowPolyFPSLite/Scenes/LowPolyFPS_Lite_Demo";
 
     private void OnEnable()
     {
@@ -19,17 +19,23 @@ public class CreateObject1 : MonoBehaviourPunCallbacks
         // コールバックの解除
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
+    void Start()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
 
+    }
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
 
         // シーン遷移後に必ず実行されるようにする
         Debug.Log("Scene Loaded: " + scene.name);
-        AssignTeamAndSpawnPlayer();
+            AssignTeamAndSpawnPlayer();
     }
 
     private void AssignTeamAndSpawnPlayer()
     {
+        PhotonNetwork.NickName = "Player";
+
         GameObject playerObject;
         Cube.Team assignedTeam;
         Transform spawnPosition;

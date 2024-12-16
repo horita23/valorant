@@ -578,7 +578,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   matchStatusText: {fileID: 279782943}
   matchButton: {fileID: 1502886089}
-  playSceneName: LowPolyFPS_Lite_Demo
+  playSceneName: LowPolyFPSLite/Scenes/LowPolyFPS_Lite_Demo
 --- !u!4 &843494108
 Transform:
   m_ObjectHideFlags: 0

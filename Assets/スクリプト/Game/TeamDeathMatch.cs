@@ -213,7 +213,7 @@ public class TeamDeathMatch : MonoBehaviour
                         }
                         PhotonNetwork.Disconnect();
 
-                        SceneManager.LoadScene("TeamSelectScene");
+                        SceneManager.LoadScene("LowPolyFPSLite/Scenes/LowPolyFPS_Lite_Demo");
 
                         m_phase = Phase.PREPARATIONPHASE;
 
