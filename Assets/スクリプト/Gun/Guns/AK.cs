@@ -14,10 +14,10 @@ public class AK : BaseGun
     public float recoilControlAmount = 0.5f; // リコイル制御量 (0.0 から 1.0)
     public int magazin = 25;
     private int MaxammoCapacity = 0;
-    private int Recoil_Bullet_Count = 0;
+    public int Recoil_Bullet_Count { get; private set; }
     private float time = 0.0f;
     private Vector3 recoilOffset = Vector3.zero;
-    private bool flag = false;
+    public bool shotflag { get; private set; }
 
     //弾痕
     public GameObject bulletHolePrefab;
@@ -31,8 +31,10 @@ public class AK : BaseGun
     [SerializeField] 
     private Vector3 fastGunRotateEuler = Vector3.zero;
 
-    public Vector2 CurrentRecoil { get; private set; }
-    private Quaternion OriginalRotation; // 元の回転を保存
+    public Vector2 CurrentRecoil;
+    public Vector2 currentrecoil => CurrentRecoil;   // 読み取り専用のプロパティ
+
+    private float lastrecilY;
 
     RaycastHit hit;
     [SerializeField]
@@ -48,6 +50,7 @@ public class AK : BaseGun
 
         Camera = playerAvatar.GetComponentInChildren<FastPersonCamera>();
 
+        shotflag = false;
     }
 
     public override void MainUpdate()
@@ -72,20 +75,20 @@ public class AK : BaseGun
 
         transform.rotation = gunRotation * FastGunRotate;
 
-        
+
+        shotflag = false;
 
         if (Input.GetKey(KeyCode.Mouse0))
         {
             Shoot();
+
         }
         else
         {
-            flag = true;
+            Recoil_Bullet_Count = 0;
+            CurrentRecoil = Vector2.zero; // リコイルなし
+            lastrecilY = 0.0f;
 
-        }
-        if (RestBullet <= 0)
-        {
-            flag = true;
         }
 
         if (Input.GetKeyDown(KeyCode.R))
@@ -93,23 +96,6 @@ public class AK : BaseGun
             Reload();
         }
 
-        if (flag)
-        {
-            // 補間して元の位置に戻す
-           // transform.rotation = Quaternion.Lerp(transform.rotation, gunRotation, Time.deltaTime * 5);
-
-
-            // 元の位置に十分近づいたら補間を停止する
-            if (Quaternion.Angle(transform.rotation, gunRotation) < 0.01f)
-            {
-                //transform.rotation = transform.parent.rotation;
-                
-            }
-            Recoil_Bullet_Count = 0;
-            CurrentRecoil = Vector2.zero; // リコイルなし
-
-            flag = false;
-        }
 
 
 
@@ -130,6 +116,7 @@ public class AK : BaseGun
             time = 0.0f;
             RestBullet--;
             ammoCapacity--;
+            shotflag = true;
             var flash = Instantiate(muzzleFlashParticle, muzzleFlashPosiotn.transform);
             
 
@@ -187,28 +174,30 @@ public class AK : BaseGun
     public override void Recoil()
     {
         Vector2 recoilOffset = GenerateRandomPoint();
-        if (Recoil_Bullet_Count == 0)
-        {
-            OriginalRotation = transform.rotation;
-
-        }
 
         Recoil_Bullet_Count++;
 
-        // 縦の反動の上限を設定
-        if (Recoil_Bullet_Count > Recoil_Bullet_limit)
-        {
-            // リコイルを適用
-            transform.Rotate(new Vector3(0, recoilOffset.x, 0));
-            CurrentRecoil = new Vector2(0, recoilOffset.x);
-        }
-        else if(Recoil_Bullet_Count > 2)
-        {
-            // リコイルを適用
-            transform.Rotate(new Vector3(-Mathf.Abs(recoilOffset.y), recoilOffset.x, 0));
-            CurrentRecoil = new Vector2(-Mathf.Abs(recoilOffset.y), recoilOffset.x); // カメラに渡すデータ
-        }
+        //// 縦の反動の上限を設定
+        //if (Recoil_Bullet_Count > Recoil_Bullet_limit)
+        //{
+        //    // リコイルを適用
+        //    CurrentRecoil = new Vector2(lastrecilY, recoilOffset.x);
+        //}
+        //else 
+        //{
+        //    // リコイルを適用
+        //    CurrentRecoil = new Vector2(-Mathf.Abs(recoilOffset.y), recoilOffset.x); // カメラに渡すデータ
+        //    lastrecilY = CurrentRecoil.y;
+        //}
 
+        if (Recoil_Bullet_Count < Recoil_Bullet_limit)
+        {
+            CurrentRecoil = RecoilPattern[Recoil_Bullet_Count];
+        }
+        else // 一定以降はランダムとか
+        {
+            CurrentRecoil = new Vector2(RecoilPattern[Recoil_Bullet_limit].x, Random.Range(-1.0f,1.5f));
+        }
 
 
     }

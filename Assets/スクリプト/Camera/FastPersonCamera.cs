@@ -6,123 +6,100 @@ using UnityEngine;
 public class FastPersonCamera : MonoBehaviourPunCallbacks
 {
 
-    private float verticalRotation;
+    [SerializeField] private float _returnSpeed = 1f;      // 補間速度
+    [SerializeField] private float _snappiness = 6f;      // リコイルのスナップ性
+    private Vector3 _recoilTargetRotation;                // リコイル目標回転
+    private Vector3 _currentRecoilRotation;               // 現在のリコイル回転
+    private Vector3 _returnTarget;                        // 補間時の目標位置
 
-    private Cube playerAvatar; // プレイヤーのAvatarオブジェクト
+    private bool isInterpolating = false;                 // 補間中フラグ
+    private Cube playerAvatar;                            // プレイヤー情報
+    private float verticalRotation = 0f;                  // 垂直回転
+    private float interpolationSpeed = 5f;                // 補間速度設定
+    private Quaternion hokancamera;                       // 回転保存用
 
-    public Vector3 positionOffset;  // Offset for camera position
+    private Vector3 FastCameraPosition = new Vector3(-0.12f, 0.06f, 0.2f);
 
-    private Vector3 FastCameraPositon;
+    private int recoilPatternIndex;
 
-    private Vector2 cameraRecoilOffset = Vector2.zero;
-
-    private Quaternion hokancamera = Quaternion.identity;
-    private bool isRecoiling = false; // 現在リコイルが適用されているか
-    private bool isInterpolating = false; // リコイル補間中か
-    private float interpolationSpeed = 5f; // 補間の速度
-
-    // Start is called before the first frame update
-    void Start()
+    void LateUpdate()
     {
-        FastCameraPositon = new Vector3(-0.119999997f, 0.0599999987f, 0.200000003f);
-        isInterpolating = false;
-        isRecoiling = false;
-    }
-
-    // Update is called once per frame
-
-    private void LateUpdate()
-    {
-
         var localPlayer = PhotonNetwork.LocalPlayer;
         playerAvatar = localPlayer.TagObject as Cube;
 
         if (playerAvatar != null && photonView.IsMine)
         {
-            if (playerAvatar.gunInstance)
+            // 銃のリコイルを取得
+            AK gun = playerAvatar.gunInstance?.GetComponent<AK>();
+            if (gun != null)
             {
-                AK gun = playerAvatar.gunInstance.GetComponent<AK>();
-                if (gun != null)
+                // リコイルが発生しているとき
+                if (gun.shotflag)
                 {
-                    //if (gun.CurrentRecoil == Vector2.zero)
-                    //{
-                    //    isRecoiling = false;
+                    isInterpolating = true;
 
-                    //    // リコイルがゼロのとき、補間を開始
-                    //    if (!isInterpolating)
-                    //    {
-                    //        isInterpolating = true;
-                    //        hokancamera = transform.rotation; // 現在のカメラ回転を保存
-                    //    }
-                    //}
-                    //else
-                    //{
-                    //    // リコイルが発生中
-                    //    isRecoiling = true;
-                    //    cameraRecoilOffset = gun.CurrentRecoil;
-                    //}
-                    cameraRecoilOffset = gun.CurrentRecoil;
-                }
-
-                // 垂直回転にリコイルの縦方向のオフセットを追加
-                verticalRotation += cameraRecoilOffset.x;
-
-                // マウス入力によるカメラの回転
-                float mouseY = Input.GetAxis("Mouse Y");
-
-                verticalRotation -= mouseY * playerAvatar.MouseSensitivity;
-
-                verticalRotation = Mathf.Clamp(verticalRotation, -70f, 70f);
-
-
-                // カメラの垂直回転を適用
-                transform.localRotation = Quaternion.Euler(verticalRotation , 0, 0);
-
-                if (playerAvatar.gunInstance != null)
-                {
-
-                    // ガンの回転を取得
-                    Quaternion gunRotation = playerAvatar.gunInstance.transform.localRotation;
-
-                    // z軸の回転をリセット
-                    gunRotation.z = 0;
-
-                    // 新しい回転を適用
-                    // transform.localRotation *= gunRotation; 
-                    transform.localRotation *= Quaternion.Euler(0, cameraRecoilOffset.y, 0);
-                }
-                // 補間処理
-                //if (isInterpolating && !isRecoiling)
-                //{
-                //    // リコイルがない場合、補間で元の回転に戻る
-                //    transform.rotation = Quaternion.Lerp(transform.rotation, hokancamera, Time.deltaTime * interpolationSpeed);
-
-                //    // 補間が完了したら状態をリセット
-                //    if (Quaternion.Angle(transform.rotation, hokancamera) < 0.01f)
-                //    {
-                //        transform.rotation = hokancamera;
-                //        isInterpolating = false; // 補間終了
-                //        cameraRecoilOffset = Vector2.zero; // リコイルなし
-                //    }
-                //}
-
-                Transform spineBone = playerAvatar.transform.Find("jett/TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1"); // 上半身のボーン名に合わせて変更
-                if (spineBone != null)
-                {
-                    // 上半身を少し回転させる（オプション）
-                    spineBone.localRotation *= transform.localRotation;
+                    Recoil(gun.currentrecoil);
 
                 }
-                Transform Splitter = playerAvatar.transform.Find("jett/TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/Neck"); // 上半身のボーン名に合わせて変更
-                if (Splitter != null)
+                else
                 {
-                    Vector3 rotatedPosition = Splitter.rotation * FastCameraPositon;
-                    transform.position = Splitter.transform.position + rotatedPosition;
+                    recoilPatternIndex = 0;
+
                 }
 
+                // 銃を撃っておらず、リコイル中かつ補間が必要な場合
+                if (!gun.shotflag && isInterpolating)
+                {
+                    hokancamera = transform.localRotation;
+                    _returnTarget = Vector3.zero; // リコイルの目標回転をリセット
+                }
             }
+
+            // 垂直回転をマウス入力に基づいて更新
+            float mouseY = Input.GetAxis("Mouse Y");
+            verticalRotation -= mouseY * playerAvatar.MouseSensitivity;
+            verticalRotation = Mathf.Clamp(verticalRotation, -70f, 70f);
+
+            // リコイルの反映処理
+            ReflectsRecoil();
+
+            // 回転の適用（カメラと体の回転）
+            transform.localRotation = Quaternion.Euler(verticalRotation + _currentRecoilRotation.x, _currentRecoilRotation.y, 0);
+
+            // 補間処理の終了条件
+            if (isInterpolating && Quaternion.Angle(transform.localRotation, hokancamera) < 0.01f)
+            {
+                isInterpolating = false; // 補間終了
+            }
+        }
+
+        Transform spineBone = playerAvatar.transform.Find("jett/TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1");
+        if (spineBone != null)
+        {
+            spineBone.localRotation *= transform.localRotation;
+        }
+
+        Transform neckBone = playerAvatar.transform.Find("jett/TP_Wushu_S0_Skelmesh.ao/Skeleton/Root/Splitter/Spine1/Spine2/Spine3/Spine4/Neck");
+        if (neckBone != null)
+        {
+            Vector3 rotatedPosition = neckBone.rotation * FastCameraPosition;
+            transform.position = neckBone.position + rotatedPosition;
         }
     }
 
+    /// <summary>指定したリコイルを設定する</summary>
+    public void Recoil(Vector2 recoil)
+    {
+        _recoilTargetRotation += new Vector3(recoil.x, recoil.y, 0);
+    }
+
+    /// <summary>リコイルを反映させる</summary>
+    void ReflectsRecoil()
+    {
+        _recoilTargetRotation = Vector3.Slerp(_recoilTargetRotation, _returnTarget,
+            _returnSpeed * Time.fixedDeltaTime);
+        _currentRecoilRotation = Vector3.Slerp(_currentRecoilRotation, _recoilTargetRotation,
+            _snappiness * Time.fixedDeltaTime);
+    }
 
 }

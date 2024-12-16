@@ -89,8 +89,25 @@ MonoBehaviour:
   Recoil_Bullet_limit: 15
   GunMoney: 2900
   Camera: {fileID: 0}
+  recoilPattern:
+  - {x: -0.48, y: 0}
+  - {x: -0.51, y: 0}
+  - {x: -0.79, y: 0.73}
+  - {x: -1.14, y: -0.55}
+  - {x: -1.71, y: -1.39}
+  - {x: -2.03, y: 1.57}
+  - {x: -2.31, y: -1.35}
+  - {x: -2.45, y: 2.06}
+  - {x: -2.68, y: -0.58}
+  - {x: -3.08, y: 0.75}
+  - {x: -3.31, y: -0.67}
+  - {x: -3.82, y: 1.02}
+  - {x: -4.28, y: -0.66}
+  - {x: -4.53, y: 0.71}
+  - {x: -4.7, y: 0.48}
+  - {x: -5.11, y: 0}
   horizontalSpread: 0.5
-  verticalSpread: 0.2
+  verticalSpread: 3.19
   probabilityFactor: 1
   recoilControlAmount: 0.5
   magazin: 25
@@ -98,6 +115,7 @@ MonoBehaviour:
   muzzleFlashParticle: {fileID: 1336949550903370, guid: 4543ab5e3d405ec40a8d4e9aa5165030, type: 3}
   muzzleFlashPosiotn: {fileID: 3170730685699409279}
   fastGunRotateEuler: {x: 0, y: 0, z: 0}
+  CurrentRecoil: {x: 0, y: 0}
   hitLayers:
     serializedVersion: 2
     m_Bits: 1
