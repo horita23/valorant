@@ -22,14 +22,14 @@ public class TeamSelectManager : MonoBehaviour
     // チームAを選択
     public void SelectTeamA()
     {
-        PlayerPrefs.SetString("SelectedTeam", "TeamA");
+        //PlayerPrefs.SetString("SelectedTeam", "TeamA");
         LoadPlayScene();
 
     }
     // チームBを選択
     public void SelectTeamB()
     {
-        PlayerPrefs.SetString("SelectedTeam", "TeamB");
+        //PlayerPrefs.SetString("SelectedTeam", "TeamB");
         LoadPlayScene();
     }
 

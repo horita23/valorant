@@ -1,87 +1,67 @@
+using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CreateObject1 : MonoBehaviourPunCallbacks
 {
     public Transform[] respawnPositon;
+    public string playSceneName = "LowPolyFPS_Lite_Demo";
 
-    // Start is called before the first frame update
-    void Start()
+    private void OnEnable()
     {
-        Application.targetFrameRate = 200;
-        // プレイヤー自身の名前を"Player"に設定する
-        PhotonNetwork.NickName = "Player";
-        PhotonNetwork.SendRate = 30;
-        PhotonNetwork.SerializationRate = 30;
-
-        // PhotonServerSettingsの設定内容を使ってマスターサーバーへ接続する
-        PhotonNetwork.ConnectUsingSettings();
-
+        // シーンロード時のコールバックを登録
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnDisable()
     {
-        
+        // コールバックの解除
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    // マスターサーバーへの接続が成功した時に呼ばれるコールバック
-    public override void OnConnectedToMaster()
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // "Room"という名前のルームに参加する（ルームが存在しなければ作成して参加する）
-        PhotonNetwork.JoinOrCreateRoom("Room", new RoomOptions(), TypedLobby.Default);
+
+        // シーン遷移後に必ず実行されるようにする
+        Debug.Log("Scene Loaded: " + scene.name);
+        AssignTeamAndSpawnPlayer();
     }
 
-    // ゲームサーバーへの接続が成功した時に呼ばれるコールバック
-    public override void OnJoinedRoom()
+    private void AssignTeamAndSpawnPlayer()
     {
-        SpawnPlayer();
-    }
+        GameObject playerObject;
+        Cube.Team assignedTeam;
+        Transform spawnPosition;
 
-    private void SpawnPlayer()
-    {
-        // チーム選択情報を取得
-        string selectedTeam = PlayerPrefs.GetString("SelectedTeam");
+        // プレイヤー数に基づき交互にチームを割り当て
+        int playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
 
-        GameObject playerObject = null;
-
-        // チームに応じてスポーン位置を決定してプレイヤーを生成
-        if (selectedTeam == "TeamA")
+        if (playerCount % 2 == 1)
         {
-            playerObject = PhotonNetwork.Instantiate("Cube", respawnPositon[0].position, Quaternion.identity);
-
-            playerObject.GetComponent<Cube>().team = Cube.Team.TeamA;
-            playerObject.GetComponent<Cube>().respawnPositon = respawnPositon[0].position;
-        }
-        else if (selectedTeam == "TeamB")
-        {
-            playerObject = PhotonNetwork.Instantiate("Cube", respawnPositon[1].position, Quaternion.identity);
-            playerObject.GetComponent<Cube>().respawnPositon = respawnPositon[1].position;
-            playerObject.GetComponent<Cube>().team = Cube.Team.TeamB;
-
+            assignedTeam = Cube.Team.TeamA;
+            spawnPosition = respawnPositon[0];
         }
         else
         {
-            Debug.LogError("チームが選択されていません");
-            return;
+            assignedTeam = Cube.Team.TeamB;
+            spawnPosition = respawnPositon[1];
         }
 
-        // プレイヤー生成時にPhotonViewのViewIDを保存
+        // プレイヤーを生成し、チームを設定
+        playerObject = PhotonNetwork.Instantiate("Cube", spawnPosition.position, Quaternion.identity);
+        playerObject.GetComponent<Cube>().team = assignedTeam;
+        playerObject.GetComponent<Cube>().respawnPositon = spawnPosition.position;
+
+        // ViewIDの保存
         PhotonView playerPhotonView = playerObject.GetComponent<PhotonView>();
         int viewID = playerPhotonView.ViewID;
 
-
-
         // カスタムプロパティにViewIDを保存
         ExitGames.Client.Photon.Hashtable customProperties = PhotonNetwork.LocalPlayer.CustomProperties;
-        // プレイヤーのActorNumberをキーにしてViewIDを保存
         customProperties[$"viewID_{PhotonNetwork.LocalPlayer.ActorNumber}"] = viewID;
         PhotonNetwork.LocalPlayer.SetCustomProperties(customProperties);
-
-
     }
 
 }
+

@@ -269,7 +269,6 @@ public class FlashSkill : SkillBase
 
                                     // ヒットしたプレイヤーにRPCでダメージを送る
                                     targetView.RPC("Flash", RpcTarget.AllBuffered, isHit[0], isHit[1]);
-                                    break;
                                 }
                             }
                         }

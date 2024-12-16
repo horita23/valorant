@@ -94,12 +94,12 @@ public class TeamDeathMatch : MonoBehaviour
                 //チームの合計キル数カウント
                 if((Cube.Team)player.CustomProperties[$"Teme_{player.ActorNumber}"] == Cube.Team.TeamA)
                 {
-                    killCount[0] = killcount;
+                    killCount[0] += killcount;
 
                 }
                 else
                 {
-                    killCount[1] = killcount;
+                    killCount[1] += killcount;
 
                 }
             }

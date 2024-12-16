@@ -22,10 +22,15 @@ public abstract class BaseGun : MonoBehaviourPunCallbacks
     public float shotInterval;//弾が出る間隔
     [Tooltip("何発連続で弾を発射したら上方向に跳ねる反動の上限をかける弾の数")]
     public int Recoil_Bullet_limit;
+    public int recoil_bullet_limit => Recoil_Bullet_limit;   // 読み取り専用のプロパティ
+
     [Tooltip("何発連続で弾を発射したら上方向に跳ねる反動の上限をかける弾の数")]
     public int GunMoney;
 
     public FastPersonCamera Camera;
+
+    [SerializeField] private Vector2[] recoilPattern; // インスペクターに表示されるようにする
+    public Vector2[] RecoilPattern => recoilPattern;   // 読み取り専用のプロパティ
 
     // targetフィールドにアクセスするためのプロパティ
     //発射
