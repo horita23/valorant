@@ -143,7 +143,7 @@ MonoBehaviour:
   respawnPositon: {x: 0, y: 0, z: 0}
   characterName: s
   HEALTH: 100
-  RunSpeed: 8.56
+  RunSpeed: 12
   WalkSpeedRatio: 0.8
   CrouchSpeedRatio: 0.6
   GunPrefab: {fileID: 5149810931926858183, guid: e27a5dd9e9fe03742a184001c7c2e7a9, type: 3}
@@ -210,6 +210,7 @@ MonoBehaviour:
   - {fileID: -3446393581368194145}
   - {fileID: -4683063491836422986}
   - {fileID: 6800052641606728714}
+  - {fileID: 8996109953504432205}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
