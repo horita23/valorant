@@ -47,4 +47,5 @@ MonoBehaviour:
   cooldown: 0.1
   skillModel:
   - {fileID: 810776106513529899, guid: b9b8d1439172daf4191862d59032fcbc, type: 3}
-  MAX_BRINKU_TIME: 5
+  SkillActivation: 0
+  BRINKU_MOVE_TIME: 0.15

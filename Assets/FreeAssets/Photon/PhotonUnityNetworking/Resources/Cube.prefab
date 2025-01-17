@@ -136,6 +136,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb2b678a1417f3245bed6eb23bfc6746, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  burinkSkillFlag: 0
   COOL_TIME: 3
   COOL_TIME_END: 3
   GameEndFlag: 0
@@ -143,7 +144,7 @@ MonoBehaviour:
   respawnPositon: {x: 0, y: 0, z: 0}
   characterName: s
   HEALTH: 100
-  RunSpeed: 12
+  RunSpeed: 5
   WalkSpeedRatio: 0.8
   CrouchSpeedRatio: 0.6
   GunPrefab: {fileID: 5149810931926858183, guid: e27a5dd9e9fe03742a184001c7c2e7a9, type: 3}
@@ -151,9 +152,9 @@ MonoBehaviour:
   m_Skill_Info:
   - skill: {fileID: 8198514620440955701, guid: 3b3a55ecbf4b4254599895f61ad775f7, type: 3}
     skill_Key: 113
-  - skill: {fileID: -5144472228389245700, guid: 8e998af7a0958264ab96c4562cc324d7, type: 3}
+  - skill: {fileID: -8607862522247372323, guid: 7ee9d8d1f4693154988722fb047ca781, type: 3}
     skill_Key: 101
-  jumpForce: 8.09
+  jumpForce: 5
   killCount: 0
   headChild: {fileID: 3597616904077443699}
   GunPositon: {fileID: 1208328615501986239}

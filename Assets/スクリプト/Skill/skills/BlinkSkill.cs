@@ -1,14 +1,17 @@
 using Photon.Pun;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 using static FlashSkill;
 
 [CreateAssetMenu(fileName = "BlinkSkill", menuName = "Skills/BlinkSkill")]
 public class BlinkSkill : SkillBase
 {
+    public float BRINKU_MOVE_TIME = 0.3f;
     public float MAX_BRINKU_TIME = 5;
     private float brinkuTime = 0;
     private GameObject currentEffect;
 
+    private float timer = 0f;
     public enum Blink
     {
         NONE = 0,
@@ -38,13 +41,27 @@ public class BlinkSkill : SkillBase
             case Blink.Boot:
                 //起動時間の経過
                 brinkuTime += Time.deltaTime;
+                            
 
-                if (currentEffect != null)
-                    // エフェクトがキャラクターと一緒に移動
-                    currentEffect.transform.position = character.transform.position;
+                if (character.burinkSkillFlag)
+                {
+                    timer += Time.deltaTime; // フレーム間の時間を加算
+                    if (timer >= BRINKU_MOVE_TIME)
+                    {
+                        EndBrinku();
+                        character.burinkSkillFlag = false;
+                    }
+                }
+                else
+                {
 
-                if (brinkuTime >= MAX_BRINKU_TIME)
-                    EndBrinku();
+                    if (currentEffect != null)
+                        // エフェクトがキャラクターと一緒に移動
+                        currentEffect.transform.position = character.transform.position;
+
+                    if (brinkuTime >= MAX_BRINKU_TIME)
+                        EndBrinku();
+                }
                 break;
             default:
                 break;
@@ -61,8 +78,12 @@ public class BlinkSkill : SkillBase
                     m_blink=Blink.Boot;
                     break;
                 case Blink.Boot:
-                    character.rb.AddForce(character.transform.forward * 600);
-                    EndBrinku();
+                    // プレイヤーの移動方向を取得（高さを無視）
+                    Vector3 moveDirection = character.rb.velocity;
+                    moveDirection.y = 0; // 高さを無視
+                    character.rb.AddForce(moveDirection.normalized * 600);
+                    character.burinkSkillFlag = true;
+                    
                     break;
                 default:
                     break;
@@ -85,6 +106,7 @@ public class BlinkSkill : SkillBase
     {
         m_blink=Blink.NONE;
         brinkuTime = 0;
+        timer = 0f; // タイマーをリセット
         LastUsedTimeSet();
 
         // エフェクトの削除

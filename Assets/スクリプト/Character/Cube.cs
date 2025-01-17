@@ -27,6 +27,9 @@ public enum StateSkill
 
 public class Cube : MonoBehaviourPunCallbacks
 {
+    public bool burinkSkillFlag = false;
+
+
     public float COOL_TIME = 3f;
     private float coolTime;
 
@@ -358,7 +361,6 @@ public class Cube : MonoBehaviourPunCallbacks
 
     private void HandleInput()
     {
-        // 入力の取得
         var input = new Vector3(0, 0, 0);
 
         if (Input.GetKey(KeyCode.A))
@@ -373,73 +375,77 @@ public class Cube : MonoBehaviourPunCallbacks
         if (Input.GetKey(KeyCode.S))
             input += new Vector3(0, 0, -1);
 
-        // カメラ回転処理
+        //キャラ回転処理
         {
+            // マウス入力によるカメラの回転
             float mouseX = Input.GetAxis("Mouse X");
             horizontalRotation += mouseX * MouseSensitivity;
-            transform.rotation = Quaternion.Euler(0, horizontalRotation, 0);
+
+            // プレイヤーのAvatarオブジェクトをカメラの水平回転に合わせて回転
+            transform.rotation = Quaternion.Euler(0, horizontalRotation, 0); ;
+
         }
 
-        // 入力がある場合、正規化
+        // 歩いていたら
         if (input != Vector3.zero)
         {
             input.Normalize();
+
             if (!isJumping)
             {
-                // アニメーション更新
+                // Update animation
                 UpdateAnimation(input);
             }
         }
 
-        // しゃがみ処理
-        float Henka = 1;
         animator.SetBool("CrouchFlag", false);
         if (Input.GetKey(KeyCode.LeftControl))
         {
-            Henka *= CrouchSpeedRatio;
+            input *= CrouchSpeedRatio;
             animator.SetInteger("Direction", animator.GetInteger("Direction") + ChangeMotionNum * CrouchMotionNum);
             animator.SetBool("CrouchFlag", true);
+
+
         }
         else if (Input.GetKey(KeyCode.LeftShift))
         {
-            Henka *= WalkSpeedRatio;
+            input *= WalkSpeedRatio;
             animator.SetInteger("Direction", animator.GetInteger("Direction") + ChangeMotionNum * WalkMotionNum);
+
         }
 
-        // アイドル状態の設定
-        if (input == Vector3.zero && !isJumping)
+        // 歩いていたら
+        if (input == Vector3.zero)
+            if (!isJumping)
+                animator.SetInteger("Direction", Idle);
+
+
+        if (!burinkSkillFlag)
         {
-            animator.SetInteger("Direction", Idle);
-        }
+            // Convert input to world space relative to the camera
+            Vector3 camForward = transform.forward;
+            Vector3 camRight = transform.right;
+            camForward.y = 0; // Keep movement on the ground plane
+            camRight.y = 0;
+            if (isGrounded)
+            {
+                Vector3 moveDirection = (camForward * input.z + camRight * input.x) * RunSpeed;
+                // Apply movement with ground friction
+                rb.velocity = new Vector3(moveDirection.x, rb.velocity.y, moveDirection.z);
+                lastMoveDirection = input; // Store last move direction
+            }
+            else
+            {
+                Vector3 moveDirection = (camForward * lastMoveDirection.z + camRight * lastMoveDirection.x) * RunSpeed;
+                // Apply movement with reduced control in the air
+                rb.velocity = new Vector3(moveDirection.x, rb.velocity.y, moveDirection.z);
+            }
 
-        // カメラを基準にした移動方向を計算
-        Vector3 camForward = transform.forward;
-        Vector3 camRight = transform.right;
-        camForward.y = 0; // 地面上の動きに制限
-        camRight.y = 0;
-
-        if (isGrounded)
-        {
-            // 地面上の移動
-            Vector3 moveDirection = (camForward * input.z + camRight * input.x).normalized * RunSpeed * Henka;
-
-            // 力を使った移動（摩擦を再現）
-            rb.AddForce(moveDirection - rb.velocity * GroundFriction, ForceMode.Acceleration);
-            lastMoveDirection = input; // 最後の移動方向を保存
-        }
-        else
-        {
-            // 空中での移動
-            Vector3 moveDirection = (camForward * lastMoveDirection.z + camRight * lastMoveDirection.x).normalized * RunSpeed * Henka;
-
-            // 空中で制限を加えた移動
-            rb.AddForce(moveDirection - rb.velocity * GroundFriction, ForceMode.Acceleration);
-        }
-
-        // Handle jump input
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded && !isJumping)
-        {
-            Jump();
+            // Handle jump input
+            if (Input.GetKeyDown(KeyCode.Space) && isGrounded && !isJumping)
+            {
+                Jump();
+            }
         }
 
         //銃の更新

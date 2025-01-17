@@ -5,22 +5,15 @@ using static FlashSkill;
 [CreateAssetMenu(fileName = "UpDraft", menuName = "Skills/UpDraft")]
 public class UpDraft : SkillBase
 {
-    public float MAX_BRINKU_TIME = 5;
+    public float BRINKU_MOVE_TIME = 0.3f;
     private float brinkuTime = 0;
     private GameObject currentEffect;
 
-    public enum BRINC
-    {
-        NONE = 0,
-        Boot = 1,
-    }
 
-    BRINC m_BRINC = BRINC.NONE;
+    private float timer = 0f;
 
     protected override void Initialize(Cube character)
     {
-        m_BRINC = BRINC.NONE;
-
     }
 
     protected override void UpdateSkill(Cube character)
@@ -33,42 +26,37 @@ public class UpDraft : SkillBase
         if (!IsAvailable)
             return;
 
-        switch (m_BRINC)
+        //起動時間の経過
+        brinkuTime += Time.deltaTime;
+
+
+        if (character.burinkSkillFlag)
         {
-            case BRINC.NONE:
-                break;
-            case BRINC.Boot:
-                //起動時間の経過
-                brinkuTime += Time.deltaTime;
+            timer += Time.deltaTime; // フレーム間の時間を加算
+            if (timer >= BRINKU_MOVE_TIME)
+            {
+                EndBrinku();
+                character.burinkSkillFlag = false;
+                character.rb.velocity= new Vector3(character.rb.velocity.x, 0, character.rb.velocity.z);
+            }
+        }
+        else
+        {
 
-                if (currentEffect != null)
-                    // エフェクトがキャラクターと一緒に移動
-                    currentEffect.transform.position = character.transform.position;
-
-                if (brinkuTime >= MAX_BRINKU_TIME)
-                    EndBrinku();
-                break;
-            default:
-                break;
+            if (currentEffect != null)
+                // エフェクトがキャラクターと一緒に移動
+                currentEffect.transform.position = character.transform.position;
         }
 
-        if (Input.GetKeyDown(character.m_Skill_Info[0].skill_Key))
+        if (Input.GetKeyDown(GetSkill_Key))
         {
-            switch (m_BRINC)
-            {
-                case BRINC.NONE:
-                    // エフェクトのインスタンスを生成し、キャラクターの子オブジェクトにする
-                    currentEffect = Instantiate(SkillModel[0], character.transform.position, character.transform.rotation);
-                    currentEffect.transform.SetParent(character.transform);
-                    m_BRINC=BRINC.Boot;
-                    break;
-                case BRINC.Boot:
-                    character.transform.position += character.transform.forward * 5;
-                    EndBrinku();
-                    break;
-                default:
-                    break;
-            }
+            // エフェクトのインスタンスを生成し、キャラクターの子オブジェクトにする
+            currentEffect = Instantiate(SkillModel[0], character.transform.position, character.transform.rotation);
+            currentEffect.transform.SetParent(character.transform);
+
+            character.rb.AddForce(Vector3.up * 600);
+            character.burinkSkillFlag = true;
+
         }
 
 
@@ -76,7 +64,7 @@ public class UpDraft : SkillBase
 
     protected override void UseSkill(Cube character)
     {
-        
+
     }
 
     protected override void ResetSkill(Cube character)
@@ -85,8 +73,8 @@ public class UpDraft : SkillBase
 
     private void EndBrinku()
     {
-        m_BRINC=BRINC.NONE;
         brinkuTime = 0;
+        timer = 0f; // タイマーをリセット
         LastUsedTimeSet();
 
         // エフェクトの削除
