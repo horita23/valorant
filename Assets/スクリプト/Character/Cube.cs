@@ -29,6 +29,8 @@ public class Cube : MonoBehaviourPunCallbacks
 {
     public bool burinkSkillFlag = false;
 
+    public bool burinkSkillFlag_2 = false;
+
 
     public float COOL_TIME = 3f;
     private float coolTime;
@@ -503,19 +505,20 @@ public class Cube : MonoBehaviourPunCallbacks
         {
             case StateSkill.Gun:
                 gunInstance.GetComponent<BaseGun>().StateUpdate();
+                burinkSkillFlag_2 = true;
                 break;
 
             case StateSkill.knife:
+                burinkSkillFlag_2 = true;
                 break;
 
             case StateSkill.Skill_1:
                 m_Skill_Info[(int)StateSkill.Skill_1].skill.StateUpdate(this);
-
                 break;
 
             case StateSkill.Skill_2:
                 m_Skill_Info[(int)StateSkill.Skill_2].skill.StateUpdate(this);
-
+                burinkSkillFlag_2 = true;
                 break;
         }
 

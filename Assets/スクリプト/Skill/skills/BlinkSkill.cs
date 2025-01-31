@@ -43,13 +43,14 @@ public class BlinkSkill : SkillBase
                 brinkuTime += Time.deltaTime;
                             
 
-                if (character.burinkSkillFlag)
+                if (character.burinkSkillFlag_2)
                 {
                     timer += Time.deltaTime; // フレーム間の時間を加算
                     if (timer >= BRINKU_MOVE_TIME)
                     {
                         EndBrinku();
                         character.burinkSkillFlag = false;
+                        character.burinkSkillFlag_2 = false;
                     }
                 }
                 else
@@ -76,6 +77,7 @@ public class BlinkSkill : SkillBase
                     currentEffect = Instantiate(SkillModel[0], character.transform.position, character.transform.rotation);
                     currentEffect.transform.SetParent(character.transform);
                     m_blink=Blink.Boot;
+                    character.burinkSkillFlag_2 = false;
                     break;
                 case Blink.Boot:
                     // プレイヤーの移動方向を取得（高さを無視）
@@ -83,7 +85,8 @@ public class BlinkSkill : SkillBase
                     moveDirection.y = 0; // 高さを無視
                     character.rb.AddForce(moveDirection.normalized * 600);
                     character.burinkSkillFlag = true;
-                    
+                    character.burinkSkillFlag_2 = true;
+
                     break;
                 default:
                     break;

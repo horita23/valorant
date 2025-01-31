@@ -137,6 +137,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   burinkSkillFlag: 0
+  burinkSkillFlag_2: 0
   COOL_TIME: 3
   COOL_TIME_END: 3
   GameEndFlag: 0
@@ -152,7 +153,7 @@ MonoBehaviour:
   m_Skill_Info:
   - skill: {fileID: 8198514620440955701, guid: 3b3a55ecbf4b4254599895f61ad775f7, type: 3}
     skill_Key: 113
-  - skill: {fileID: -8607862522247372323, guid: 7ee9d8d1f4693154988722fb047ca781, type: 3}
+  - skill: {fileID: -5144472228389245700, guid: 8e998af7a0958264ab96c4562cc324d7, type: 3}
     skill_Key: 101
   jumpForce: 5
   killCount: 0
