@@ -213,7 +213,7 @@ public class TeamDeathMatch : MonoBehaviour
                         }
                         PhotonNetwork.Disconnect();
 
-                        SceneManager.LoadScene("TeamSelectScene");
+                        SceneManager.LoadScene("HomeScene");
 
                         m_phase = Phase.PREPARATIONPHASE;
 

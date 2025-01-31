@@ -236,8 +236,11 @@ public class Cube : MonoBehaviourPunCallbacks
     {
 
         ExitGames.Client.Photon.Hashtable gameEndFlag = PhotonNetwork.LocalPlayer.CustomProperties;
-        // プレイヤーのActorNumberをキーにしてViewIDを保存
-        GameEndFlag = (bool)gameEndFlag[$"GameEneFlag_{PhotonNetwork.LocalPlayer.ActorNumber}"];
+
+        if (gameEndFlag != null && gameEndFlag.ContainsKey($"GameEndFlag_{PhotonNetwork.LocalPlayer.ActorNumber}"))
+        {
+            GameEndFlag = (bool)gameEndFlag[$"GameEndFlag_{PhotonNetwork.LocalPlayer.ActorNumber}"];
+        }
 
         if (GameEndFlag)
         {

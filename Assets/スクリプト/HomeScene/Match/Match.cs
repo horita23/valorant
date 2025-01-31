@@ -9,7 +9,7 @@ public class Match : MonoBehaviourPunCallbacks
 {
     public Text matchStatusText;      // マッチング状況表示テキスト
     public Button matchButton;        // マッチング開始/キャンセルボタン
-    public string playSceneName = "LowPolyFPS_Lite_Demo"; // 遷移先シーン名
+    public string playSceneName = "LowPolyFPSLite/Scenes/LowPolyFPS_Lite_Demo"; // 遷移先シーン名
 
     private bool isMatched = false;   // マッチング完了フラグ
     private bool isMatching = false;  // マッチング中フラグ
