@@ -79,10 +79,17 @@ public class BlinkSkill : SkillBase
                     m_blink=Blink.Boot;
                     character.burinkSkillFlag_2 = false;
                     break;
-                case Blink.Boot:
-                    // プレイヤーの移動方向を取得（高さを無視）
+                case Blink.Boot:// プレイヤーの移動方向を取得（高さを無視）
                     Vector3 moveDirection = character.rb.velocity;
                     moveDirection.y = 0; // 高さを無視
+
+                    // 移動していない場合は前方方向にする
+                    if (moveDirection.magnitude < 0.1f)
+                    {
+                        moveDirection = character.transform.forward;
+                    }
+
+                    // 力を加える
                     character.rb.AddForce(moveDirection.normalized * 600);
                     character.burinkSkillFlag = true;
                     character.burinkSkillFlag_2 = true;
