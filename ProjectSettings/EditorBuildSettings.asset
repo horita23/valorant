@@ -22,6 +22,6 @@ EditorBuildSettings:
     guid: 093d1989793ea474d91f090d660145b9
   - enabled: 1
     path: Assets/LowPolyFPSLite/Scenes/LowPolyFPS_Lite_Demo.unity
-    guid: 130de191e9bf7de41a659f68e5741ed0
+    guid: 46686054c4c0b4c49bd21affd8faf992
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 9e7be553448fa2546aea5752021cbcf7, type: 2}

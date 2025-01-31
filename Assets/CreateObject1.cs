@@ -34,19 +34,16 @@ public class CreateObject1 : MonoBehaviourPunCallbacks
         Cube.Team assignedTeam;
         Transform spawnPosition;
 
-        // プレイヤー数に基づき交互にチームを割り当て
         int playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
+        int actorNumber = PhotonNetwork.LocalPlayer.ActorNumber;
 
-        if (playerCount % 2 == 1)
-        {
-            assignedTeam = Cube.Team.TeamA;
-            spawnPosition = respawnPositon[0];
-        }
-        else
-        {
-            assignedTeam = Cube.Team.TeamB;
-            spawnPosition = respawnPositon[1];
-        }
+        // ActorNumber を使ってリスポーン位置を決定
+        int spawnIndex = actorNumber % respawnPositon.Length;
+        spawnPosition = respawnPositon[spawnIndex];
+
+        // チームを交互に割り当てる
+        assignedTeam = (actorNumber % 2 == 1) ? Cube.Team.TeamA : Cube.Team.TeamB;
+
 
         // プレイヤーを生成し、チームを設定
         playerObject = PhotonNetwork.Instantiate("Cube", spawnPosition.position, Quaternion.identity);
