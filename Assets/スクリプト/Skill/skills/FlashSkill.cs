@@ -127,11 +127,6 @@ public class FlashSkill : SkillBase
                     int viewID = (int)player.CustomProperties[$"viewID_{player.ActorNumber}"];
                     GameObject playerObject = PhotonView.Find(viewID)?.gameObject;
 
-                    int playerHP = (int)playerObject.GetComponent<Cube>().GetHp();
-                    var playerScript = playerObject.GetComponent<Cube>();
-
-                    Debug.Log(playerScript.GetHp());
-                    Debug.Log(playerHP);
 
                     // プレイヤーのカメラを取得
                     Camera playerCam = playerObject.GetComponentInChildren<Camera>();
